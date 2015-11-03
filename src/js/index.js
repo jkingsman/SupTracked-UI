@@ -1,7 +1,8 @@
 /* globals makeAuthRequest,Materialize */
 "use strict";
 
-$(document).on("click", ":submit", function(e){
+$(document).on("click", ":submit", function(event){
+    event.preventDefault();
     var action = $(this).val();
 
     if(action === 'login'){
