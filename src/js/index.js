@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,Materialize */
+/* globals authLogin,authRegister,Materialize */
 "use strict";
 
 $(document).on("click", ":submit", function(event){
@@ -6,9 +6,9 @@ $(document).on("click", ":submit", function(event){
     var action = $(this).val();
 
     if(action === 'login'){
-      makeAuthRequest(1, 2, "Verifying user", 4);
+      authLogin('username', 'password', 'server');
     } else {
       // handle registration
-      makeAuthRequest(1, 2, "Attempting registration", 4);
+      authRegister('username', 'password', 'server');
     }
 });
