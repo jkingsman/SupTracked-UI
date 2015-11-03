@@ -1,3 +1,5 @@
+"use strict";
+
 var gulp = require('gulp'),
     minifyHtml = require('gulp-minify-html'),
     minifyCss  = require('gulp-minify-css'),
@@ -37,7 +39,7 @@ gulp.task('css', function () {
 
 //lib
 gulp.task('js-lib', function () {
-    gulp.src(['./src/lib/materialize.js', './src/lib/init.js'])
+    gulp.src(['./src/lib/materialize.js', './src/lib/init.js', './src/lib/request.js'])
     .pipe(uglify())
     .pipe(concat('lib.js'))
     .pipe(gulp.dest('./dist'));
@@ -56,11 +58,11 @@ gulp.task('copy', function () {
     .pipe(gulp.dest('./dist/img'));
 });
 
-gulp.task('default', ['hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
+gulp.task('default', ['empty', 'hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
 
 //realtime watching
 gulp.task('realtime', function() {
-  gulp.watch('./src/**/*', ['hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
+  gulp.watch('./src/**/*', ['empty', 'hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
 });
 
 gulp.task('watch', ['realtime', 'default']);
