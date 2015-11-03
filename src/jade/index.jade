@@ -20,11 +20,28 @@ body
                   i.material-icons.prefix lock
                   input#password.validate(type='password')
                   label(for='password') Password
-              .row
-                .input-field.col.s12
-                  i.material-icons.prefix cloud
-                  input#server.validate(type='text', value='127.0.0.1:3000')
-                  label(for='server') Server
+              
+              ul.collapsible(data-collapsible='accordion')
+                li
+                  .collapsible-header
+                    i.material-icons settings
+                    | Advanced
+                  .collapsible-body
+                    .row(style='margin: 10px;')
+                      .input-field.col.s12
+                        i.material-icons.prefix cloud
+                        input#server.validate(type='text', value='127.0.0.1:3000')
+                        label(for='server') Server
+                  
+                    .row(style='margin: 10px; padding-bottom: 15px;')
+                      .input-field.col.s12.m6
+                        input#daysession(type='checkbox')
+                        label(for='daysession') use a 24 hour session
+                      .input-field.col.s12.m6
+                        input#https(type='checkbox')
+                        label(for='https') use HTTPS
+                        
+                                            
               .row
                 .col.s6
                   button.btn.waves-effect.waves-light(type='submit', value='login')
