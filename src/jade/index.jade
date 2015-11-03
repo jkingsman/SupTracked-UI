@@ -1,0 +1,24 @@
+include ../jade-components/structure/head
+doctype html
+mixin head('Authenticate')
+body
+  include ../jade-components/structure/nav-login
+  .container
+    .section
+      // Icon Section
+      .row
+        .col.s12.m6.offset-m3
+            h5.light-blue-text
+              | Authentication
+              .row
+                .input-field.col.s12.m6
+                  input#username.validate(type='text')
+                  label(for='username') Username
+              .row
+                .input-field.col.s12.m6
+                  input#username.validate(type='text')
+                  label(for='username') Username
+    br
+    br
+    .section
+  include ../jade-components/structure/footer
