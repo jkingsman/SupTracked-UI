@@ -17,7 +17,7 @@ gulp.task('hint', function () {
 
 //clear out the folder
 gulp.task('empty', function() {
-    del(['./dist/**', './dist/js/**', '!./dist', '!./dist/js', '!./dist/.gitignore']);
+    del(['./dist/**', './dist/js/**', '!./dist', '!./dist/img', '!./dist/js']);
 });
 
 // minify our html
@@ -52,9 +52,8 @@ gulp.task('js-main', function () {
 
 //move over remaining files
 gulp.task('copy', function () {
-    return gulp.src(['./src/fonts/**/*'], {
-        base: 'src'
-    }).pipe(gulp.dest('./dist'));
+    gulp.src(['./src/img/**/*'])
+    .pipe(gulp.dest('./dist/img'));
 });
 
 gulp.task('default', ['hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
