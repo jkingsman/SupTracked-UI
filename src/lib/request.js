@@ -2,13 +2,13 @@
 /*jshint -W003 */
 "use strict";
 
-// see if they're already authenticated
-if(getCookie('server').length > 0 && getCookie('auth').length > 0){
+// see if they're already authenticated and aren't trying to log out
+if(getCookie('server').length > 0 && getCookie('auth').length > 0 && location.search.indexOf('logout') === -1){
   makeAuthRequest('/user', 'GET', null, 'json', function(err, data){
-    if(!err){
-      Materialize.toast('Authenticated; logging in', 6000);
-    } else {
-      Materialize.toast(err, 6000);
+    if(!err && (window.location.pathname === '/' || window.location.pathname === '/index.html')){
+      // they have valid credentials stored, and they're hitting the login page - wave them in
+      Materialize.toast("Logging in...", 6000);
+      window.location = "/experiences.html";
     }
   });
 } else{
@@ -95,7 +95,8 @@ function authLogin(username, password, server){
     document.cookie = "server=" + server + '; expires=' + now.toUTCString();
     document.cookie = "auth=" + btoa(username + ':'+ password) + '; expires=' + now.toUTCString();
 
-    Materialize.toast('Redirect goes here...', 6000, 'success-toast');
+    Materialize.toast("Logging in...", 6000);
+    window.location = "/experiences.html";
   })
   .fail(displayJSONError);
 }
@@ -152,9 +153,9 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb){
     url: server + endpoint,
     data: data
   })
-  .done(function(msg) {
+  .done(function(msg, textStatus, xhr) {
     // fire the callback
-    cb(null, msg);
+    cb(null, msg, xhr.status);
   })
   .fail(function(xhr){
     // parse out the error message (either responseText or, failing that, statusText) and fire the callback
@@ -166,7 +167,7 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb){
       errorText = xhr.statusText;
     }
 
-    cb(errorText, null);
+    cb(errorText, null, xhr.status);
   });
 }
 
@@ -176,4 +177,5 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb){
 * @callback requestCallback
 * @param {string} err (will be null if no err occurred)
 * @param {string} data data returned by the server (will be null if there is no response AND the 'text' type is provided for responseType)
+* @param {Number} code http status code
 */
