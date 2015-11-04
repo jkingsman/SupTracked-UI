@@ -12,6 +12,7 @@
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
+    "gulp-connect": "^2.2.0",
     "gulp-es6-transpiler": "^1.0.1",
     "gulp-jade": "^1.1.0",
     "gulp-jshint": "^1.12.0",
