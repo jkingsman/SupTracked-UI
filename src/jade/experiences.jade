@@ -1,0 +1,28 @@
+include ../jade-components/structure/head
+doctype html
+mixin head('Experiences')
+body
+  include ../jade-components/structure/nav
+  main
+    .container
+      .section#loading
+        h5.center-align Loading experiences
+        br 
+        .progress
+          .indeterminate
+      .section#emptyExperiences(style='display: none;')
+        ul.collection
+          li.collection-item.avatar
+            i.material-icons.circle report_problem
+            span.title No Experiences Found
+            a.secondary-content(href='newexperience.html')
+              i.material-icons add
+      .section#experiences(style='display: none;')
+        ul.collection
+        
+      .fixed-action-btn(style='bottom: 45px; right: 24px;')
+        a.btn-floating.btn-large.red(href='newexperience.html')
+          i.large.material-icons add
+          
+  include ../jade-components/structure/footer
+  script(src='js/experiences.js')

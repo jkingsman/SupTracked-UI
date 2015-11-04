@@ -1,0 +1,1 @@
+"use strict";var $input=$(".datepicker").pickadate(),picker=$input.pickadate("picker");picker.set("select",new Date);var date=new Date;$("time").val(date.getHours()+date.getMinutes());
