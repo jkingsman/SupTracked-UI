@@ -61,7 +61,7 @@ function displayJSONError(xhr){
   var err = xhr.responseText;
   try{
     var name = Object.keys(JSON.parse(err))[0];
-    Materialize.toast(JSON.parse(err)[name], 6000, 'warning-toast');
+    Materialize.toast(JSON.parse(err)[name].charAt(0).toUpperCase() + JSON.parse(err)[name].slice(1), 6000, 'warning-toast');
     console.log("Raw error:" + xhr.responseText + "; " + xhr.status);
   }
   catch (e){

@@ -9,36 +9,24 @@ body
         // Icon Section
         .row
           .col.s12.m6.offset-m3
-            form(name="authenticate", id="authenticate")
+            form
               .row
                 .input-field.col.s12
                   i.material-icons.prefix account_circle
-                  input#username.validate(type='text')
+                  input#username(type='text', required)
                   label(for='username') Username
               .row
                 .input-field.col.s12
                   i.material-icons.prefix lock
-                  input#password.validate(type='password')
+                  input#password(type='password', required)
                   label(for='password') Password
-              
-              ul.collapsible(data-collapsible='accordion')
-                li
-                  .collapsible-header
-                    i.material-icons settings
-                    | Advanced
-                  .collapsible-body
-                    .row(style='margin: 10px;')
-                      .input-field.col.s12
-                        i.material-icons.prefix cloud
-                        input#server.validate(type='text', value='http://127.0.0.1:3000')
-                        label(for='server') Server
-                  
-                    .row(style='margin: 10px; padding-bottom: 15px;')
-                      .input-field.col.s12.m6
-                        input#daysession(type='checkbox')
-                        label(for='daysession') use a 24 hour session
-                        
-                                            
+              .row
+                .input-field.col.s12
+                  i.material-icons.prefix cloud
+                  input#server.validate(type='text', value='http://127.0.0.1:3000')
+                  label(for='server') Server
+
+                                          
               .row
                 .col.s6
                   button.btn.waves-effect.waves-light(type='submit', value='login')
