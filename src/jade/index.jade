@@ -30,16 +30,13 @@ body
                     .row(style='margin: 10px;')
                       .input-field.col.s12
                         i.material-icons.prefix cloud
-                        input#server.validate(type='text', value='127.0.0.1:3000')
+                        input#server.validate(type='text', value='http://127.0.0.1:3000')
                         label(for='server') Server
                   
                     .row(style='margin: 10px; padding-bottom: 15px;')
                       .input-field.col.s12.m6
                         input#daysession(type='checkbox')
                         label(for='daysession') use a 24 hour session
-                      .input-field.col.s12.m6
-                        input#https(type='checkbox')
-                        label(for='https') use HTTPS
                         
                                             
               .row

@@ -19,3 +19,13 @@
         padding-top: 1rem !important;
     }
 }
+
+.warning-toast {
+  background-color: maroon;
+  line-height: initial;
+}
+
+.success-toast {
+  background-color: darkgreen;
+  line-height: initial;
+}

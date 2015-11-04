@@ -1,34 +1,179 @@
 /* globals Materialize */
+/*jshint -W003 */
+"use strict";
 
-// log the user into the given server with the provided credentials
+// see if they're already authenticated
+if(getCookie('server').length > 0 && getCookie('auth').length > 0){
+  makeAuthRequest('/user', 'GET', null, 'json', function(err, data){
+    if(!err){
+      Materialize.toast('Authenticated; logging in', 6000);
+    } else {
+      Materialize.toast(err, 6000);
+    }
+  });
+} else{
+  // if they're not at the login screen, take them there
+  if(window.location.pathname !== '/' && window.location.pathname !== '/index.html'){
+    window.location = "/";
+  }
+}
+
+/**
+* Loads a cookie by name
+*
+* @param {String} cname The desired cookie name
+* @return {String} The data of the cookie, or an empty string if it doesn't exist
+*/
+function getCookie(cname) {
+  var name = cname + "=";
+  var ca = document.cookie.split(';');
+  for(var i = 0; i < ca.length; i += 1) {
+    var c = ca[i];
+    while (c.charAt(0) === ' '){
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) === 0){
+      return c.substring(name.length,c.length);
+    }
+  }
+  return "";
+}
+
+/**
+* Parse out what an error was and show it to the user in a toast
+*
+* @param {xhr} xhr xhr request containing the error
+*/
+function displayJSONError(xhr){
+  // handle standard error codes
+  if(xhr.status === 0){
+    // usually indicates a connection issues
+    Materialize.toast('Server connection error', 6000, 'warning-toast');
+    return;
+  }
+
+  if(xhr.status === 401){
+    // usually indicates a connection issues
+    Materialize.toast('Authentication error', 6000, 'warning-toast');
+    return;
+  }
+
+  var err = xhr.responseText;
+  try{
+    var name = Object.keys(JSON.parse(err))[0];
+    Materialize.toast(JSON.parse(err)[name], 6000, 'warning-toast');
+    console.log("Raw error:" + xhr.responseText + "; " + xhr.status);
+  }
+  catch (e){
+    Materialize.toast('Unparseable error  (' + xhr.status + ')', 6000, 'warning-toast');
+  }
+}
+
+/**
+* Logs a user in and stores the cookie
+*
+* @param {String} username
+* @param {String} password
+* @param {String} server
+*/
 function authLogin(username, password, server){
-  "use strict";
+  $.ajax({
+    method: 'GET',
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader('Authorization','Basic ' + btoa(username + ':'+ password));
+    },
+    dataType: "json",
+    url: server + '/user',
+  })
+  .done(function(msg) {
+    // set 24 hr expiration
+    var now = new Date();
+    var time = now.getTime();
+    time += 86400 * 1000;
+    now.setTime(time);
 
-  // get the cookie
-  //  return err or success
-  Materialize.toast('Making connection', 2000);
-  setTimeout(function(){ Materialize.toast('Logging in', 2000); }, 1000);
+    document.cookie = "server=" + server + '; expires=' + now.toUTCString();
+    document.cookie = "auth=" + btoa(username + ':'+ password) + '; expires=' + now.toUTCString();
+
+    Materialize.toast('Redirect goes here...', 6000, 'success-toast');
+  })
+  .fail(displayJSONError);
 }
 
-// register the user with given server with the provided credentials
+/**
+* Register the user with given server with the provided credentials
+*
+* @param {String} username
+* @param {String} password
+* @param {String} server
+*/
 function authRegister(username, password, server){
-  "use strict";
-
-  // get the cookie
-  //  return err or success
-  Materialize.toast('Making connection', 2000);
-  setTimeout(function(){ Materialize.toast('Registering', 2000); }, 1000);
+  $.ajax({
+    method: 'POST',
+    contentType: 'application/json; charset=UTF-8',
+    processData: false,
+    dataType: "text",
+    url: server + '/register',
+    data: JSON.stringify({username: username, password: password})
+  })
+  .done(function(msg) {
+    Materialize.toast('Registration successful', 6000, 'success-toast');
+  })
+  .fail(displayJSONError);
 }
 
-// make function to authenticate for the first time
-function makeAuthRequest(endpoint, data, progressMessage, callback){
-  "use strict";
+/**
+* Make an authenticated server request
+*
+* @param {String} endpoint the endpoint URL the data should go to
+* @param {String} verb HTTP very the data should be sent with
+* @param {String} data JSON data to be sent
+* @param {String} responseType 'json' or 'text'; json will parse and give the JSON as the data to the callback. Text should only be used when no data is returned, and the callback data param will be null
+* @param {callback} cb callback that handles the response
+*/
+function makeAuthRequest(endpoint, verb, data, responseType, cb){
+  var auth = getCookie('auth');
+  var server = getCookie('server');
 
-  // get the cookie
-  //  break if not exists; redirect to login
-  // fire the request
-  // show the message
-  // return err or data
-  Materialize.toast('Making connection', 2000);
-  setTimeout(function(){ Materialize.toast(progressMessage, 2000); }, 1000);
+  if(auth.length < 1 && server.length < 1){
+    // doesn't exist; send them to login
+    window.location = "/";
+    return;
+  }
+
+  $.ajax({
+    method: verb,
+    contentType: 'application/json; charset=UTF-8',
+    processData: false,
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader('Authorization', 'Basic ' + auth);
+    },
+    dataType: responseType,
+    url: server + endpoint,
+    data: data
+  })
+  .done(function(msg) {
+    // fire the callback
+    cb(null, msg);
+  })
+  .fail(function(xhr){
+    // parse out the error message (either responseText or, failing that, statusText) and fire the callback
+    var errorText;
+    if(xhr.responseText.length > 0 || xhr.responseText !== ''){
+      var name = Object.keys(JSON.parse(xhr.responseText))[0];
+      errorText = JSON.parse(xhr.responseText)[name];
+    } else {
+      errorText = xhr.statusText;
+    }
+
+    cb(errorText, null);
+  });
 }
+
+
+/**
+* Callback to handle an authenticated request
+* @callback requestCallback
+* @param {string} err (will be null if no err occurred)
+* @param {string} data data returned by the server (will be null if there is no response AND the 'text' type is provided for responseType)
+*/

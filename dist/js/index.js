@@ -1,1 +1,14 @@
-"use strict";$(document).on("click",":submit",function(e){e.preventDefault();var s=$(this).val();"login"===s?authLogin("username","password","server"):authRegister("username","password","server")});
+/* globals authLogin,authRegister,Materialize */
+"use strict";
+
+$(document).on("click", ":submit", function(event){
+  event.preventDefault();
+  var action = $(this).val();
+
+  if(action === 'login'){
+    authLogin($('#username').val(), $('#password').val(), $('#server').val());
+  } else {
+    // handle registration
+    authRegister($('#username').val(), $('#password').val(), $('#server').val());
+  }
+});
