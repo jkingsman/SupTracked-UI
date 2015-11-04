@@ -8,7 +8,7 @@ if(getCookie('server').length > 0 && getCookie('auth').length > 0 && location.se
     if(!err && (window.location.pathname === '/' || window.location.pathname === '/index.html')){
       // they have valid credentials stored, and they're hitting the login page - wave them in
       Materialize.toast("Logging in...", 6000);
-      window.location = "/experiences.html";
+      window.location = "experiences.html";
     }
   });
 } else{
@@ -96,7 +96,7 @@ function authLogin(username, password, server){
     document.cookie = "auth=" + btoa(username + ':'+ password) + '; expires=' + now.toUTCString();
 
     Materialize.toast("Logging in...", 6000);
-    window.location = "/experiences.html";
+    window.location = "experiences.html";
   })
   .fail(displayJSONError);
 }
@@ -138,7 +138,7 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb){
 
   if(auth.length < 1 && server.length < 1){
     // doesn't exist; send them to login
-    window.location = "/";
+    window.location = "index.html";
     return;
   }
 
