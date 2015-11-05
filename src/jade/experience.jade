@@ -1,0 +1,68 @@
+include ../jade-components/structure/head
+doctype html
+mixin head('Experiences')
+body
+  include ../jade-components/structure/nav
+  main
+    .container
+      .section#loading
+        h5.center-align Loading experience
+        br 
+        .progress
+          .indeterminate
+      .section#noExperience(style='display: none;')
+        h5.center-align 
+          i.material-icons error
+          | No such experience!
+      .section#main(style='display: none;')
+        .row
+          .col.s12
+            h3#title
+            h6#date
+            ul.tabs
+              li.tab.col.s4.active
+                a.active(href='#consumptions') Consumptions
+              li.tab.col.s4
+                a(href='#notes') Notes
+              li.tab.col.s4
+                a(href='#meta') Meta
+          #consumptions.col.s12
+            ul.collection#consumptionsCollection
+              li.collection-item#noConsumptions(style='display: hidden;')
+                div
+                  | No consumptions
+            hr
+            h5 Add Consumption
+            form#addConsumption
+              .row
+                .input-field.col.s2
+                  input#addCount(type='text', value='1', required)
+                  label.active(for='addCount') Count
+                .input-field.col.s5
+                  input.datepicker#addDate(type='date', required)
+                  label.active(for='addDate') Date
+                .input-field.col.s5
+                  input#addTime(type='text', required)
+                  label.active#addtimeLabel(for='addTime') Time
+              .row
+                .input-field.col.s12
+                  input#addLocation(type='text', required)
+                  label.active(for='addLocation') Location
+              .row
+                .col.s4
+                  label Drug
+                  select#addDrug.browser-default
+                .col.s4
+                  label Method
+                  select#addMethod.browser-default
+                .col.s4
+                  button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px')
+                    | Create
+                    i.material-icons.right add
+
+          #notes.col.s12
+            textarea#notesArea.materialize-textarea
+          #meta.col.s12 Meta
+          
+  include ../jade-components/structure/footer
+  script(src='js/experience.js')

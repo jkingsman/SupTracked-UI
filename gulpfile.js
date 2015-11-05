@@ -76,7 +76,7 @@ gulp.task('default', ['empty', 'hint', 'html', 'css', 'js-lib', 'js-main', 'copy
 
 //realtime watching
 gulp.task('realtime', function() {
-  gulp.watch('./src/**/*', ['empty', 'hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
+  gulp.watch('./src/**/*', ['hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
 });
 
 gulp.task('watch', ['realtime', 'default', 'webserver']);

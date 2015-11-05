@@ -1,1 +1,1 @@
-"use strict";makeAuthRequest("/experience/search","GET",null,"json",function(e,n,s){404===s&&($("#loading").hide(),$("#emptyExperiences").show())});
+"use strict";makeAuthRequest("/experience/search","POST",null,"json",function(e,n,s){404===s&&($("#loading").hide(),$("#emptyExperiences").show())});

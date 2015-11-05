@@ -25,8 +25,10 @@ $(document).on("click", ":submit", function(event){
   makeAuthRequest('/experience', 'POST', JSON.stringify({title: $('#title').val(), date: timeStamp}), 'json', function(err, data, code){
     if(err){
       Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
-    } else{
-      Materialize.toast('Experience created', 6000, 'success-toast');
+      return;
     }
+
+    window.location = "experience.html?" + data.id;
+    Materialize.toast('Experience created', 6000, 'success-toast');
   });
 });
