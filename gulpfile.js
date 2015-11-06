@@ -52,7 +52,18 @@ gulp.task('js-lib', function () {
 //main
 gulp.task('js-main', function () {
   gulp.src(['./src/js/**/*'])
-  .pipe(uglify())
+  .pipe(uglify({mangle: true,
+    compress: {
+      sequences: true,
+      dead_code: true,
+      conditionals: true,
+      booleans: true,
+      unused: true,
+      if_return: true,
+      join_vars: true,
+      //drop_console: true
+    }
+  }))
   .pipe(gulp.dest('./dist/js'))
   .pipe(connect.reload());
 });
