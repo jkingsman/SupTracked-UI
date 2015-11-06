@@ -15,6 +15,8 @@ if(location.search.indexOf('logout') > -1){
   Materialize.toast("You have been logged out!", 1000);
 }
 
+$('#server').val('http://' + location.host.split(':')[0] + ':3000');
+
 $(document).on("click", ":submit", function(event){
   event.preventDefault();
   var action = $(this).val();
