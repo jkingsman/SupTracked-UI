@@ -160,7 +160,8 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb){
   .fail(function(xhr){
     // parse out the error message (either responseText or, failing that, statusText) and fire the callback
     var errorText;
-    if(xhr.responseText.length > 0 || xhr.responseText !== ''){
+    if(xhr.responseText !== undefined && (xhr.responseText.length > 0 || xhr.responseText !== '')){
+      console.log(xhr.responseText)
       var name = Object.keys(JSON.parse(xhr.responseText))[0];
       errorText = JSON.parse(xhr.responseText)[name];
     } else {

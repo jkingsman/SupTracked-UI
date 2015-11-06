@@ -29,3 +29,33 @@
   background-color: darkgreen;
   line-height: initial;
 }
+
+.consumption-icon {
+  padding-left: 10px;
+}
+
+.consumption-data {
+  padding-left: 10px;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 600px) {
+  .consumption-location {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .consumption-friends {
+    display: none;
+  }
+}
+
+.consumption-location {
+  padding-left: 40px;
+  font-style: oblique;
+}
+
+.consumption-friends {
+  padding-left: 40px;
+}

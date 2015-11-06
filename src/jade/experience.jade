@@ -1,6 +1,6 @@
 include ../jade-components/structure/head
 doctype html
-mixin head('Experiences')
+mixin head('View Experience')
 body
   include ../jade-components/structure/nav
   main
@@ -28,15 +28,35 @@ body
                 a(href='#meta') Meta
           #consumptions.col.s12
             ul.collection#consumptionsCollection
-              li.collection-item#noConsumptions(style='display: hidden;')
-                div
-                  | No consumptions
+              li.collection-item#noConsumptions
             a.waves-effect.waves-light.btn.modal-trigger(onClick='$("#addConsumptionModal").openModal();', style='width: 100%;') Add Consumption
 
           #notes.col.s12
             textarea#notesArea.materialize-textarea
-          #meta.col.s12 Meta
-    #addConsumptionModal.modal.bottom-sheet
+          #meta.col.s12
+            .row
+              .input-field.col.s12
+                input#metaTitle(type='text', required)
+                label.active#addTitleLabel(for='metaTitle') Title
+            .row
+              .input-field.col.s12
+                input.datepicker#metaDate(type='date', required)
+                label.active(for='metaDate') Date
+            .row
+              .input-field.col.s12
+                textarea#metaPanic.materialize-textarea
+                label.active#metaPanicLabel(for='metaPanic') Panic Message
+            .row
+              label Rating
+              select#metaRating.browser-default
+                option(value='0').selected No Rating
+                option(value='1') Horrific
+                option(value='2') Bad
+                option(value='3') Meh
+                option(value='4') Good
+                option(value='5') Great
+                option(value='6') Spectacular
+    #addConsumptionModal.modal
       .modal-content
         h4 Add Consumption
         form#addConsumption
@@ -65,7 +85,54 @@ body
               button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px')
                 | Create
                 i.material-icons.right add
-
+    #editConsumptionModal.modal
+      .modal-content
+        h4 Edit
+        form#editConsumption
+          input#editID(type='hidden')
+          .row
+            .input-field.col.s2
+              input#editCount(type='text', value='1', required)
+              label.active(for='editCount') Count
+            .input-field.col.s5
+              input.datepicker#editDate(type='date', required)
+              label.active(for='editDate') Date
+            .input-field.col.s5
+              input#editTime(type='text', required)
+              label.active#edittimeLabel(for='editTime') Time
+          .row
+            .input-field.col.s12
+              input#editLocation(type='text', required)
+              label.active#editLocationLabel(for='editLocation') Location
+          .row
+            .col.s4
+              label Drug
+              select#editDrug.browser-default
+            .col.s4
+              label Method
+              select#editMethod.browser-default
+          .row
+            .col.s6
+              h5 Friends
+              #editFriendBox
+            .col.s6
+              h5 Add Friend
+              .row
+                .col.s8
+                  label(for='addFriend') Friend Name
+                  input#addFriend(type='text', list='friends')
+                  datalist#friends
+                    option(value="Frank")
+                .col.s4
+                  a.btn.waves-effect.waves-light(onClick='addFriend();')
+                    | Add
+                
+          .row
+            .col.s12
+              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%;')
+                | Done
+                i.material-icons.right done
+        
           
   include ../jade-components/structure/footer
   script(src='js/experience.js')

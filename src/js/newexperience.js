@@ -14,7 +14,7 @@ $(document).on("click", ":submit", function(event){
   event.preventDefault();
 
   // load up the date and time
-  var datetime = Math.floor(Date.parse($('#date').val()) / 1000);
+  var datetime = Math.floor(Date.parse($('#date').val() + ' 00:00:00 GMT') / 1000);
 
   // add the time box
   var hours = Math.floor($('#time').val() / 100);
