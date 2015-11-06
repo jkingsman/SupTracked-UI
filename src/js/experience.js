@@ -4,6 +4,36 @@
 var experienceID = location.search.slice(1);
 var noteSaveNotificationTimeout;
 
+// draw consumptions into the collection
+function drawConsumptions(){
+  makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
+    console.log(data)
+    // load Consumptions
+    if(data.consumptions.length < 1){
+      $('#noConsumptions').show();
+    } else {
+      $('#noConsumptions').hide();
+
+      $('#consumptionsCollection').empty();
+      data.consumptions.forEach(function(consumption){
+        $('#consumptionsCollection').append('<li class="collection-item">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '<a href="#" title="delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content"><i class="material-icons">delete</i></a></div></li>');
+      });
+    }
+  });
+}
+
+function deleteConsumption(id){
+  makeAuthRequest('/consumption', 'DELETE', JSON.stringify({id: id}), 'json', function(err, data, code){
+    if(code !== 200){
+      Materialize.toast(err, 6000, 'warning-toast');
+      return;
+    }
+
+    Materialize.toast('Consumption deleted', 1000, 'success-toast');
+    drawConsumptions();
+  });
+}
+
 // fill in drug/method selectors, etc.
 function setUpAddConsumptions(){
   // init new consumption date picker
@@ -57,8 +87,10 @@ $('#addConsumption').submit(function( event ) {
       return;
     }
 
-    console.log('drawing in the consumption')
+    // draw consumptions, which will include our new one
+    drawConsumptions();
     Materialize.toast('Consumption created', 6000, 'success-toast');
+    $('#addConsumptionModal').closeModal();
   });
 });
 
@@ -77,18 +109,7 @@ $(document).ready(function(){
     var date = new Date(data.date * 1000);
     $('#date').text(date.toISOString().slice(0, 16).replace(/T/, ' '));
 
-    // load Consumptions
-    if(data.consumptions.length < 1){
-      $('#noConsumptions').show();
-    } else {
-      $('#noConsumptions').hide();
-
-      data.consumptions.forEach(function(consumption){
-        console.log(consumption)
-        $('#consumptionsCollection').append('<li class="collection-item">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '<a href="#" class="secondary-content"><i class="material-icons">send</i></a></div></li>');
-      });
-    }
-
+    drawConsumptions();
     setUpAddConsumptions();
 
     // load notes

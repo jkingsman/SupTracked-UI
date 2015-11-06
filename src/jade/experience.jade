@@ -31,38 +31,41 @@ body
               li.collection-item#noConsumptions(style='display: hidden;')
                 div
                   | No consumptions
-            hr
-            h5 Add Consumption
-            form#addConsumption
-              .row
-                .input-field.col.s2
-                  input#addCount(type='text', value='1', required)
-                  label.active(for='addCount') Count
-                .input-field.col.s5
-                  input.datepicker#addDate(type='date', required)
-                  label.active(for='addDate') Date
-                .input-field.col.s5
-                  input#addTime(type='text', required)
-                  label.active#addtimeLabel(for='addTime') Time
-              .row
-                .input-field.col.s12
-                  input#addLocation(type='text', required)
-                  label.active(for='addLocation') Location
-              .row
-                .col.s4
-                  label Drug
-                  select#addDrug.browser-default
-                .col.s4
-                  label Method
-                  select#addMethod.browser-default
-                .col.s4
-                  button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px')
-                    | Create
-                    i.material-icons.right add
+            a.waves-effect.waves-light.btn.modal-trigger(onClick='$("#addConsumptionModal").openModal();', style='width: 100%;') Add Consumption
 
           #notes.col.s12
             textarea#notesArea.materialize-textarea
           #meta.col.s12 Meta
+    #addConsumptionModal.modal.bottom-sheet
+      .modal-content
+        h4 Add Consumption
+        form#addConsumption
+          .row
+            .input-field.col.s2
+              input#addCount(type='text', value='1', required)
+              label.active(for='addCount') Count
+            .input-field.col.s5
+              input.datepicker#addDate(type='date', required)
+              label.active(for='addDate') Date
+            .input-field.col.s5
+              input#addTime(type='text', required)
+              label.active#addtimeLabel(for='addTime') Time
+          .row
+            .input-field.col.s12
+              input#addLocation(type='text', required)
+              label.active(for='addLocation') Location
+          .row
+            .col.s4
+              label Drug
+              select#addDrug.browser-default
+            .col.s4
+              label Method
+              select#addMethod.browser-default
+            .col.s4
+              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px')
+                | Create
+                i.material-icons.right add
+
           
   include ../jade-components/structure/footer
   script(src='js/experience.js')
