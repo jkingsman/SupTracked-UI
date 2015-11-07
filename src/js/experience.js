@@ -174,7 +174,8 @@ function editConsumption(id){
   });
 }
 
-function addFriend(){
+$('#addFriendForm').submit(function( event ) {
+  event.preventDefault();
   var friendName = $('#addFriend').val();
   makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({consumption_id: $('#editID').val(), name: friendName}), 'json', function(err, data, code){
     if(code !== 201){
@@ -190,7 +191,7 @@ function addFriend(){
     $('#addFriend').val('');
     drawConsumptions();
   });
-}
+});
 
 function removeFriend(id){
   makeAuthRequest('/consumption/friend', 'DELETE', JSON.stringify({id: id}), 'json', function(err, data, code){
