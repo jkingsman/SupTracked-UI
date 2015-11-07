@@ -59,6 +59,12 @@ body
             .row
               label.tooltipped(data-position='right', data-delay='50', data-tooltip='Add App notes as a function of time elapsed since the selected consumption.', style='border-bottom: 1px dashed #ADADAD;') T-Time
               select#metaTTime.browser-default
+            .row
+              hr
+              a.btn.waves-effect.waves-light(onClick='deleteExperience();', style='width: 100%;') 
+                i.material-icons.left report_problem
+                i.material-icons.right report_problem
+                | Delete
               
     #addConsumptionModal.modal
       .modal-content
@@ -125,8 +131,8 @@ body
            .row
              .col.s12
                button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%;')
-                 | Done
                  i.material-icons.right done
+                 | Done
         #editFriendsTab
           .row
             .col.s6
