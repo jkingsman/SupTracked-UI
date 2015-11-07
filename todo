@@ -1,12 +1,16 @@
-drugs
-methods
+Configure
+  drugs
+  methods
+  user
 
-app view
+Media
+  Add media
+  Search Media
 
-media
+App view
 
-user config
+*****migrate data*****
 
-migrate data
+Search Experience
 
 drug metrics
