@@ -8,6 +8,41 @@ var metaSaveNotificationTimeout;
 // we futz with the meta values after the listener is added; padd it out so the first update doesn't fire the message
 var initialMetaMsgFired = 0;
 
+// fill in title/rating, etc.
+function setUpMeta(){
+  makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
+    var $input = $('#metaDate').pickadate({
+      format: 'yyyy-mm-dd'
+    });
+    var picker = $input.pickadate('picker');
+    picker.set('select', new Date(data.date * 1000).toISOString().slice(0, 10));
+
+    // load title
+    $('#metaTitle').val(data.title);
+    $('#addTitleLabel').addClass('active');
+
+    // panic msg
+    $('#metaPanic').text(data.panicmsg);
+    $('#metaPanicLabel').addClass('active');
+
+    // rating
+    if(data.rating_id){
+      $('#metaRating').val(data.rating_id);
+    }
+
+    // draw T-Time
+    // flush first
+    $('#metaTTime').empty();
+    $('#metaTTime').append('<option value="0">No T-Time</option>');
+    data.consumptions.forEach(function(consumption){
+      $('#metaTTime').append('<option value="' + consumption.id + '">' + new Date(consumption.date * 1000).toISOString().slice(10, 16).replace(/T/, ' ') + ' -- ' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + '</option>');
+    });
+
+    if(data.ttime){
+      $('#metaTTime').val(data.ttime);
+    }
+  });
+}
 
 // draw consumptions into the collection
 function drawConsumptions(){
@@ -166,42 +201,6 @@ function removeFriend(id){
 
     $('#friend' + id).remove();
     drawConsumptions();
-  });
-}
-
-// fill in title/rating, etc.
-function setUpMeta(){
-  makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
-    var $input = $('#metaDate').pickadate({
-      format: 'yyyy-mm-dd'
-    });
-    var picker = $input.pickadate('picker');
-    picker.set('select', new Date(data.date * 1000).toISOString().slice(0, 10));
-
-    // load title
-    $('#metaTitle').val(data.title);
-    $('#addTitleLabel').addClass('active');
-
-    // panic msg
-    $('#metaPanic').text(data.panicmsg);
-    $('#metaPanicLabel').addClass('active');
-
-    // rating
-    if(data.rating_id){
-      $('#metaRating').val(data.rating_id);
-    }
-
-    // draw T-Time
-    // flush first
-    $('#metaTTime').empty();
-    $('#metaTTime').append('<option value="0">No T-Time</option>');
-    data.consumptions.forEach(function(consumption){
-      $('#metaTTime').append('<option value="' + consumption.id + '">' + new Date(consumption.date * 1000).toISOString().slice(10, 16).replace(/T/, ' ') + ' -- ' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + '</option>');
-    });
-
-    if(data.ttime){
-      $('#metaTTime').val(data.ttime);
-    }
   });
 }
 
