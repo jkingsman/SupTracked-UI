@@ -46,13 +46,6 @@ function setUpMeta(){
 
 // kill the whole thing
 function deleteExperience(){
-  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
-
-  });
-}
-
-// draw consumptions into the collection
-function drawConsumptions(){
   makeAuthRequest('/experience', 'DELETE', JSON.stringify({id: experienceID}), 'json', function(err, data, code){
     if(code !== 200){
       Materialize.toast(err, 6000, 'warning-toast');
@@ -62,6 +55,43 @@ function drawConsumptions(){
     window.location = '/experiences.html';
   });
 }
+
+// draw consumptions into the collection
+function drawConsumptions(){
+  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
+    // load Consumptions
+    if(code === 404){
+      $('#consumptionsCollection').empty();
+      $('#consumptionsCollection').append('<li id="noConsumptions" class="collection-item"><div>No consumptions</div></li>');
+    } else {
+      $('#consumptionsCollection').empty();
+
+      data.forEach(function(consumption){
+        // build friends list
+        var friendList = [];
+        friendList = consumption.friends.map(function(friend){
+          return friend.name;
+        });
+
+        var friendString = 'No friends';
+
+        if(friendList.length > 0){
+          friendString = friendList.join(', ');
+        }
+
+        $('#consumptionsCollection').append('<li class="collection-item">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') +
+        '<span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
+        '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
+        '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
+        '<a href="#" title="Edit" onClick="editConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">list</i></a>' +
+        '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">open_in_new</i></a>' +
+        '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
+        '</div></li>');
+      });
+    }
+  });
+}
+
 
 function deleteConsumption(id){
   makeAuthRequest('/consumption', 'DELETE', JSON.stringify({id: id}), 'json', function(err, data, code){
