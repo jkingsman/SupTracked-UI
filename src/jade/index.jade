@@ -1,8 +1,9 @@
-include ../jade-components/structure/head
-doctype html
-mixin head('Authenticate')
-body
-  include ../jade-components/structure/nav-login
+extends ../jade-components/logged-out-page.jade
+
+block title
+  title Log In | SupTracked
+
+block content
   main
     .container
       .section
@@ -26,7 +27,7 @@ body
                   input#server.validate(type='text', value='http://127.0.0.1:3000')
                   label(for='server') Server
 
-                                          
+
               .row
                 .col.s6
                   button.btn.waves-effect.waves-light(type='submit', value='login')
@@ -37,7 +38,7 @@ body
                   button.btn.waves-effect.waves-light(type='submit', value='register')
                     | Register
                     i.material-icons.right add
-                  
-                    
-  include ../jade-components/structure/footer
+
+
+block scripts
   script(src='js/index.js')

@@ -1,17 +1,18 @@
-include ../jade-components/structure/head
-doctype html
-mixin head('View Experience')
-body
-  include ../jade-components/structure/nav
+extends ../jade-components/logged-in-page.jade
+
+block title
+  title View Experience | SupTracked
+
+block content
   main
     .container
       .section#loading
         h5.center-align Loading experience
-        br 
+        br
         .progress
           .indeterminate
       .section#noExperience(style='display: none;')
-        h5.center-align 
+        h5.center-align
           i.material-icons error
           | No such experience!
       .section#main(style='display: none;')
@@ -61,11 +62,11 @@ body
               select#metaTTime.browser-default
             .row
               hr
-              a.btn.waves-effect.waves-light(onClick='deleteExperience();', style='width: 100%;') 
+              a.btn.waves-effect.waves-light(onClick='deleteExperience();', style='width: 100%;')
                 i.material-icons.left report_problem
                 i.material-icons.right report_problem
                 | Delete
-              
+
     #addConsumptionModal.modal
       .modal-content
         h4 Add Consumption
@@ -103,7 +104,7 @@ body
             a.active(href='#editConsumptionTab') Edit
           li.tab.col.s4
             a(href='#editFriendsTab') Friends
-        
+
         #editConsumptionTab
          form#editConsumption
            input#editID(type='hidden')
@@ -149,7 +150,7 @@ body
                   .col.s4
                     button.btn.waves-effect.waves-light(type='submit')
                       | Add
-        
-          
-  include ../jade-components/structure/footer
+
+
+block scripts
   script(src='js/experience.js')

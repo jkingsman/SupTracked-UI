@@ -1,0 +1,66 @@
+doctype html
+html(lang='en')
+  head
+    block title
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    meta(name='viewport', content='width=420, initial-scale=.75, maximum-scale=.75, user-scalable=no')
+
+    // CSS
+    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic,300,500,500italic,300italic,100,100italic', rel='stylesheet')
+    link(href='style.css', type='text/css', rel='stylesheet', media='screen')
+
+    // Add to homescreen for Chrome on Android
+    meta(name='mobile-web-app-capable', content='yes')
+    link(rel='icon', sizes='192x192', href='img/android-desktop.png')
+
+    // Add to homescreen for Safari on iOS
+    meta(name='apple-mobile-web-app-capable', content='yes')
+    meta(name='apple-mobile-web-app-status-bar-style', content='black')
+    meta(name='apple-mobile-web-app-title', content='SupTracked')
+    link(rel='apple-touch-icon-precomposed', href='img/ios-desktop.png')
+    link(rel='shortcut icon', href='img/favicon.png')
+  body
+    ul#configDropdown.dropdown-content
+      li
+        a(href='#!') one
+      li
+        a(href='#!') two
+      li
+        a(href='#!') three
+        
+    nav.light-blue.lighten-1
+      .nav-wrapper.container
+        span
+          a#logo-container.brand-logo(href='/') 
+            i.material-icons.left.mobile-pad dashboard
+            | SupTracked
+        ul.right.hide-on-med-and-down
+          li
+            a(href='/experiences.html') Experiences
+          li
+            a.dropdown-button(href='#!', data-activates='configDropdown')
+              | Config
+              i.material-icons.right arrow_drop_down
+          li
+            a(href='/?logout') Logout
+        ul#nav-mobile.side-nav
+          li
+            a(href='/experiences.html') 
+              i.material-icons.left.mobile-pad list
+              |  Experiences
+          li
+            a.dropdown-button(href='#!', data-activates='configDropdown')
+              | Config
+              i.material-icons.right arrow_drop_down
+          li
+            a(href='/?logout')
+              i.material-icons.left.mobile-pad stop
+              |  Logout
+        a.button-collapse(href='#', data-activates='nav-mobile')
+          i.material-icons menu
+    block content
+            
+    script(src='https://code.jquery.com/jquery-2.1.1.min.js')
+    script(src='lib.js')
+    block scripts

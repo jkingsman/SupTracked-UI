@@ -1,8 +1,9 @@
-include ../jade-components/structure/head
-doctype html
-mixin head('Experiences')
-body
-  include ../jade-components/structure/nav
+extends ../jade-components/logged-in-page.jade
+
+block title
+  title Experiences | SupTracked
+
+block content
   main
     .container
       .section#loading
@@ -23,6 +24,6 @@ body
       .fixed-action-btn(style='bottom: 45px; right: 24px;')
         a.btn-floating.btn-large.red(href='newexperience.html')
           i.large.material-icons add
-          
-  include ../jade-components/structure/footer
+            
+block scripts          
   script(src='js/experiences.js')
