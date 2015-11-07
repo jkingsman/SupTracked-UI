@@ -56,6 +56,10 @@ body
                 option(value='4') Good
                 option(value='5') Great
                 option(value='6') Spectacular
+            .row
+              label.tooltipped(data-position='right', data-delay='50', data-tooltip='Add App notes as a function of time elapsed since the selected consumption.', style='border-bottom: 1px dashed #ADADAD;') T-Time
+              select#metaTTime.browser-default
+              
     #addConsumptionModal.modal
       .modal-content
         h4 Add Consumption
@@ -75,14 +79,15 @@ body
               input#addLocation(type='text', required)
               label.active(for='addLocation') Location
           .row
-            .col.s4
+            .col.6
               label Drug
               select#addDrug.browser-default
-            .col.s4
+            .col.s6
               label Method
               select#addMethod.browser-default
-            .col.s4
-              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px')
+          .row
+            .col.s12
+              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
                 | Create
                 i.material-icons.right add
     #editConsumptionModal.modal
@@ -125,8 +130,7 @@ body
                     option(value="Frank")
                 .col.s4
                   a.btn.waves-effect.waves-light(onClick='addFriend();')
-                    | Add
-                
+                    | Add                
           .row
             .col.s12
               button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%;')
