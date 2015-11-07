@@ -34,7 +34,9 @@ gulp.task('html', function () {
 //minify & concat our CSS
 gulp.task('css', function () {
   gulp.src('./src/css/*')
-  .pipe(minifyCss())
+  .pipe(minifyCss({
+    keepSpecialComments: 0
+  }))
   .pipe(concat('style.css'))
   .pipe(gulp.dest('./dist/'))
   .pipe(connect.reload());
