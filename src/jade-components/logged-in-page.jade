@@ -20,15 +20,7 @@ html(lang='en')
     meta(name='apple-mobile-web-app-title', content='SupTracked')
     link(rel='apple-touch-icon-precomposed', href='img/ios-desktop.png')
     link(rel='shortcut icon', href='img/favicon.png')
-  body
-    ul#configDropdown.dropdown-content
-      li
-        a(href='#!') one
-      li
-        a(href='#!') two
-      li
-        a(href='#!') three
-        
+  body        
     nav.light-blue.lighten-1
       .nav-wrapper.container
         span
@@ -42,6 +34,13 @@ html(lang='en')
             a.dropdown-button(href='#!', data-activates='configDropdown')
               | Config
               i.material-icons.right arrow_drop_down
+            ul#configDropdown.dropdown-content
+              li
+                a(href='/drugs.html') Drugs
+              li
+                a(href='/methods.html') Methods
+              li
+                a(href='/user.html') User
           li
             a(href='/?logout') Logout
         ul#nav-mobile.side-nav
@@ -50,12 +49,20 @@ html(lang='en')
               i.material-icons.left.mobile-pad list
               |  Experiences
           li
-            a.dropdown-button(href='#!', data-activates='configDropdown')
-              | Config
-              i.material-icons.right arrow_drop_down
+            a(href='/drugs.html') 
+              i.material-icons.left.mobile-pad view_week
+              |  Configure Drugs
+          li
+            a(href='/methods.html') 
+              i.material-icons.left.mobile-pad dns
+              |  Configure Methods
+          li
+            a(href='/user.html') 
+              i.material-icons.left.mobile-pad perm_identity
+              |  Configure User
           li
             a(href='/?logout')
-              i.material-icons.left.mobile-pad stop
+              i.material-icons.left.mobile-pad person_pin
               |  Logout
         a.button-collapse(href='#', data-activates='nav-mobile')
           i.material-icons menu
