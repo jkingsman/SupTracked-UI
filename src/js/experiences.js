@@ -21,8 +21,8 @@ function loadMore() {
       limit: batchSize,
       offset: currentBatch * batchSize
     }), 'json', function(err, data, code) {
-      // either we've got an incomplete page and at the end, or we have a perfect boundary and have 404'd
-      if (code !== 404 && data.length === batchSize) {
+      // we've got an incomplete page and at the end
+      if (code !== 404) {
         // we're not at the end yet; bump it up
         currentBatch += 1;
       } else {
