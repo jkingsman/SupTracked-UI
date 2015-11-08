@@ -20,11 +20,55 @@ block content
               i.material-icons add
               
       .section#media(style='display: none;')
-        ul.collection#experiences-collection
+        ul.collection#media-collection
         
       .fixed-action-btn(style='bottom: 45px; right: 24px;')
         a.btn-floating.btn-large.red(href='#', onClick='newMedia();')
           i.large.material-icons add
+          
+    #addMediaModal.modal
+      .modal-content
+        h4 Add Media
+        form#addConsumption
+          .row
+            .input-field.col.s12
+              input#title(type='text', value='1', required)
+              label.active(for='Title') Title
+            .input-field.col.s12
+              input.datepicker#tags(type='text', required)
+              label.active(for='tags') Tags
+          .row
+            .input-field.col.s12
+              .switch
+                label
+                  | Current Timestamp
+                  input#currentDate(type='checkbox')
+                  span.lever
+                  | Custom Timestamp
+          .row
+            .input-field.col.s12
+              .switch
+                label
+                  | Experience
+                  input#associationType(type='checkbox')
+                  span.lever
+                  | Drug
+          .row
+            .input-field.col.s12
+              input#addLocation(type='text', required)
+              label.active(for='addLocation') Location
+          .row
+            .col.6
+              label Drug
+              select#addDrug.browser-default
+            .col.s6
+              label Method
+              select#addMethod.browser-default
+          .row
+            .col.s12
+              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+                | Create
+                i.material-icons.right add  
             
 block scripts          
   script(src='js/media.js')

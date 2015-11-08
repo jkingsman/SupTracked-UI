@@ -9,7 +9,7 @@ var atEnd = false;
 
 makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code) {
   if (code === 404) {
-    // no Experiences
+    // no media
     $('#loading').hide();
     $('#emptyMedia').show();
   }
@@ -58,11 +58,11 @@ function loadMore() {
           stringifiedConsumptions.push('no consumptions');
         }
 
-        $('#experiences-collection').append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + stringifiedConsumptions.join('<br />') + '</div></li>');
+        $('#media-collection').append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + stringifiedConsumptions.join('<br />') + '</div></li>');
       });
 
       $('#loading').hide();
-      $('#experiences').show();
+      $('#media').show();
     });
   }
 }
@@ -74,3 +74,7 @@ $(window).scroll(function() {
     loadMore();
   }
 });
+
+function newMedia(){
+  $('#addMediaModal').openModal();
+}
