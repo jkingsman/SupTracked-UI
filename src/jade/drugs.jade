@@ -31,8 +31,9 @@ block content
               option(value='2') Uncommon
               option(value='3') Rare
           .input-field.col.s12
-            textarea#notes.materialize-textarea
-            label#notesLabel(for='notes') Notes
+            textarea#notes.materialize-textarea(style='display: none;')
+            label#notesLabel(for='notes', style='display: none;') Notes
+            #notesMarkdown
         a.waves-effect.waves-light.btn#saveNew(style='width: 100%;', onClick='saveNew();') Create New Drug
         a.waves-effect.waves-light.btn#deleteDrug(style='width: 100%;', onClick='deleteDrug();') Delete Drug
 

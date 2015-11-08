@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,Materialize */
+/* globals makeAuthRequest,Materialize,micromarkdown */
 "use strict";
 
 var experienceID = location.search.slice(1);
@@ -337,6 +337,10 @@ $(document).ready(function(){
     $('#notesArea').text(data.notes);
     $('#notesArea').trigger('autoresize');
 
+    // load markdown
+    var breaksToBR = micromarkdown.parse($('#notesArea').val()).replace(/(?:\r\n|\r|\n)/g, '<br />');
+    $('#notesMarkdown').html(breaksToBR);
+
     // lift the curtain
     $('#loading').hide();
     $('#main').show();
@@ -380,4 +384,10 @@ $("#metaTitle, #metaDate, #metaPanic, #metaRating, #metaTTime").on('change keyup
   } else{
     initialMetaMsgFired = 1;
   }
+});
+
+// add click listener to reveal text box
+$("#notesMarkdown").on("click", function() {
+  $("#notesMarkdown").hide();
+  $("#notesArea").show();
 });

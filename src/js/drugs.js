@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,Materialize */
+/* globals makeAuthRequest,Materialize,micromarkdown */
 
 "use strict";
 
@@ -83,6 +83,11 @@ $("#drugList").on('change', function() {
       // trigger formatting and autoresizing
       $('#nameLabel, #unitLabel, #classificationLabel, #familyLabel, #notesLabel').addClass('active');
       $('#notes').trigger('autoresize');
+
+      var breaksToBR = micromarkdown.parse($('#notes').val()).replace(/(?:\r\n|\r|\n)/g, ' <br /> ');
+      $('#notesMarkdown').html(breaksToBR);
+      $('#notes').hide();
+      $('#notesMarkdown').show();
     }
   });
 });
@@ -155,3 +160,10 @@ function deleteDrug(){
     Materialize.toast('Drug deleted', 1000);
   });
 }
+
+// add click listener to reveal text box
+$("#notesMarkdown").on("click", function() {
+  $("#notesMarkdown").hide();
+  $("#notes").show();
+  $("#notesLabel").show();
+});
