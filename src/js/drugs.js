@@ -112,7 +112,7 @@ $("#name, #unit, #classification, #family, #rarity, #notes").on('change keyup pa
         // redraw the dropdown and reselect the Drug
         populateDropdown(parseInt($('#drugList').val()));
 
-        Materialize.toast('Drug saved.', 1000);
+        Materialize.toast('Drug saved', 1000);
       });
     }, 1000);
   }
@@ -138,7 +138,7 @@ function saveNew() {
     // redraw the dropdown and reselect the Drug
     populateDropdown(data.id);
 
-    Materialize.toast('Drug created.', 1000);
+    Materialize.toast('Drug created', 1000);
   });
 }
 
@@ -152,6 +152,6 @@ function deleteDrug(){
     // redraw the dropdown and reselect the Drug
     populateDropdown(0);
 
-    Materialize.toast('Drug deleted.', 1000);
+    Materialize.toast('Drug deleted', 1000);
   });
 }

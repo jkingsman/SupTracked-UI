@@ -187,7 +187,7 @@ function editConsumption(id){
   });
 }
 
-$('#addFriendForm').submit(function( event ) {
+$('#addFriendForm').submit(function(event) {
   event.preventDefault();
   var friendName = $('#addFriend').val();
   makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({consumption_id: $('#editID').val(), name: friendName}), 'json', function(err, data, code){

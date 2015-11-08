@@ -99,7 +99,7 @@ $("#name, #icon").on('change keyup paste', function() {
         // redraw the dropdown and reselect the method
         populateDropdown(parseInt($('#methodList').val()));
 
-        Materialize.toast('Method saved.', 1000);
+        Materialize.toast('Method saved', 1000);
       });
     }, 1000);
   }
@@ -121,7 +121,7 @@ function saveNew() {
     // redraw the dropdown and reselect the method
     populateDropdown(data.id);
 
-    Materialize.toast('Method created.', 1000);
+    Materialize.toast('Method created', 1000);
   });
 }
 
@@ -135,6 +135,6 @@ function deleteMethod(){
     // redraw the dropdown and reselect the method
     populateDropdown(0);
 
-    Materialize.toast('Method deleted.', 1000);
+    Materialize.toast('Method deleted', 1000);
   });
 }
