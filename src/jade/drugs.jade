@@ -6,7 +6,35 @@ block title
 block content
     main
       .container
-        
+        h4 Edit Drugs
+        label Browser Select
+        select.browser-default#drugList
+        hr
+        .row
+          .input-field.col.s12
+            input#name(type='text')
+            label#nameLabel(for='name') Name 
+          .input-field.col.s12
+            input#unit(type='text')
+            label#unitLabel(for='unit') Unit 
+          .input-field.col.s12
+            input#classification(type='text')
+            label#classificationLabel(for='classification') Classification 
+          .input-field.col.s12
+            input#family(type='text')
+            label#familyLabel(for='family') Family 
+          .col.s12
+            label Rarity
+            select.browser-default#rarity
+              option(value='0') Very Common
+              option(value='1', selected) Common
+              option(value='2') Uncommon
+              option(value='3') Rare
+          .input-field.col.s12
+            textarea#notes.materialize-textarea
+            label#notesLabel(for='notes') Notes
+        a.waves-effect.waves-light.btn#saveNew(style='width: 100%;', onClick='saveNew();') Create New Drug
+        a.waves-effect.waves-light.btn#deleteDrug(style='width: 100%;', onClick='deleteDrug();') Delete Drug
 
 block scripts
   script(src='js/drugs.js')
