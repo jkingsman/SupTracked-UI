@@ -6,7 +6,19 @@ block title
 block content
     main
       .container
-        
+        h4 Edit Methods
+        label Method Select
+        select.browser-default#methodList
+        hr
+        .row
+          .input-field.col.s12
+            input#name(type='text')
+            label#nameLabel(for='name') Name 
+          .input-field.col.s12
+            input#icon(type='text')
+            label#iconLabel(for='icon') icon 
+        a.waves-effect.waves-light.btn#saveNew(style='width: 100%;', onClick='saveNew();') Create New Method
+        a.waves-effect.waves-light.btn#deleteMethod(style='width: 100%;', onClick='deleteMethod();') Delete Method
 
 block scripts
   script(src='js/methods.js')
