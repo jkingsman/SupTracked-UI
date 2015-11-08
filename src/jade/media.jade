@@ -1,0 +1,30 @@
+extends ../jade-components/logged-in-page.jade
+
+block title
+  title Media | SupTracked
+
+block content
+  main
+    .container
+      .section#loading
+        h5.center-align Loading media
+        br 
+        .progress
+          .indeterminate
+      .section#emptyMedia(style='display: none;')
+        ul.collection
+          li.collection-item.avatar
+            i.material-icons.circle report_problem
+            span.title No Media Found
+            a.secondary-content(href='#', onClick='newMedia();')
+              i.material-icons add
+              
+      .section#media(style='display: none;')
+        ul.collection#experiences-collection
+        
+      .fixed-action-btn(style='bottom: 45px; right: 24px;')
+        a.btn-floating.btn-large.red(href='#', onClick='newMedia();')
+          i.large.material-icons add
+            
+block scripts          
+  script(src='js/media.js')

@@ -7,17 +7,17 @@ var currentBatch = 0;
 var batchSize = 30;
 var atEnd = false;
 
-makeAuthRequest('/experience/search', 'POST', null, 'json', function(err, data, code) {
+makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code) {
   if (code === 404) {
     // no Experiences
     $('#loading').hide();
-    $('#emptyExperiences').show();
+    $('#emptyMedia').show();
   }
 });
 
 function loadMore() {
   if (!atEnd) {
-    makeAuthRequest('/experience/search', 'POST', JSON.stringify({
+    makeAuthRequest('/media/search', 'POST', JSON.stringify({
       limit: batchSize,
       offset: currentBatch * batchSize
     }), 'json', function(err, data, code) {
