@@ -34,8 +34,8 @@ block content
             textarea#notes.materialize-textarea(style='display: none;')
             label#notesLabel(for='notes', style='display: none;') Notes
             #notesMarkdown
-        a.waves-effect.waves-light.btn#saveNew(style='width: 100%;', onClick='saveNew();') Create New Drug
-        a.waves-effect.waves-light.btn#deleteDrug(style='width: 100%;', onClick='deleteDrug();') Delete Drug
+        a.waves-effect.waves-light.btn.page-action#saveNew(style='width: 100%;', onClick='saveNew();') Create New Drug
+        a.waves-effect.waves-light.btn.page-action#deleteDrug(style='width: 100%;', onClick='deleteDrug();') Delete Drug
 
 block scripts
   script(src='js/drugs.js')

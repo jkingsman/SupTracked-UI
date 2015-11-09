@@ -21,16 +21,20 @@ block content
             h3#title
             h6#date
             ul.tabs
-              li.tab.col.s4.active
-                a.active(href='#consumptions') Consumptions
-              li.tab.col.s4
+              li.tab.col.s3.active
+                a.active(href='#consumptions')
+                  | Cons
+                  span.hide-on-med-and-down umptions
+              li.tab.col.s3
                 a(href='#notes') Notes
-              li.tab.col.s4
+              li.tab.col.s3
                 a(href='#meta') Meta
+              li.tab.col.s3
+                a(href='#media') Media
           #consumptions.col.s12
             ul.collection#consumptionsCollection
               li.collection-item#noConsumptions
-            a.waves-effect.waves-light.btn.modal-trigger(onClick='$("#addConsumptionModal").openModal();', style='width: 100%;') Add Consumption
+            a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick='$("#addConsumptionModal").openModal();', style='width: 100%;') Add Consumption
 
           #notes.col.s12
             textarea#notesArea.materialize-textarea(style='display: none;')
