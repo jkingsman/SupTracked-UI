@@ -74,8 +74,9 @@ function loadMore() {
 
 loadMore();
 
-$(window).scroll(function() {
+// only do the load check once every 500ms
+window.setInterval(function(){
   if ($(window).scrollTop() + $(window).height() > $(document).height() - 50) {
     loadMore();
   }
-});
+}, 500);
