@@ -15,7 +15,11 @@ $(document).ready(function() {
   });
 
   // audit data
-  makeAuthRequest('/user/audit', 'POST', JSON.stringify({limit: 250}), 'json', function(err, data, code) {
+  var auditCount = parseInt(location.search.slice(1));
+  if(isNaN(auditCount)){
+    auditCount = 250;
+  }
+  makeAuthRequest('/user/audit', 'POST', JSON.stringify({limit: auditCount}), 'json', function(err, data, code) {
     data.forEach(function(auditEntry){
       $('#auditLog').append('<li class="collection-item">' +
       new Date((auditEntry.date * 1000) - (new Date().getTimezoneOffset() * 60000)).toISOString().slice(0, 16).replace('T', ' ') +
