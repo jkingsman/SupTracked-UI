@@ -4,4 +4,4 @@ Individual pages are kept in the `jade` folder. Everything in the `lib` folder i
 
 To deploy, serve the `dist` directory.
 
-I know this uses jQuery. I know it shouldn't. I just don't have the time or mental bandwidth to learn a new frontend framework right now... sorry.
+I know this uses jQuery. I know it shouldn't. This is just a mockup before I start learning a new framework to rebuild it in.
