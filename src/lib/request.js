@@ -208,7 +208,7 @@ function makeAuthBlobRequest(endpoint, cb){
       }
   };
 
-  xhr.open("GET", endpoint);
+  xhr.open("GET", server + endpoint);
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.setRequestHeader('Authorization', 'Basic ' + auth);
   xhr.responseType = 'blob';
