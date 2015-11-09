@@ -4,10 +4,10 @@
 "use strict";
 
 var currentBatch = 0;
-var batchSize = 30;
+var batchSize = 10;
 var atEnd = false;
 
-makeAuthRequest('/experience/search', 'POST', null, 'json', function(err, data, code) {
+makeAuthRequest('/experience/search', 'POST', JSON.stringify({limit: 1}), 'json', function(err, data, code) {
   if (code === 404) {
     // no Experiences
     $('#loading').hide();
@@ -28,6 +28,11 @@ function loadMore() {
       } else {
         atEnd = true;
       }
+
+      // get it into date order
+      data.sort(function(a, b) {
+        return parseFloat(b.date) - parseFloat(a.date);
+      });
 
       data.forEach(function(experience) {
         if (experience.title.length < 1) {
