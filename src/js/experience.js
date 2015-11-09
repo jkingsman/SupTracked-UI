@@ -282,19 +282,23 @@ function drawMedia() {
     association_type: 'experience',
     association: experienceID
   }), 'json', function(err, data, code) {
-    data.forEach(function(media) {
-      var mediaUrl = getCookie('server') + '/media/file/' + media.id;
+    data.forEach(function(media, index) {
+      if (index % 4 === 0) {
+        // we're beginning a new row
+        $('#media').append('<div id="row' + Math.floor(index / 4) + '" class="row"></div>');
+      }
 
-      $('#media').append('<div class="col s12 m3"><div class="card"><div class="card-image">' +
+      var mediaUrl = getCookie('server') + '/media/file/' + media.id;
+      $('#row' + Math.floor(index / 4)).append('<div class="col s12 m3"><div class="card"><div class="card-image">' +
         '<a id="imagelink' + media.id + '"><img id="image' + media.id + '"/><span class="card-title">' + media.title + '</span><a/></div>' +
         '<div class="card-content"><p>' + new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '</p></div>' +
         '</div></div>');
 
-        makeAuthBlobRequest('/media/file/' + media.id, function(data){
-          var url = window.URL || window.webkitURL;
-          $('#image' + media.id).attr('src', url.createObjectURL(data));
-          $('#imagelink' + media.id).attr('href', url.createObjectURL(data));
-        });
+      makeAuthBlobRequest('/media/file/' + media.id, function(data) {
+        var url = window.URL || window.webkitURL;
+        $('#image' + media.id).attr('src', url.createObjectURL(data));
+        $('#imagelink' + media.id).attr('href', url.createObjectURL(data));
+      });
     });
   });
 }
