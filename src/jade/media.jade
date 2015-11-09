@@ -23,47 +23,46 @@ block content
         ul.collection#media-collection
         
       .fixed-action-btn(style='bottom: 45px; right: 24px;')
-        a.btn-floating.btn-large.red(href='#', onClick='newMedia();')
+        a.btn-floating.btn-large.red.page-action(href='#', onClick='$("#addMediaModal").openModal();')
           i.large.material-icons add
           
     #addMediaModal.modal
       .modal-content
         h4 Add Media
-        form#addConsumption
+        form#addMedia
           .row
             .input-field.col.s12
-              input#title(type='text', value='1', required)
+              input#title(type='text', required)
               label.active(for='Title') Title
             .input-field.col.s12
               input.datepicker#tags(type='text', required)
               label.active(for='tags') Tags
           .row
+            input#timeCurrent(name='time', type='radio', checked='', value='current')
+            label(for='timeCurrent') Current Time
+            input#timeCustom(name='time', type='radio', value='custom')
+            label.margin-left-40(for='timeCustom') Custom Time
+          .row#customTimeArea(style='display: none;')
             .input-field.col.s12
-              .switch
-                label
-                  | Current Timestamp
-                  input#currentDate(type='checkbox')
-                  span.lever
-                  | Custom Timestamp
+              input#customTime(type='text')
+              label.active(for='customTime') Custom Time
           .row
-            .input-field.col.s12
-              .switch
-                label
-                  | Experience
-                  input#associationType(type='checkbox')
-                  span.lever
-                  | Drug
+            .col.s12
+              label(for='experience') Experience
+              select#experience.browser-default
           .row
-            .input-field.col.s12
-              input#addLocation(type='text', required)
-              label.active(for='addLocation') Location
+            input#explicit(type='checkbox')
+            label(for='explicit') Explicit
+            br
+            input#favorite(type='checkbox')
+            label(for='favorite') Favorite
           .row
-            .col.6
-              label Drug
-              select#addDrug.browser-default
-            .col.s6
-              label Method
-              select#addMethod.browser-default
+            .file-field.input-field
+              .btn
+                span File
+                input#mediaFile(type='file', required)
+              .file-path-wrapper
+                input.file-path.validate(type='text')
           .row
             .col.s12
               button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
