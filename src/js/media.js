@@ -1,10 +1,10 @@
-/* globals makeAuthRequest,Materialize */
+/* globals makeAuthRequest,Materialize,getCookie,makeAuthBlobRequest */
 /* jshint -W089 */
 
 "use strict";
 
 var currentBatch = 0;
-var batchSize = 30;
+var batchSize = 24;
 var atEnd = false;
 
 makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code) {
@@ -17,6 +17,7 @@ makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code)
 
 function loadMore() {
   if (!atEnd) {
+    atEnd = true;
     makeAuthRequest('/media/search', 'POST', JSON.stringify({
       limit: batchSize,
       offset: currentBatch * batchSize
@@ -29,36 +30,29 @@ function loadMore() {
         atEnd = true;
       }
 
-      data.forEach(function(experience) {
-        if (experience.title.length < 1) {
-          experience.title = '[none]';
+      data.forEach(function(media, index) {
+        if (index % 4 === 0) {
+          // we're beginning a new row
+          $('#media').append('<div id="row' + Math.floor(index / 4) + '" class="row"></div>');
         }
 
-        // compile thr consumptions, grouped by drug
-        var groupedConsumptionList = {};
+        var mediaUrl = getCookie('server') + '/media/file/' + media.id;
 
-        experience.consumptions.forEach(function(consumption){
-          if(groupedConsumptionList.hasOwnProperty(consumption.drug.name)){
-            groupedConsumptionList[consumption.drug.name].count += consumption.count;
-          } else {
-            groupedConsumptionList[consumption.drug.name] = {};
-            groupedConsumptionList[consumption.drug.name].count = consumption.count;
-            groupedConsumptionList[consumption.drug.name].unit = consumption.drug.unit;
-          }
+        var association = '';
+        if(media.association_type === 'experience'){
+          association = '<br><a href="/experience.html?' + media.association + '">View Experience</a>';
+        }
+
+        $('#row' + Math.floor(index / 4)).append('<div class="col s12 m3"><div class="card"><div class="card-image">' +
+          '<a id="imagelink' + media.id + '"><img id="image' + media.id + '"/><span class="card-title">' + media.title + '</span><a/></div>' +
+          '<div class="card-content"><p>' + new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + association + '</p></div>' +
+          '</div></div>');
+
+        makeAuthBlobRequest('/media/file/' + media.id, function(data) {
+          var url = window.URL || window.webkitURL;
+          $('#image' + media.id).attr('src', url.createObjectURL(data));
+          $('#imagelink' + media.id).attr('href', url.createObjectURL(data));
         });
-
-        // group the consumptions into strings by drug
-        var stringifiedConsumptions = [];
-
-        if(Object.keys(groupedConsumptionList).length > 0){
-          for(var drug in groupedConsumptionList){
-            stringifiedConsumptions.push(groupedConsumptionList[drug].count + ' ' + groupedConsumptionList[drug].unit + ' ' + drug);
-          }
-        } else {
-          stringifiedConsumptions.push('no consumptions');
-        }
-
-        $('#media-collection').append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + stringifiedConsumptions.join('<br />') + '</div></li>');
       });
 
       $('#loading').hide();
