@@ -286,12 +286,14 @@ function drawMedia() {
       var mediaUrl = getCookie('server') + '/media/file/' + media.id;
 
       $('#media').append('<div class="col s12 m3"><div class="card"><div class="card-image">' +
-        '<img id="image' + media.id + '"/><span class="card-title">' + media.title + '</span></div>' +
+        '<a id="imagelink' + media.id + '"><img id="image' + media.id + '"/><span class="card-title">' + media.title + '</span><a/></div>' +
         '<div class="card-content"><p>' + new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '</p></div>' +
         '</div></div>');
 
         makeAuthBlobRequest('/media/file/' + media.id, function(data){
-          console.log(data)
+          var url = window.URL || window.webkitURL;
+          $('#image' + media.id).attr('src', url.createObjectURL(data));
+          $('#imagelink' + media.id).attr('href', url.createObjectURL(data));
         });
     });
   });
