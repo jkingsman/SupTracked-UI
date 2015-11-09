@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,Materialize,micromarkdown */
+/* globals makeAuthRequest,makeAuthBlobRequest,Materialize,micromarkdown,getCookie */
 "use strict";
 
 var experienceID = location.search.slice(1);
@@ -9,8 +9,8 @@ var metaSaveNotificationTimeout;
 var initialMetaMsgFired = 0;
 
 // fill in title/rating, etc.
-function setUpMeta(){
-  makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
+function setUpMeta() {
+  makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
     var $input = $('#metaDate').pickadate({
       format: 'yyyy-mm-dd'
     });
@@ -26,7 +26,7 @@ function setUpMeta(){
     $('#metaPanicLabel').addClass('active');
 
     // rating
-    if(data.rating_id){
+    if (data.rating_id) {
       $('#metaRating').val(data.rating_id);
     }
 
@@ -34,20 +34,22 @@ function setUpMeta(){
     // flush first
     $('#metaTTime').empty();
     $('#metaTTime').append('<option value="0">No T-Time</option>');
-    data.consumptions.forEach(function(consumption){
+    data.consumptions.forEach(function(consumption) {
       $('#metaTTime').append('<option value="' + consumption.id + '">' + new Date(consumption.date * 1000).toISOString().slice(10, 16).replace(/T/, ' ') + ' -- ' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + '</option>');
     });
 
-    if(data.ttime){
+    if (data.ttime) {
       $('#metaTTime').val(data.ttime);
     }
   });
 }
 
 // kill the whole thing
-function deleteExperience(){
-  makeAuthRequest('/experience', 'DELETE', JSON.stringify({id: experienceID}), 'json', function(err, data, code){
-    if(code !== 200){
+function deleteExperience() {
+  makeAuthRequest('/experience', 'DELETE', JSON.stringify({
+    id: experienceID
+  }), 'json', function(err, data, code) {
+    if (code !== 200) {
       Materialize.toast(err, 6000, 'warning-toast');
       return;
     }
@@ -57,45 +59,47 @@ function deleteExperience(){
 }
 
 // draw consumptions into the collection
-function drawConsumptions(){
-  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
+function drawConsumptions() {
+  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
     // load Consumptions
-    if(code === 404){
+    if (code === 404) {
       $('#consumptionsCollection').empty();
       $('#consumptionsCollection').append('<li id="noConsumptions" class="collection-item"><div>No consumptions</div></li>');
     } else {
       $('#consumptionsCollection').empty();
 
-      data.forEach(function(consumption){
+      data.forEach(function(consumption) {
         // build friends list
         var friendList = [];
-        friendList = consumption.friends.map(function(friend){
+        friendList = consumption.friends.map(function(friend) {
           return friend.name;
         });
 
         var friendString = 'No friends';
 
-        if(friendList.length > 0){
+        if (friendList.length > 0) {
           friendString = friendList.join(', ');
         }
 
         $('#consumptionsCollection').append('<li class="collection-item">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') +
-        '<span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
-        '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
-        '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
-        '<a href="#" title="Edit" onClick="editConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">list</i></a>' +
-        '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">open_in_new</i></a>' +
-        '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
-        '</div></li>');
+          '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
+          '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
+          '<a href="#" title="Edit" onClick="editConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">list</i></a>' +
+          '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">open_in_new</i></a>' +
+          '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
+          '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
+          '</li>');
       });
     }
   });
 }
 
 
-function deleteConsumption(id){
-  makeAuthRequest('/consumption', 'DELETE', JSON.stringify({id: id}), 'json', function(err, data, code){
-    if(code !== 200){
+function deleteConsumption(id) {
+  makeAuthRequest('/consumption', 'DELETE', JSON.stringify({
+    id: id
+  }), 'json', function(err, data, code) {
+    if (code !== 200) {
       Materialize.toast(err, 6000, 'warning-toast');
       return;
     }
@@ -103,10 +107,13 @@ function deleteConsumption(id){
     Materialize.toast('Consumption deleted', 1000, 'success-toast');
 
     // if we just deleted the T-Time consumption, reset that
-    makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
-      if(id === data.ttime){
-        makeAuthRequest('/experience', 'PUT', JSON.stringify({id: experienceID, ttime: 0}), 'json', function(err, data, code){
-          if(code !== 200){
+    makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
+      if (id === data.ttime) {
+        makeAuthRequest('/experience', 'PUT', JSON.stringify({
+          id: experienceID,
+          ttime: 0
+        }), 'json', function(err, data, code) {
+          if (code !== 200) {
             Materialize.toast('Metadata save error: ' + err, 6000, 'warning-toast');
             return;
           }
@@ -120,14 +127,21 @@ function deleteConsumption(id){
   });
 }
 
-function duplicateConsumption(id){
-  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
-    data.forEach(function(consumption){
-      if(consumption.id === id){
-        var payload = {date: Math.floor((new Date().getTime() - (new Date().getTimezoneOffset()) * 60000) / 1000), count: consumption.count, experience_id: experienceID, drug_id: consumption.drug.id, method_id: consumption.method.id, location: consumption.location};
+function duplicateConsumption(id) {
+  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(consumption) {
+      if (consumption.id === id) {
+        var payload = {
+          date: Math.floor((new Date().getTime() - (new Date().getTimezoneOffset()) * 60000) / 1000),
+          count: consumption.count,
+          experience_id: experienceID,
+          drug_id: consumption.drug.id,
+          method_id: consumption.method.id,
+          location: consumption.location
+        };
 
-        makeAuthRequest('/consumption', 'POST', JSON.stringify(payload), 'json', function(err, data, code){
-          if(err){
+        makeAuthRequest('/consumption', 'POST', JSON.stringify(payload), 'json', function(err, data, code) {
+          if (err) {
             Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
             return;
           }
@@ -141,10 +155,10 @@ function duplicateConsumption(id){
   });
 }
 
-function editConsumption(id){
-  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
-    data.forEach(function(consumption){
-      if(consumption.id === id){
+function editConsumption(id) {
+  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(consumption) {
+      if (consumption.id === id) {
         // load the ID
         $('#editID').val(consumption.id);
 
@@ -173,10 +187,10 @@ function editConsumption(id){
 
         // set up Friends
         $('#editFriendBox').empty();
-        if(consumption.friends.length === 0){
+        if (consumption.friends.length === 0) {
           $('#editFriendBox').text('No friends!');
-        } else{
-          consumption.friends.forEach(function(friend){
+        } else {
+          consumption.friends.forEach(function(friend) {
             $('#editFriendBox').append('<div class="chip" id="friend' + friend.id + '" onClick="removeFriend(' + friend.id + ')">' + friend.name + '</div>');
           });
         }
@@ -190,8 +204,11 @@ function editConsumption(id){
 $('#addFriendForm').submit(function(event) {
   event.preventDefault();
   var friendName = $('#addFriend').val();
-  makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({consumption_id: $('#editID').val(), name: friendName}), 'json', function(err, data, code){
-    if(code !== 201){
+  makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
+    consumption_id: $('#editID').val(),
+    name: friendName
+  }), 'json', function(err, data, code) {
+    if (code !== 201) {
       Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
       return;
     }
@@ -206,9 +223,11 @@ $('#addFriendForm').submit(function(event) {
   });
 });
 
-function removeFriend(id){
-  makeAuthRequest('/consumption/friend', 'DELETE', JSON.stringify({id: id}), 'json', function(err, data, code){
-    if(code !== 200){
+function removeFriend(id) {
+  makeAuthRequest('/consumption/friend', 'DELETE', JSON.stringify({
+    id: id
+  }), 'json', function(err, data, code) {
+    if (code !== 200) {
       Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
       return;
     }
@@ -219,7 +238,7 @@ function removeFriend(id){
 }
 
 // fill in drug/method selectors, dates, etc. for creation and editing etc.
-function setUpConsumptions(){
+function setUpConsumptions() {
   // init new consumption date picker
   var $input = $('#addDate').pickadate({
     format: 'yyyy-mm-dd'
@@ -231,35 +250,55 @@ function setUpConsumptions(){
   $('#addTime').val(('0' + date.getHours()).slice(-2) + ('0' + date.getMinutes()).slice(-2));
   $('#addtimeLabel').addClass('active');
 
-  makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code){
-    if(data.length < 1){
+  makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
+    if (data.length < 1) {
       $('#addDrug').append('<option value="" disabled selected>None</option>');
       $('#editDrug').append('<option value="" disabled selected>None</option>');
       return;
     }
 
-    data.forEach(function(drug){
+    data.forEach(function(drug) {
       $('#addDrug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
       $('#editDrug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
     });
   });
 
-  makeAuthRequest('/method/all', 'GET', null, 'json', function(err, data, code){
-    if(data.length < 1){
+  makeAuthRequest('/method/all', 'GET', null, 'json', function(err, data, code) {
+    if (data.length < 1) {
       $('#addMethod').append('<option value="" disabled selected>None</option>');
       $('#editMethod').append('<option value="" disabled selected>None</option>');
       return;
     }
 
-    data.forEach(function(method){
+    data.forEach(function(method) {
       $('#addMethod').append('<option value="' + method.id + '">' + method.name + '</option>');
       $('#editMethod').append('<option value="' + method.id + '">' + method.name + '</option>');
     });
   });
 }
 
+function drawMedia() {
+  makeAuthRequest('/media/search', 'POST', JSON.stringify({
+    association_type: 'experience',
+    association: experienceID
+  }), 'json', function(err, data, code) {
+    data.forEach(function(media) {
+      var mediaUrl = getCookie('server') + '/media/file/' + media.id;
+
+      $('#media').append('<div class="col s12 m3"><div class="card"><div class="card-image">' +
+        '<img id="image' + media.id + '"/><span class="card-title">' + media.title + '</span></div>' +
+        '<div class="card-content"><p>' + new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '</p></div>' +
+        '</div></div>');
+
+        makeAuthBlobRequest('/media/file/' + media.id, function(data){
+          console.log(data)
+        });
+    });
+  });
+}
+
 // create Add Experience submit listener
-$('#addConsumption').submit(function( event ) {
+$('#addConsumption').submit(function(event) {
   event.preventDefault();
   var datetime = Math.floor(Date.parse($('#addDate').val()) / 1000);
 
@@ -269,10 +308,17 @@ $('#addConsumption').submit(function( event ) {
   var timeSeconds = (hours * 3600) + (minutes * 60);
   var timeStamp = (datetime + timeSeconds);
 
-  var payload = {date: timeStamp, count: $('#addCount').val(), experience_id: experienceID, drug_id: $('#addDrug').val(), method_id: $('#addMethod').val(), location: $('#addLocation').val()};
+  var payload = {
+    date: timeStamp,
+    count: $('#addCount').val(),
+    experience_id: experienceID,
+    drug_id: $('#addDrug').val(),
+    method_id: $('#addMethod').val(),
+    location: $('#addLocation').val()
+  };
 
-  makeAuthRequest('/consumption', 'POST', JSON.stringify(payload), 'json', function(err, data, code){
-    if(err){
+  makeAuthRequest('/consumption', 'POST', JSON.stringify(payload), 'json', function(err, data, code) {
+    if (err) {
       Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
       return;
     }
@@ -287,7 +333,7 @@ $('#addConsumption').submit(function( event ) {
 
 
 // consumption edit listener
-$('#editConsumption').submit(function( event ) {
+$('#editConsumption').submit(function(event) {
   event.preventDefault();
   var datetime = Math.floor(Date.parse($('#editDate').val()) / 1000);
 
@@ -297,10 +343,18 @@ $('#editConsumption').submit(function( event ) {
   var timeSeconds = (hours * 3600) + (minutes * 60);
   var timeStamp = (datetime + timeSeconds);
 
-  var payload = {id: $('#editID').val(), date: timeStamp, count: $('#editCount').val(), experience_id: experienceID, drug_id: $('#editDrug').val(), method_id: $('#editMethod').val(), location: $('#editLocation').val()};
+  var payload = {
+    id: $('#editID').val(),
+    date: timeStamp,
+    count: $('#editCount').val(),
+    experience_id: experienceID,
+    drug_id: $('#editDrug').val(),
+    method_id: $('#editMethod').val(),
+    location: $('#editLocation').val()
+  };
 
-  makeAuthRequest('/consumption', 'PUT', JSON.stringify(payload), 'json', function(err, data, code){
-    if(code !== 200){
+  makeAuthRequest('/consumption', 'PUT', JSON.stringify(payload), 'json', function(err, data, code) {
+    if (code !== 200) {
       Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
       return;
     }
@@ -313,9 +367,9 @@ $('#editConsumption').submit(function( event ) {
   });
 });
 
-$(document).ready(function(){
-  makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code){
-    if(code === 404){
+$(document).ready(function() {
+  makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
+    if (code === 404) {
       // no Experiences
       $('#loading').hide();
       $('#noExperience').show();
@@ -330,6 +384,7 @@ $(document).ready(function(){
     $('#date').text(date.toISOString().slice(0, 10));
 
     drawConsumptions();
+    drawMedia();
     setUpConsumptions();
     setUpMeta();
 
@@ -352,8 +407,11 @@ $(document).ready(function(){
 $("#notesArea").on('change keyup paste', function() {
   clearTimeout(noteSaveNotificationTimeout);
   noteSaveNotificationTimeout = setTimeout(function() {
-    makeAuthRequest('/experience', 'PUT', JSON.stringify({id: experienceID, notes: $("#notesArea").val()}), 'json', function(err, data, code){
-      if(code !== 200){
+    makeAuthRequest('/experience', 'PUT', JSON.stringify({
+      id: experienceID,
+      notes: $("#notesArea").val()
+    }), 'json', function(err, data, code) {
+      if (code !== 200) {
         Materialize.toast('Notes save error: ' + err, 6000, 'warning-toast');
         return;
       }
@@ -365,13 +423,20 @@ $("#notesArea").on('change keyup paste', function() {
 
 // listen on meta change
 $("#metaTitle, #metaDate, #metaPanic, #metaRating, #metaTTime").on('change keyup paste', function() {
-  if(initialMetaMsgFired){
+  if (initialMetaMsgFired) {
     // only fire if this isn't generated by our loading/futzing
     clearTimeout(metaSaveNotificationTimeout);
     metaSaveNotificationTimeout = setTimeout(function() {
-      var updateObj = {id: experienceID, title: $('#metaTitle').val(), date: Math.floor(new Date($('#metaDate').val() + 'T00:00:00').getTime() / 1000), panicmsg: $('#metaPanic').val(), rating_id: $('#metaRating').val(), ttime: $('#metaTTime').val()};
-      makeAuthRequest('/experience', 'PUT', JSON.stringify(updateObj), 'json', function(err, data, code){
-        if(code !== 200){
+      var updateObj = {
+        id: experienceID,
+        title: $('#metaTitle').val(),
+        date: Math.floor(new Date($('#metaDate').val() + 'T00:00:00').getTime() / 1000),
+        panicmsg: $('#metaPanic').val(),
+        rating_id: $('#metaRating').val(),
+        ttime: $('#metaTTime').val()
+      };
+      makeAuthRequest('/experience', 'PUT', JSON.stringify(updateObj), 'json', function(err, data, code) {
+        if (code !== 200) {
           Materialize.toast('Metadata save error: ' + err, 6000, 'warning-toast');
           return;
         }
@@ -381,7 +446,7 @@ $("#metaTitle, #metaDate, #metaPanic, #metaRating, #metaTTime").on('change keyup
         Materialize.toast('Metadata saved.', 1000);
       });
     }, 1000);
-  } else{
+  } else {
     initialMetaMsgFired = 1;
   }
 });

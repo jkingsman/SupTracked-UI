@@ -8,7 +8,6 @@
 
 $(document).on('click', 'a', function(event) {
   if ($(event.target).attr('class') == undefined || $(event.target).attr('class').indexOf('page-action') === -1) {
-    console.log('preving')
     event.preventDefault();
     window.location = $(this).attr("href");
   }

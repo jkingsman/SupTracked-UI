@@ -180,3 +180,37 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb){
 * @param {string} data data returned by the server (will be null if there is no response AND the 'text' type is provided for responseType)
 * @param {Number} code http status code
 */
+
+/**
+* Make an authenticated server request for an image (returns a blob)
+*
+* @param {String} endpoint the endpoint URL the data should go to
+* @param {String} verb HTTP very the data should be sent with
+* @param {String} data JSON data to be sent
+* @param {String} responseType 'json' or 'text'; json will parse and give the JSON as the data to the callback. Text should only be used when no data is returned, and the callback data param will be null
+* @param {callback} cb callback that handles the response (only param is the data)
+*/
+function makeAuthBlobRequest(endpoint, cb){
+  var auth = getCookie('auth');
+  var server = getCookie('server');
+
+  if(auth.length < 1 && server.length < 1){
+    // doesn't exist; send them to login and clear cookies
+    window.location = "/index.html?logout";
+    return;
+  }
+
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function(){
+      if (this.readyState === 4 && this.status === 200){
+          //this.response is what you're looking for
+          cb(this.response);
+      }
+  };
+
+  xhr.open("GET", endpoint);
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.setRequestHeader('Authorization', 'Basic ' + auth);
+  xhr.responseType = 'blob';
+  xhr.send();
+}
