@@ -251,6 +251,13 @@ function setUpConsumptions() {
   $('#addtimeLabel').addClass('active');
 
   makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
+    data.sort(function(a, b){
+      a = a.name.toLowerCase();
+      b = b.name.toLowerCase();
+
+      return (a < b) ? -1 : (a > b) ? 1 : 0;
+    });
+
     if (data.length < 1) {
       $('#addDrug').append('<option value="" disabled selected>None</option>');
       $('#editDrug').append('<option value="" disabled selected>None</option>');
@@ -264,6 +271,13 @@ function setUpConsumptions() {
   });
 
   makeAuthRequest('/method/all', 'GET', null, 'json', function(err, data, code) {
+    data.sort(function(a, b){
+      a = a.name.toLowerCase();
+      b = b.name.toLowerCase();
+
+      return (a < b) ? -1 : (a > b) ? 1 : 0;
+    });
+
     if (data.length < 1) {
       $('#addMethod').append('<option value="" disabled selected>None</option>');
       $('#editMethod').append('<option value="" disabled selected>None</option>');
