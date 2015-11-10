@@ -161,7 +161,24 @@ $('#addQuicknote').submit(function(event) {
   updateExperienceObject(function() {
     var newNotes;
     if (experience.ttime) {
-      // do t-time math
+      experience.consumptions.forEach(function(consumption){
+        if(consumption.id === experience.ttime){
+          var conDate = Math.floor(new Date(consumption.date * 1000).getTime() / 1000);
+          var now = Math.floor(new Date().getTime() / 1000) - (new Date().getTimezoneOffset() * 60);
+
+          var sign = '+';
+          if(conDate > now){
+            sign = '-';
+          }
+
+          var diff = Math.abs(now - conDate);
+          var hours = Math.floor(diff / 60 / 60);
+          diff -= hours *  60 * 60;
+          var minutes = Math.floor(diff / 60);
+
+          newNotes = experience.notes + '\nT' + sign + ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2) + ' -- ' + $('#note').val();
+        }
+      });
     } else {
       newNotes = experience.notes + '\n' + ('0' + new Date().getHours()).slice(-2) + ('0' + new Date().getMinutes()).slice(-2) + ' -- ' + $('#note').val();
     }
