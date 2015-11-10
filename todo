@@ -1,5 +1,6 @@
 App view
   Panic
+  Media
 
 MIGRATE :D
 
@@ -9,6 +10,6 @@ Search
 
 Metrics
 
-Mobile datalist polyfill 
+Mobile datalist polyfill
 
 Unfocus notes field on submit

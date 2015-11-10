@@ -204,8 +204,43 @@ $('#addQuicknote').submit(function(event) {
 
 // upload media
 $('#media').change(function() {
-  console.log('uploading media');
-  $('#media').val('');
+  event.preventDefault();
+
+  // build the form
+  var formData = new FormData();
+  formData.append("title", 'Mobile Media ' + Math.floor(Math.random() * 16777215).toString(8));
+  formData.append("date", Math.floor(new Date().getTime() / 1000) - (new Date().getTimezoneOffset() * 60));
+  formData.append("association_type", 'experience');
+  formData.append("association", experience.id);
+
+  formData.append("image", $('#media').prop('files')[0]);
+
+  var auth = getCookie('auth');
+  var server = getCookie('server');
+
+  var xhr = new XMLHttpRequest();
+
+  xhr.onload = function(e) {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 201) {
+        Materialize.toast('Media added', 6000, 'success-toast');
+        $('#media').val('');
+        $('#mediaPath').val('');
+      } else {
+        Materialize.toast(xhr.statusText, 4000, 'warning-toast');
+        $('#media').val('');
+        $('#mediaPath').val('');
+      }
+    }
+  };
+
+  xhr.onerror = function(e) {
+    Materialize.toast(xhr.statusText, 4000, 'warning-toast');
+  };
+
+  xhr.open("POST", server + '/media');
+  xhr.setRequestHeader('Authorization', 'Basic ' + auth);
+  xhr.send(formData);
 });
 
 // init tabs
