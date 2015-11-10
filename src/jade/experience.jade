@@ -89,7 +89,7 @@ block content
               label.active#addtimeLabel(for='addTime') Time
           .row
             .input-field.col.s12
-              input#addLocation(type='text', required)
+              input#addLocation(type='text', required, list='locations')
               label.active(for='addLocation') Location
           .row
             .col.s12
@@ -127,8 +127,9 @@ block content
                label.active#edittimeLabel(for='editTime') Time
            .row
              .input-field.col.s12
-               input#editLocation(type='text', required)
+               input#editLocation(type='text', required, list='locations')
                label.active#editLocationLabel(for='editLocation') Location
+               datalist#locations
            .row
              .col.s12
                label Drug
@@ -154,7 +155,6 @@ block content
                     label(for='addFriend') Friend Name
                     input#addFriend(type='text', list='friends')
                     datalist#friends
-                      option(value="Frank")
                   .col.s4
                     button.btn.waves-effect.waves-light(type='submit')
                       | Add

@@ -41,6 +41,12 @@ function setUpMeta() {
     if (data.ttime) {
       $('#metaTTime').val(data.ttime);
     }
+
+    makeAuthRequest('/consumption/locations', 'GET', null, 'json', function(err, data, code) {
+      data.forEach(function(location) {
+        $('#locations').append('<option value="' + location.location + '"></option>');
+      });
+    });
   });
 }
 
@@ -195,7 +201,13 @@ function editConsumption(id) {
           });
         }
 
-        $('#editConsumptionModal').openModal();
+        makeAuthRequest('/consumption/friends', 'GET', null, 'json', function(err, data, code) {
+          data.forEach(function(friend) {
+            $('#friends').append('<option value="' + friend.name + '"></option>');
+          });
+
+          $('#editConsumptionModal').openModal();
+        });
       }
     });
   });
@@ -251,7 +263,7 @@ function setUpConsumptions() {
   $('#addtimeLabel').addClass('active');
 
   makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
-    data.sort(function(a, b){
+    data.sort(function(a, b) {
       a = a.name.toLowerCase();
       b = b.name.toLowerCase();
 
@@ -271,7 +283,7 @@ function setUpConsumptions() {
   });
 
   makeAuthRequest('/method/all', 'GET', null, 'json', function(err, data, code) {
-    data.sort(function(a, b){
+    data.sort(function(a, b) {
       a = a.name.toLowerCase();
       b = b.name.toLowerCase();
 
@@ -436,7 +448,7 @@ $("#notesArea").on('change keyup paste', function() {
         return;
       }
 
-      Materialize.toast('Notes saved.', 1000);
+      Materialize.toast('Notes saved', 1000);
     });
   }, 1000);
 });
