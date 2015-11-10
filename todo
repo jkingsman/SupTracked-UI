@@ -1,8 +1,6 @@
 App view
   Panic
 
-MIGRATE :D
-
 Search
   Media
   Experience
@@ -10,5 +8,3 @@ Search
 Metrics
 
 Mobile datalist polyfill
-
-Unfocus notes field on submit

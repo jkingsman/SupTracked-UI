@@ -197,6 +197,7 @@ $('#addQuicknote').submit(function(event) {
 
     updateExperienceObject(function() {});
     $('#note').val('');
+    $('#title').focus();
   });
 
 
