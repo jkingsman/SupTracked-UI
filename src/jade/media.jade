@@ -20,7 +20,6 @@ block content
               i.material-icons add
               
       .section#media(style='display: none;')
-        ul.collection#media-collection
         
       .fixed-action-btn(style='bottom: 45px; right: 24px;')
         a.btn-floating.btn-large.red.page-action(href='#', onClick='$("#addMediaModal").openModal();')
@@ -33,9 +32,9 @@ block content
           .row
             .input-field.col.s12
               input#title(type='text', required)
-              label.active(for='Title') Title
+              label.active(for='title') Title
             .input-field.col.s12
-              input.datepicker#tags(type='text', required)
+              input#tags(type='text', required)
               label.active(for='tags') Tags
           .row
             input#timeCurrent(name='time', type='radio', checked='', value='current')
@@ -67,7 +66,41 @@ block content
             .col.s12
               button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
                 | Create
-                i.material-icons.right add  
+                i.material-icons.right add
             
+    #editMediaModal.modal
+      .modal-content
+        h4 Edit Media
+        form#editMedia
+          input#editID(type='hidden')
+          input#assocType(type='hidden')
+          .row
+            .input-field.col.s12
+              input#editTitle(type='text', required)
+              label.active#editTitleLabel(for='editTitle') Title
+            .input-field.col.s12
+              input#editTags(type='text', required)
+              label.active#editTagsLabel(for='editTags') Tags
+            .input-field.col.s12
+              input#editTime(type='text')
+              label.active#editTimeLabel(for='editTime') Time
+          .row#editExperienceRow
+            .col.s12
+              label(for='editExperience') Experience
+              select#editExperience.browser-default
+          .row
+            input#editExplicit(type='checkbox')
+            label(for='editExplicit') Explicit
+            br
+            input#editFavorite(type='checkbox')
+            label(for='editFavorite') Favorite
+          .row
+            .col.s12
+              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+                | Save
+                i.material-icons.right done
+              a.btn.waves-effect.waves-light.page-action(style='margin-top: 25px; width: 100%', onClick='deleteMedia();')
+                | Delete
+                i.material-icons.right delete
 block scripts          
   script(src='js/media.js')

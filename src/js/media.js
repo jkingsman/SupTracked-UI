@@ -7,6 +7,9 @@ var currentBatch = 0;
 var batchSize = 24;
 var atEnd = false;
 
+var imagesPopulated = false; // we don't let a new page load until the previous is done
+var rowsProcessed = 0;
+
 makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code) {
   if (code === 404) {
     // no media
@@ -30,9 +33,10 @@ function loadMore() {
       }
 
       data.forEach(function(media, index) {
-        if (index % 4 === 0) {
+        if (index % 3 === 0) {
           // we're beginning a new row
-          $('#media').append('<div id="row' + Math.floor(index / 4) + '" class="row"></div>');
+          $('#media').append('<div id="row' + rowsProcessed + '" class="row"></div>');
+          rowsProcessed += 1;
         }
 
         var mediaUrl = getCookie('server') + '/media/file/' + media.id;
@@ -42,15 +46,29 @@ function loadMore() {
           association = '<br><a href="/experience.html?' + media.association + '">View Experience</a>';
         }
 
-        $('#row' + Math.floor(index / 4)).append('<div class="col s12 m3"><div class="card"><div class="card-image">' +
-          '<a id="imagelink' + media.id + '"><img id="image' + media.id + '"/><span class="card-title">' + media.title + '</span><a/></div>' +
-          '<div class="card-content"><p>' + new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + association + '</p></div>' +
+        var explicitBlurStyle = '';
+        if (media.explicit) {
+          explicitBlurStyle = 'style="-webkit-filter: blur(15px); filter: blur(15px);"';
+        }
+
+        var favoriteIcon = '';
+        if (media.favorite) {
+          favoriteIcon = '<i class="material-icons" style="color: gold;">thumb_up</i>';
+        }
+
+        $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
+          '<a id="imagelink' + media.id + '"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title">' + favoriteIcon + media.title + '</span><a/></div>' +
+          '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons" style="position: relative; top: 6px;">reorder</i></a>' +
+          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + association + '</p></div>' +
           '</div></div>');
 
-        makeAuthBlobRequest('/media/file/' + media.id, function(data) {
-          var url = window.URL || window.webkitURL;
-          $('#image' + media.id).attr('src', url.createObjectURL(data));
-          $('#imagelink' + media.id).attr('href', url.createObjectURL(data));
+        makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
+          $('#image' + media.id).attr('src', URL.createObjectURL(imgData));
+          $('#imagelink' + media.id).attr('href', URL.createObjectURL(imgData));
+
+          if (index === data.length - 1) {
+            imagesPopulated = true;
+          }
         });
       });
 
@@ -67,6 +85,7 @@ function prepareAdd() {
   makeAuthRequest('/experience/search', 'POST', null, 'json', function(err, data, code) {
     if (data.length < 1) {
       $('#experience').append('<option value="" disabled selected>None</option>');
+      $('#editExperience').append('<option value="" disabled selected>None</option>');
       return;
     }
 
@@ -76,9 +95,104 @@ function prepareAdd() {
 
     data.forEach(function(experience) {
       $('#experience').append('<option value="' + experience.id + '">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + ' -- ' + experience.title + '</option>');
+      $('#editExperience').append('<option value="' + experience.id + '">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + ' -- ' + experience.title + '</option>');
     });
   });
 }
+
+function deleteMedia() {
+  var id = $('#editID').val();
+  makeAuthRequest('/media', 'DELETE', JSON.stringify({id: id}), 'json', function(err, data, code) {
+    if(code !== 200){
+      $("#editMediaModal").closeModal();
+      Materialize.toast('Deletion error: ' + err, 6000, 'warning-toast');
+      return;
+    }
+
+    $("#editMediaModal").closeModal();
+    Materialize.toast('Media deleted', 6000, 'success-toast');
+    setTimeout(function() {
+      window.location = '/media.html';
+    }, 1000);
+  });
+}
+
+function editMedia(id) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  makeAuthRequest('/media/' + id, 'GET', null, 'json', function(err, data, code) {
+    $('#editID').val(id);
+    $('#assocType').val(data.association_type);
+    $('#editTitle').val(data.title);
+    $('#editTags').val(data.tags);
+    $('#editTime').val(new Date(data.date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', ''));
+
+    $('#editTitleLabel, #editTagsLabel, #editTimeLabel').addClass('active');
+
+    if (data.association_type === 'drug') {
+      $('#editExperienceRow').hide();
+    } else {
+      $('#editExperience').val(data.association);
+    }
+
+    $("#editExplicit").prop("checked", data.explicit === 1);
+    $("#editFavorite").prop("checked", data.favorite === 1);
+
+    $("#editMediaModal").openModal();
+  });
+}
+
+$('#editMedia').submit(function(event) {
+  event.preventDefault();
+
+  // assemble this horrible date
+  var editDate = $('#editTime').val().split(' ')[0];
+  var editTime = $('#editTime').val().split(' ')[1];
+  var editDateStamp = Math.floor(new Date(editDate).getTime() / 1000);
+
+  // add hours and minutes
+  editDateStamp += Math.floor(editTime / 100) * 3600;
+  editDateStamp += (editTime - (Math.floor(editTime / 100) * 100)) * 60;
+
+  var editObject = {
+    id: $('#editID').val(),
+    title: $('#editTitle').val(),
+    tags: $('#editTags').val(),
+    date: editDateStamp
+  };
+
+  if ($('#editFavorite').is(':checked')) {
+    editObject.favorite = 1;
+  } else {
+    editObject.favorite = 0;
+  }
+
+  if ($('#editExplicit').is(':checked')) {
+    editObject.explicit = 1;
+  } else {
+    editObject.explicit = 0;
+  }
+
+  if($('#assocType').val() === 'experience'){
+    editObject.association_type = 'experience';
+    editObject.association = $('#editExperience').val();
+  }
+
+  makeAuthRequest('/media', 'PUT', JSON.stringify(editObject), 'json', function(err, data, code) {
+    if(code !== 200){
+      $("#editMediaModal").closeModal();
+      Materialize.toast('Update error: ' + err, 6000, 'warning-toast');
+      return;
+    }
+
+    $("#editMediaModal").closeModal();
+    Materialize.toast('Media updated', 6000, 'success-toast');
+    setTimeout(function() {
+      window.location = '/media.html';
+    }, 1000);
+  });
+});
 
 $('#addMedia').submit(function(event) {
   event.preventDefault();
@@ -124,7 +238,7 @@ $('#addMedia').submit(function(event) {
       if (xhr.status === 201) {
         $("#addMediaModal").closeModal();
         Materialize.toast('Media added', 6000, 'success-toast');
-        setTimeout(function(){
+        setTimeout(function() {
           window.location = '/media.html';
         }, 1000);
       } else {
@@ -154,7 +268,8 @@ $('input:radio[name=time]').on('change', function() {
 });
 
 $(window).scroll(function() {
-  if ($(window).scrollTop() + $(window).height() > $(document).height() - 50) {
+  if ($(window).scrollTop() + $(window).height() > $(document).height() - 50 && imagesPopulated) {
+    imagesPopulated = false;
     loadMore();
   }
 });
