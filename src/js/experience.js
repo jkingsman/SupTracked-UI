@@ -74,6 +74,10 @@ function drawConsumptions() {
     } else {
       $('#consumptionsCollection').empty();
 
+      data.sort(function(a, b){
+        return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
+      });
+
       data.forEach(function(consumption) {
         // build friends list
         var friendList = [];
