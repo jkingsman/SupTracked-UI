@@ -5,5 +5,3 @@ Search
     Searches on date/note/tage, and one search for every drug selected (unless it's all drugs) which is intersected
 
 Metrics
-
-Combine API and UI; UI has one folder and it run from the app as a static dir on a different port
