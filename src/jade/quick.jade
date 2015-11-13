@@ -27,10 +27,12 @@ block content
           .row
             .col.s12
               ul.tabs
-                li.tab.col.s6
+                li.tab.col.s4
                   a.active(href='#consumptions') List
-                li.tab.col.s6
+                li.tab.col.s4
                   a(href='#addConsumption') Add
+                li.tab.col.s4
+                  a(href='#panic') Panic
                   
             #consumptions.col.s12
               ul.collection#consumptionsCollection
@@ -55,5 +57,9 @@ block content
                     datalist#addLocationAutofill
                 button.btn.waves-effect.waves-light(type='submit', value='create', style='width: 100%;')
                   | Add Consumption
+                  
+            #panic.col.s12
+              button.btn.waves-effect.orange.waves-light#panicButton(value='create', style='width: 100%; margin-top: 10px;', onClick='confirmPanic();')
+                | Send Panic Message
 block scripts          
   script(src='js/quick.js')

@@ -79,6 +79,81 @@ function duplicateConsumption(id) {
   });
 }
 
+function sendGeoData() {
+  navigator.geolocation.watchPosition(function(position) {
+    makeAuthRequest('/sms', 'POST', JSON.stringify({
+      message: 'As of now, they are near the following location: https://www.google.com/maps/search/' +
+        position.coords.latitude + ',' + position.coords.longitude +
+        '. Updated data may be sent as it becomes available.'
+    }), 'json', function(err, data, code) {
+      if (code !== 200) {
+        Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+        return;
+      }
+
+      Materialize.toast('Location data sent', 5000, 'success-toast');
+    });
+  });
+}
+
+function confirmPanic() {
+  $('#panicButton').removeClass('orange').addClass('red');
+  $('#panicButton').text('Confirm panic message?');
+  $('#panicButton').attr('onclick', 'sendPanic();');
+}
+
+function sendPanic() {
+  makeAuthRequest('/sms', 'POST', JSON.stringify({
+    message: atob(getCookie('auth')).split(':')[0] + ' is having a bad drug experience, and would like your help.'
+  }), 'json', function(err, data, code) {
+    if (code !== 200) {
+      Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+      return;
+    }
+
+    Materialize.toast('Initial message sent', 5000, 'success-toast');
+  });
+
+  setTimeout(function() {
+    sendGeoData();
+
+    updateExperienceObject(function() {
+      var consumptionArray = [];
+      experience.consumptions.forEach(function(consumption) {
+        consumptionArray.push(new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') +
+          ' -- ' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name);
+
+        if (consumptionArray.length === experience.consumptions.length) {
+          // loaded all experiences; on to the next step
+          makeAuthRequest('/sms', 'POST', JSON.stringify({
+            message: 'They have taken the following substances: \n' + consumptionArray.join('. \n')
+          }), 'json', function(err, data, code) {
+            if (code !== 200) {
+              Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+              return;
+            }
+
+            Materialize.toast('Consumption data sent', 5000, 'success-toast');
+          });
+        }
+      });
+
+      if (experience.panicmsg && experience.panicmsg.length > 1) {
+        makeAuthRequest('/sms', 'POST', JSON.stringify({
+          message: 'They have provided the following information that may be helpful: ' + experience.panicmsg
+        }), 'json', function(err, data, code) {
+          if (code !== 200) {
+            Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+            return;
+          }
+
+          Materialize.toast('Panic message sent', 5000, 'success-toast');
+        });
+      }
+    });
+  }, 1000);
+}
+
 // load drugs, methods into fields and draw the title
 updateExperienceObject(function() {
   makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, drugs, code) {
@@ -161,19 +236,19 @@ $('#addQuicknote').submit(function(event) {
   updateExperienceObject(function() {
     var newNotes;
     if (experience.ttime) {
-      experience.consumptions.forEach(function(consumption){
-        if(consumption.id === experience.ttime){
+      experience.consumptions.forEach(function(consumption) {
+        if (consumption.id === experience.ttime) {
           var conDate = Math.floor(new Date(consumption.date * 1000).getTime() / 1000);
           var now = Math.floor(new Date().getTime() / 1000) - (new Date().getTimezoneOffset() * 60);
 
           var sign = '+';
-          if(conDate > now){
+          if (conDate > now) {
             sign = '-';
           }
 
           var diff = Math.abs(now - conDate);
           var hours = Math.floor(diff / 60 / 60);
-          diff -= hours *  60 * 60;
+          diff -= hours * 60 * 60;
           var minutes = Math.floor(diff / 60);
 
           newNotes = experience.notes + '\nT' + sign + ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2) + ' -- ' + $('#note').val();
