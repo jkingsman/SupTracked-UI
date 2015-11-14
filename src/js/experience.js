@@ -206,7 +206,7 @@ function editConsumption(id) {
         });
         var picker = $input.pickadate('picker');
 
-        var date = new Date(consumption.date * 1000);
+        var date = new Date((consumption.date * 1000) + (new Date().getTimezoneOffset() * 60000));
         picker.set('select', date);
 
         $('#editTime').val(date.toISOString().slice(11, 16).replace(/:/, ''));
