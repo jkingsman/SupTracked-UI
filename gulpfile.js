@@ -53,7 +53,7 @@ gulp.task('js-lib', function () {
 
 //main
 gulp.task('js-main', function () {
-  gulp.src(['./src/js/**/*'])
+  gulp.src(['./src/js/*', '!src/js/analytics'])
   .pipe(uglify({mangle: true,
     compress: {
       sequences: true,
@@ -66,6 +66,25 @@ gulp.task('js-main', function () {
       //drop_console: true
     }
   }))
+  .pipe(gulp.dest('./dist/js'))
+  .pipe(connect.reload());
+});
+
+gulp.task('js-analytics', function () {
+  gulp.src(['./src/js/analytics/**/*'])
+  .pipe(uglify({mangle: true,
+    compress: {
+      sequences: true,
+      dead_code: true,
+      conditionals: true,
+      booleans: true,
+      unused: true,
+      if_return: true,
+      join_vars: true,
+      //drop_console: true
+    }
+  }))
+  .pipe(concat('analytics_display.js'))
   .pipe(gulp.dest('./dist/js'))
   .pipe(connect.reload());
 });
@@ -85,11 +104,11 @@ gulp.task('webserver', function() {
   });
 });
 
-gulp.task('default', ['empty', 'hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
+gulp.task('default', ['empty', 'hint', 'html', 'css', 'js-lib', 'js-main', 'js-analytics', 'copy']);
 
 //realtime watching
 gulp.task('realtime', function() {
-  gulp.watch('./src/**/*', ['hint', 'html', 'css', 'js-lib', 'js-main', 'copy']);
+  gulp.watch('./src/**/*', ['hint', 'html', 'css', 'js-lib', 'js-main', 'js-analytics', 'copy']);
 });
 
 gulp.task('watch', ['realtime', 'default', 'webserver']);
