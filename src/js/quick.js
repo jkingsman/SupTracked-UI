@@ -25,6 +25,10 @@ function drawConsumptions() {
   if (experience.consumptions.length === 0) {
     $('#consumptionsCollection').append('<li class="collection-item"><div>No consumptions</div></li>');
   } else {
+    experience.consumptions.sort(function(a, b) {
+      return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
+    });
+
     experience.consumptions.forEach(function(consumption) {
       $('#consumptionsCollection').append('<li class="collection-item">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') +
         '<a href="#" title="Set to Now" onClick="setNow(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">alarm_on</i></a>' +
