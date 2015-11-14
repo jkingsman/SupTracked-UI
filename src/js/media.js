@@ -78,6 +78,13 @@ function loadMore() {
   }
 }
 
+var autoLoader = function() {
+  if ($(window).scrollTop() + $(window).height() > $(document).height() - 50 && imagesPopulated) {
+    imagesPopulated = false;
+    loadMore();
+  }
+};
+
 function prepareAdd() {
   var today = new Date();
   var dateString = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2) + ' ' + ('0' + today.getHours()).slice(-2) + ('0' + today.getMinutes()).slice(-2);
@@ -204,8 +211,7 @@ $('#filterForm').submit(function(event) {
   makeAuthRequest('/media/search', 'POST', JSON.stringify(filterCriteria), 'json',
     function(err, data, code) {
       $(".row").remove(); // clear existing entries
-      $(window).off("scroll", autoLoadder); // stop listening for scroll; we're loading them all at once now
-
+      $(window).off("scroll", autoLoader); // stop listening for scroll; we're loading them all at once now
 
       data.forEach(function(media, index) {
         if (index % 3 === 0) {
@@ -373,14 +379,7 @@ $('input:radio[name=time]').on('change', function() {
   }
 });
 
-var autoLoadder = function() {
-  if ($(window).scrollTop() + $(window).height() > $(document).height() - 50 && imagesPopulated) {
-    imagesPopulated = false;
-    loadMore();
-  }
-};
-
-$(window).scroll(autoLoadder);
+$(window).scroll(autoLoader);
 
 loadMore();
 prepareAdd();

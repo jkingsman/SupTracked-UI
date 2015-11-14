@@ -19,6 +19,25 @@ block content
             a.secondary-content(href='newexperience.html')
               i.material-icons add
       .section#experiences(style='display: none;')
+        ul.collapsible(data-collapsible='accordion')
+          li
+            .collapsible-header
+              i.material-icons filter_drama
+              | Filter
+            .collapsible-body
+              form#filterForm
+                p
+                  label.active(for='filterTitle') Title
+                  input#filterTitle(type='text')
+                  label.active(for='filternotes') Notes
+                  input#filterNotes(type='text')
+                  label.active(for='filterStartDate') Start Date
+                  input#filterStartDate(type='text')
+                  label.active(for='filterEndDate') End Date
+                  input#filterEndDate(type='text')
+                  button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+                    | Filter
+                    i.material-icons.right search
         ul.collection#experiences-collection
         
       .fixed-action-btn(style='bottom: 45px; right: 24px;')
