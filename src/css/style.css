@@ -50,3 +50,8 @@
 .card .card-title {
   background-color: rgba(128,128,128,0.50);
 }
+
+.icon-padding {
+  position: relative;
+  top: 6px;
+}
