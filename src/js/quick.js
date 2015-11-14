@@ -260,6 +260,12 @@ $('#addQuicknote').submit(function(event) {
 
   updateExperienceObject(function() {
     var newNotes;
+
+    if(!experience.notes){
+      // if they're empty (null, usually), fill with empty string so we don't concat the string 'null' into the notes
+      experience.notes = '';
+    }
+
     if (experience.ttime) {
       experience.consumptions.forEach(function(consumption) {
         if (consumption.id === experience.ttime) {
