@@ -27,7 +27,8 @@ function drawConsumptions() {
   } else {
     experience.consumptions.forEach(function(consumption) {
       $('#consumptionsCollection').append('<li class="collection-item">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') +
-        '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">open_in_new</i></a>' +
+        '<a href="#" title="Set to Now" onClick="setNow(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">alarm_on</i></a>' +
+        '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">call_split</i></a>' +
         '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
         '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
         '</li>');
@@ -48,6 +49,30 @@ function deleteConsumption(id) {
     updateExperienceObject(function() {
       drawConsumptions();
     });
+  });
+}
+
+function setNow(id) {
+  experience.consumptions.forEach(function(consumption) {
+    if (consumption.id === id) {
+      var payload = {
+        id: id,
+        date: Math.floor((new Date().getTime() - (new Date().getTimezoneOffset()) * 60000) / 1000),
+      };
+
+      makeAuthRequest('/consumption', 'PUT', JSON.stringify(payload), 'json', function(err, data, code) {
+        if (code !== 200) {
+          Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+          return;
+        }
+
+        // draw consumptions, which will include our jumped one
+        updateExperienceObject(function() {
+          drawConsumptions();
+        });
+        Materialize.toast('Consumption set to now', 1000, 'success-toast');
+      });
+    }
   });
 }
 

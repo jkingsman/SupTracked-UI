@@ -74,7 +74,7 @@ function drawConsumptions() {
     } else {
       $('#consumptionsCollection').empty();
 
-      data.sort(function(a, b){
+      data.sort(function(a, b) {
         return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
       });
 
@@ -95,7 +95,8 @@ function drawConsumptions() {
           '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
           '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
           '<a href="#" title="Edit" onClick="editConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">list</i></a>' +
-          '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">open_in_new</i></a>' +
+          '<a href="#" title="Set to Now" onClick="setNow(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">alarm_on</i></a>' +
+          '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">call_split</i></a>' +
           '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
           '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
           '</li>');
@@ -134,6 +135,30 @@ function deleteConsumption(id) {
       }
     });
     drawConsumptions();
+  });
+}
+
+function setNow(id) {
+  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(consumption) {
+      if (consumption.id === id) {
+        var payload = {
+          id: id,
+          date: Math.floor((new Date().getTime() - (new Date().getTimezoneOffset()) * 60000) / 1000),
+        };
+
+        makeAuthRequest('/consumption', 'PUT', JSON.stringify(payload), 'json', function(err, data, code) {
+          if (code !== 200) {
+            Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+            return;
+          }
+
+          // draw consumptions, which will include our jumped one
+          drawConsumptions();
+          Materialize.toast('Consumption set to now', 1000, 'success-toast');
+        });
+      }
+    });
   });
 }
 
