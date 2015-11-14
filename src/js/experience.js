@@ -337,6 +337,11 @@ function drawMedia() {
     association_type: 'experience',
     association: experienceID
   }), 'json', function(err, data, code) {
+    if(data === null){
+      // skip on empty
+      return;
+    }
+
     data.forEach(function(media, index) {
       if (index % 4 === 0) {
         // we're beginning a new row
