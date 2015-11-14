@@ -198,7 +198,7 @@ function editConsumption(id) {
         $('#editID').val(consumption.id);
 
         // set count
-        $('#editCount').text(consumption.count);
+        $('#editCount').val(consumption.count);
 
         // set date and time
         var $input = $('#editDate').pickadate({
