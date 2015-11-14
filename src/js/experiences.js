@@ -85,6 +85,24 @@ function prepareFilter() {
   var dateString = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2) + ' ' + ('0' + today.getHours()).slice(-2) + ('0' + today.getMinutes()).slice(-2);
   $('#filterEndDate').val(dateString);
   $('#filterStartDate').val('1975-01-01 0000');
+
+  makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(drug) {
+      $('#drugs').append('<option>' + drug.name + '</option>');
+    });
+  });
+
+  makeAuthRequest('/method/all', 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(method) {
+      $('#methods').append('<option>' + method.name + '</option>');
+    });
+  });
+
+  makeAuthRequest('/consumption/friends', 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(friend) {
+      $('#friends').append('<option>' + friend.name + '</option>');
+    });
+  });
 }
 
 $('#filterForm').submit(function(event) {
@@ -97,6 +115,10 @@ $('#filterForm').submit(function(event) {
 
   if ($('#filterNotes').val().length > 0) {
     filterCriteria.notes = $('#filterNotes').val();
+  }
+
+  if ($('#filterRating').val() > 0) {
+    filterCriteria.rating_id = $('#filterRating').val();
   }
 
   // assemble start date
@@ -129,6 +151,17 @@ $('#filterForm').submit(function(event) {
       });
 
       data.forEach(function(experience) {
+        // how we do a ghetto high speed search without parsing json
+        var conString = JSON.stringify(experience.consumptions);
+        if (conString.indexOf($('#filterLocation').val()) === -1 ||
+          conString.indexOf($('#filterFriends').val()) === -1 ||
+          conString.indexOf($('#filterDrug').val()) === -1 ||
+          conString.indexOf($('#filterMethod').val()) === -1) {
+          // don't match our criteria
+          return;
+        }
+
+
         if (experience.title.length < 1) {
           experience.title = '[none]';
         }

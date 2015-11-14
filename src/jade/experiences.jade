@@ -29,12 +29,32 @@ block content
                 p
                   label.active(for='filterTitle') Title
                   input#filterTitle(type='text')
-                  label.active(for='filternotes') Notes
+                  label.active(for='filterNotes') Notes
                   input#filterNotes(type='text')
+                  label.active(for='filterLocation') Location
+                  input#filterLocation(type='text')
+                  label.active(for='filterFriends') Friends
+                  input#filterFriends(type='text', list='friends')
+                  datalist#friends
+                  label.active(for='filterDrug') Drug
+                  input#filterDrug(type='text', list='drugs')
+                  datalist#drugs
+                  label.active(for='filterMethod') Method
+                  input#filterMethod(type='text', list='methods')
+                  datalist#methods
                   label.active(for='filterStartDate') Start Date
                   input#filterStartDate(type='text')
                   label.active(for='filterEndDate') End Date
                   input#filterEndDate(type='text')
+                  label Rating
+                  select#filterRating.browser-default
+                    option(value='0').selected All Ratings
+                    option(value='1') Horrific
+                    option(value='2') Bad
+                    option(value='3') Meh
+                    option(value='4') Good
+                    option(value='5') Great
+                    option(value='6') Spectacular
                   button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
                     | Filter
                     i.material-icons.right search
