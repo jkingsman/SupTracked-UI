@@ -100,10 +100,19 @@ function prepareAdd() {
   });
 }
 
+function prepareFilter() {
+  var today = new Date();
+  var dateString = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2) + ' ' + ('0' + today.getHours()).slice(-2) + ('0' + today.getMinutes()).slice(-2);
+  $('#filterEndDate').val(dateString);
+  $('#filterStartDate').val('1975-01-01 0000');
+}
+
 function deleteMedia() {
   var id = $('#editID').val();
-  makeAuthRequest('/media', 'DELETE', JSON.stringify({id: id}), 'json', function(err, data, code) {
-    if(code !== 200){
+  makeAuthRequest('/media', 'DELETE', JSON.stringify({
+    id: id
+  }), 'json', function(err, data, code) {
+    if (code !== 200) {
       $("#editMediaModal").closeModal();
       Materialize.toast('Deletion error: ' + err, 6000, 'warning-toast');
       return;
@@ -143,6 +152,103 @@ function editMedia(id) {
   });
 }
 
+$('#filterForm').submit(function(event) {
+  event.preventDefault();
+  var filterCriteria = {};
+
+  if ($('#filterTitle').val().length > 0) {
+    filterCriteria.title = $('#filterTitle').val();
+  }
+
+  if ($('#filterTags').val().length > 0) {
+    filterCriteria.tags = $('#filterTags').val();
+  }
+
+  if ($('#filterExplicit').is(':checked') !== $('#filterNonExplicit').is(':checked')) {
+    if ($('#filterExplicit').is(':checked')) {
+      filterCriteria.explicit = 1;
+    } else {
+      filterCriteria.explicit = 0;
+    }
+  }
+
+  if ($('#filterFavorite').is(':checked') !== $('#filterNonFavorite').is(':checked')) {
+    if ($('#filterFavorite').is(':checked')) {
+      filterCriteria.favorite = 1;
+    } else {
+      filterCriteria.favorite = 0;
+    }
+  }
+
+  // assemble start date
+  var startDate = $('#filterStartDate').val().split(' ')[0];
+  var startTime = $('#filterStartDate').val().split(' ')[1];
+  var startDateStamp = Math.floor(new Date(startDate).getTime() / 1000);
+
+  // add hours and minutes
+  startDateStamp += Math.floor(startTime / 100) * 3600;
+  startDateStamp += (startTime - (Math.floor(startTime / 100) * 100)) * 60;
+
+  // assemble end date
+  var endDate = $('#filterEndDate').val().split(' ')[0];
+  var endTime = $('#filterEndDate').val().split(' ')[1];
+  var endDateStamp = Math.floor(new Date(endDate).getTime() / 1000);
+
+  // add hours and minutes
+  endDateStamp += Math.floor(endTime / 100) * 3600;
+  endDateStamp += (endTime - (Math.floor(endTime / 100) * 100)) * 60;
+
+  filterCriteria.startdate = startDateStamp;
+  filterCriteria.enddate = endDateStamp;
+
+  makeAuthRequest('/media/search', 'POST', JSON.stringify(filterCriteria), 'json',
+    function(err, data, code) {
+      $(".row").remove(); // clear existing entries
+      $(window).off("scroll", autoLoadder); // stop listening for scroll; we're loading them all at once now
+
+
+      data.forEach(function(media, index) {
+        if (index % 3 === 0) {
+          // we're beginning a new row
+          $('#media').append('<div id="row' + rowsProcessed + '" class="row"></div>');
+          rowsProcessed += 1;
+        }
+
+        var mediaUrl = getCookie('server') + '/media/file/' + media.id;
+
+        var association = '';
+        if (media.association_type === 'experience') {
+          association = '<br><a href="/experience.html?' + media.association + '">View Experience</a>';
+        }
+
+        var explicitBlurStyle = '';
+        if (media.explicit) {
+          explicitBlurStyle = 'style="-webkit-filter: blur(15px); filter: blur(15px);"';
+        }
+
+        var favoriteIcon = '';
+        if (media.favorite) {
+          favoriteIcon = '<i class="material-icons" style="color: gold;">thumb_up</i>';
+        }
+
+        $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
+          '<a id="imagelink' + media.id + '"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title">' + favoriteIcon + media.title + '</span><a/></div>' +
+          '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons" style="position: relative; top: 6px;">reorder</i></a>' +
+          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + association + '</p></div>' +
+          '</div></div>');
+
+        makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
+          $('#image' + media.id).attr('src', URL.createObjectURL(imgData));
+          $('#imagelink' + media.id).attr('href', URL.createObjectURL(imgData));
+
+          if (index === data.length - 1) {
+            imagesPopulated = true;
+          }
+        });
+      });
+    });
+});
+
 $('#editMedia').submit(function(event) {
   event.preventDefault();
 
@@ -174,13 +280,13 @@ $('#editMedia').submit(function(event) {
     editObject.explicit = 0;
   }
 
-  if($('#assocType').val() === 'experience'){
+  if ($('#assocType').val() === 'experience') {
     editObject.association_type = 'experience';
     editObject.association = $('#editExperience').val();
   }
 
   makeAuthRequest('/media', 'PUT', JSON.stringify(editObject), 'json', function(err, data, code) {
-    if(code !== 200){
+    if (code !== 200) {
       $("#editMediaModal").closeModal();
       Materialize.toast('Update error: ' + err, 6000, 'warning-toast');
       return;
@@ -267,12 +373,15 @@ $('input:radio[name=time]').on('change', function() {
   }
 });
 
-$(window).scroll(function() {
+var autoLoadder = function() {
   if ($(window).scrollTop() + $(window).height() > $(document).height() - 50 && imagesPopulated) {
     imagesPopulated = false;
     loadMore();
   }
-});
+};
+
+$(window).scroll(autoLoadder);
 
 loadMore();
 prepareAdd();
+prepareFilter();

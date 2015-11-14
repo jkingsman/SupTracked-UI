@@ -20,6 +20,34 @@ block content
               i.material-icons add
               
       .section#media(style='display: none;')
+        ul.collapsible(data-collapsible='accordion')
+          li
+            .collapsible-header
+              i.material-icons filter_drama
+              | Filter
+            .collapsible-body
+              form#filterForm
+                p
+                  label.active(for='filterTitle') Title
+                  input#filterTitle(type='text')
+                  label.active(for='filterTags') Tags
+                  input#filterTags(type='text')
+                  label.active(for='filterStartDate') Start Date
+                  input#filterStartDate(type='text')
+                  label.active(for='filterEndDate') End Date
+                  input#filterEndDate(type='text')
+                  input#filterExplicit(type='checkbox', checked)
+                  label(for='filterExplicit') Explicit
+                  input#filterNonExplicit(type='checkbox', checked)
+                  label(for='filterNonExplicit', style='margin-left: 30px;', checked) Non-explicit
+                  br
+                  input#filterFavorite(type='checkbox', checked)
+                  label(for='filterFavorite') Favorite
+                  input#filterNonFavorite(type='checkbox', checked)
+                  label(for='filterNonFavorite', style='margin-left: 30px;') Non-favorite
+                  button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+                    | Filter
+                    i.material-icons.right search
         
       .fixed-action-btn(style='bottom: 45px; right: 24px;')
         a.btn-floating.btn-large.red.page-action(href='#', onClick='$("#addMediaModal").openModal();')
