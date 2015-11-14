@@ -1,4 +1,5 @@
 (function($) {
+  "use strict";
   $(function() {
     $('.button-collapse').sideNav({
       closeOnClick: true
@@ -7,7 +8,8 @@
 })(jQuery); // end of jQuery name space
 
 $(document).on('click', 'a', function(event) {
-  if ($(event.target).attr('class') == undefined || $(event.target).attr('class').indexOf('page-action') === -1) {
+  "use strict";
+  if ($(event.target).attr('class') === undefined || $(event.target).attr('class').indexOf('page-action') === -1) {
     event.preventDefault();
     window.location = $(this).attr("href");
   }
