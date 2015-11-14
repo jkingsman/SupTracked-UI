@@ -179,54 +179,6 @@ function sendPanic() {
   }, 1000);
 }
 
-// load drugs, methods into fields and draw the title
-updateExperienceObject(function() {
-  makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, drugs, code) {
-    drugs.sort(function(a, b) {
-      a = a.name.toLowerCase();
-      b = b.name.toLowerCase();
-
-      return (a < b) ? -1 : (a > b) ? 1 : 0;
-    });
-
-    if (drugs.length < 1) {
-      $('#addDrug').append('<option value="" disabled selected>None</option>');
-      return;
-    }
-
-    drugs.forEach(function(drug) {
-      $('#addDrug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
-    });
-  });
-
-  makeAuthRequest('/method/all', 'GET', null, 'json', function(err, methods, code) {
-    methods.sort(function(a, b) {
-      a = a.name.toLowerCase();
-      b = b.name.toLowerCase();
-
-      return (a < b) ? -1 : (a > b) ? 1 : 0;
-    });
-
-    if (methods.length < 1) {
-      $('#addMethod').append('<option value="" disabled selected>None</option>');
-      return;
-    }
-
-    methods.forEach(function(method) {
-      $('#addMethod').append('<option value="' + method.id + '">' + method.name + '</option>');
-    });
-  });
-
-  makeAuthRequest('/consumption/locations', 'GET', null, 'json', function(err, data, code) {
-    data.forEach(function(location) {
-      $('#addLocationAutofill').append('<option value="' + location.location + '"></option>');
-    });
-  });
-
-  $('#title').html(experience.title);
-  drawConsumptions();
-});
-
 // add consumption submit listener
 $('#addConsumption').submit(function(event) {
   event.preventDefault();
@@ -353,4 +305,53 @@ $('#media').change(function() {
 // init tabs
 $(document).ready(function() {
   $('ul.tabs').tabs();
+});
+
+// load drugs, methods into fields and draw the title
+updateExperienceObject(function() {
+  makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, drugs, code) {
+    drugs.sort(function(a, b) {
+      a = a.name.toLowerCase();
+      b = b.name.toLowerCase();
+
+      return (a < b) ? -1 : (a > b) ? 1 : 0;
+    });
+
+    if (drugs.length < 1) {
+      $('#addDrug').append('<option value="" disabled selected>None</option>');
+      return;
+    }
+
+    drugs.forEach(function(drug) {
+      $('#addDrug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+    });
+  });
+
+  makeAuthRequest('/method/all', 'GET', null, 'json', function(err, methods, code) {
+    methods.sort(function(a, b) {
+      a = a.name.toLowerCase();
+      b = b.name.toLowerCase();
+
+      return (a < b) ? -1 : (a > b) ? 1 : 0;
+    });
+
+    if (methods.length < 1) {
+      $('#addMethod').append('<option value="" disabled selected>None</option>');
+      return;
+    }
+
+    methods.forEach(function(method) {
+      $('#addMethod').append('<option value="' + method.id + '">' + method.name + '</option>');
+    });
+  });
+
+  makeAuthRequest('/consumption/locations', 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(location) {
+      $('#addLocationAutofill').append('<option value="' + location.location + '"></option>');
+    });
+  });
+
+  $('#title').html(experience.title);
+  $('.fullLink').attr('href', '/experience.html?' + experience.id);
+  drawConsumptions();
 });

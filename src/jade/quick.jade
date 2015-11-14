@@ -33,7 +33,7 @@ block content
                   a(href='#addConsumption') Add
                 li.tab.col.s4
                   a(href='#panic') Panic
-                  
+                            
             #consumptions.col.s12
               ul.collection#consumptionsCollection
               
@@ -61,5 +61,16 @@ block content
             #panic.col.s12
               button.btn.waves-effect.orange.waves-light#panicButton(value='create', style='width: 100%; margin-top: 10px;', onClick='confirmPanic();')
                 | Send Panic Message
+          
+          .row
+            h6.center-align
+              a.fullLink(href='/experiences.html') Full Expererience
+              //
+                we have to put the page-action (which stops the iOS window.location
+                intercept and forces opening in a new window. The only catch
+                is that the code looks at the click event target, which in this
+                case is actually the icon, not the plain link
+              a.fullLink(href='/experiences.html', target='_blank')
+                i.material-icons.icon-padding.page-action tab
 block scripts          
   script(src='js/quick.js')
