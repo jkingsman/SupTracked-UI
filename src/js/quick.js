@@ -213,6 +213,7 @@ $('#addConsumption').submit(function(event) {
 // add quicknote submit listener
 $('#addQuicknote').submit(function(event) {
   event.preventDefault();
+  document.activeElement.blur();
 
   updateExperienceObject(function() {
     var newNotes;
