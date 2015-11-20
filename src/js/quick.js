@@ -311,6 +311,10 @@ $(document).ready(function() {
   $('ul.tabs').tabs();
 });
 
+if(location.search.slice(1) === 'hiddenNav'){
+  $('nav').hide();
+}
+
 // load drugs, methods into fields and draw the title
 updateExperienceObject(function() {
   makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, drugs, code) {
