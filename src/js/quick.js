@@ -36,6 +36,8 @@ function drawConsumptions() {
         '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
         '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
         '</li>');
+
+      $('#addLocation').val(consumption.location);
     });
   }
 }
