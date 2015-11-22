@@ -98,6 +98,7 @@ function drawConsumptions() {
           '<a href="#" title="Set to Now" onClick="setNow(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">alarm_on</i></a>' +
           '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">call_split</i></a>' +
           '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
+          '<a href="#" title="Clone Friend and Location Data" onClick="cloneData(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">input</i></a>' +
           '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
           '</li>');
       });
@@ -144,7 +145,7 @@ function setNow(id) {
       if (consumption.id === id) {
         var payload = {
           id: id,
-          date: Math.floor((new Date().getTime() - (new Date().getTimezoneOffset()) * 60000) / 1000),
+          date: Math.floor((new Date().getTime() - (new Date().getTimezoneOffset()) * 60000) / 1000)
         };
 
         makeAuthRequest('/consumption', 'PUT', JSON.stringify(payload), 'json', function(err, data, code) {
@@ -157,6 +158,50 @@ function setNow(id) {
           drawConsumptions();
           Materialize.toast('Consumption set to now', 1000, 'success-toast');
         });
+      }
+    });
+  });
+}
+
+function cloneData(id) {
+  makeAuthRequest('/consumption/experience/' + experienceID, 'GET', null, 'json', function(err, consumptions, code) {
+    // sort by date desc
+    consumptions.sort(function(a, b) {
+      return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
+    });
+
+    // set current con to earliest con
+    makeAuthRequest('/consumption', 'PUT', JSON.stringify({
+      id: id,
+      location: consumptions[consumptions.length - 1].location
+    }), 'json', function(err, data, code) {
+      if (code !== 200) {
+        Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+        return;
+      }
+      Materialize.toast('Location data cloned', 1000, 'success-toast');
+
+      if (consumptions[consumptions.length - 1].friends.length > 0) {
+        // original consumption has friends to clone
+        consumptions[consumptions.length - 1].friends.forEach(function(friend, index) {
+          makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
+            consumption_id: id,
+            name: friend.name
+          }), 'json', function(err, data, code) {
+            if (code !== 201) {
+              Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+              return;
+            }
+            if(index === (consumptions[consumptions.length - 1].friends.length - 1)){
+              console.log('fsd')
+              // just processed last element; fire message and refresh
+              Materialize.toast('Friend data cloned', 1000, 'success-toast');
+              drawConsumptions();
+            }
+          });
+        });
+      } else {
+        Materialize.toast('No friends to clone', 1000);
       }
     });
   });
@@ -338,7 +383,7 @@ function drawMedia() {
     association_type: 'experience',
     association: experienceID
   }), 'json', function(err, data, code) {
-    if(data === null){
+    if (data === null) {
       // skip on empty
       return;
     }
@@ -403,7 +448,7 @@ $('#addConsumption').submit(function(event) {
 // consumption edit listener
 $('#editConsumption').submit(function(event) {
   event.preventDefault();
-  
+
   var datetime = Math.floor(Date.parse($('#editDate').val()) / 1000);
 
   // add the time box
