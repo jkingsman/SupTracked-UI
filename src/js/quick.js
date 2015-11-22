@@ -218,7 +218,7 @@ $('#addQuicknote').submit(function(event) {
   updateExperienceObject(function() {
     var newNotes;
 
-    if(!experience.notes){
+    if (!experience.notes) {
       // if they're empty (null, usually), fill with empty string so we don't concat the string 'null' into the notes
       experience.notes = '';
     }
@@ -312,7 +312,7 @@ $(document).ready(function() {
   $('ul.tabs').tabs();
 });
 
-if(location.search.slice(1) === 'hiddenNav'){
+if (location.search.slice(1) === 'hiddenNav') {
   $('nav').hide();
 }
 
@@ -325,6 +325,13 @@ updateExperienceObject(function() {
 
       return (a < b) ? -1 : (a > b) ? 1 : 0;
     });
+
+    if (experience.consumptions.length > 0) {
+      experience.consumptions.forEach(function(consumption) {
+        $('#addDrug').append('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
+      });
+      $('#addDrug').append('<option disabled>──────────────</option>');
+    }
 
     if (drugs.length < 1) {
       $('#addDrug').append('<option value="" disabled selected>None</option>');
@@ -343,6 +350,13 @@ updateExperienceObject(function() {
 
       return (a < b) ? -1 : (a > b) ? 1 : 0;
     });
+
+    if (experience.consumptions.length > 0) {
+      experience.consumptions.forEach(function(consumption) {
+        $('#addMethod').append('<option value="' + consumption.method.id + '">' + consumption.method.name + '</option>');
+      });
+      $('#addMethod').append('<option disabled>──────────────</option>');
+    }
 
     if (methods.length < 1) {
       $('#addMethod').append('<option value="" disabled selected>None</option>');
