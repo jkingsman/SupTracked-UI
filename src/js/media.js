@@ -136,6 +136,7 @@ function deleteMedia() {
 function editMedia(id) {
   event.preventDefault();
   event.stopPropagation();
+  document.activeElement.blur();
 
   makeAuthRequest('/media/' + id, 'GET', null, 'json', function(err, data, code) {
     $('#editID').val(id);
@@ -161,6 +162,8 @@ function editMedia(id) {
 
 $('#filterForm').submit(function(event) {
   event.preventDefault();
+  document.activeElement.blur();
+
   var filterCriteria = {};
 
   if ($('#filterTitle').val().length > 0) {
@@ -257,6 +260,7 @@ $('#filterForm').submit(function(event) {
 
 $('#editMedia').submit(function(event) {
   event.preventDefault();
+  document.activeElement.blur();
 
   // assemble this horrible date
   var editDate = $('#editTime').val().split(' ')[0];
@@ -307,7 +311,8 @@ $('#editMedia').submit(function(event) {
 });
 
 $('#addMedia').submit(function(event) {
-  event.preventDefault();
+  event.efault();
+
 
   // assemble this horrible date
   var customDate = $('#customTime').val().split(' ')[0];

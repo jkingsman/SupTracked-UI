@@ -188,6 +188,8 @@ function sendPanic() {
 // add consumption submit listener
 $('#addConsumption').submit(function(event) {
   event.preventDefault();
+  document.activeElement.blur();
+
   var payload = {
     date: Math.floor((new Date().getTime() - (new Date().getTimezoneOffset()) * 60000) / 1000),
     count: $('#count').val(),

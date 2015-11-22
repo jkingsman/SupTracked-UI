@@ -11,6 +11,7 @@ var date = new Date();
 
 $(document).on("click", ":submit", function(event){
   event.preventDefault();
+  document.activeElement.blur();
 
   // load up the date and time
   var datetime = Math.floor(Date.parse($('#date').val() + ' 00:00:00 GMT') / 1000);

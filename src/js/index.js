@@ -19,6 +19,8 @@ $('#server').val(location.protocol + '//' + location.host.split(':')[0] + ':3000
 
 $(document).on("click", ":submit", function(event){
   event.preventDefault();
+  document.activeElement.blur();
+  
   var action = $(this).val();
 
   if(action === 'login'){

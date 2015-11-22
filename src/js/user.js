@@ -55,6 +55,8 @@ $("#emergcontact, #phone").on('change keyup paste', function() {
 
 $('#updatePass').submit(function(event) {
   event.preventDefault();
+  document.activeElement.blur();
+
   if($('#password').val() !== $('#passwordConfirm').val()){
     Materialize.toast('Passwords must match', 6000, 'warning-toast');
     return;

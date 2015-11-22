@@ -244,6 +244,7 @@ function editConsumption(id) {
 
 $('#addFriendForm').submit(function(event) {
   event.preventDefault();
+
   var friendName = $('#addFriend').val();
   makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
     consumption_id: $('#editID').val(),
@@ -366,6 +367,7 @@ function drawMedia() {
 // create Add Experience submit listener
 $('#addConsumption').submit(function(event) {
   event.preventDefault();
+
   var datetime = Math.floor(Date.parse($('#addDate').val()) / 1000);
 
   // add the time box
@@ -401,6 +403,7 @@ $('#addConsumption').submit(function(event) {
 // consumption edit listener
 $('#editConsumption').submit(function(event) {
   event.preventDefault();
+  
   var datetime = Math.floor(Date.parse($('#editDate').val()) / 1000);
 
   // add the time box

@@ -107,6 +107,8 @@ function prepareFilter() {
 
 $('#filterForm').submit(function(event) {
   event.preventDefault();
+  document.activeElement.blur();
+  
   var filterCriteria = {};
 
   if ($('#filterTitle').val().length > 0) {
