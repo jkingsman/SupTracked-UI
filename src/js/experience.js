@@ -193,7 +193,6 @@ function cloneData(id) {
               return;
             }
             if(index === (consumptions[consumptions.length - 1].friends.length - 1)){
-              console.log('fsd')
               // just processed last element; fire message and refresh
               Materialize.toast('Friend data cloned', 1000, 'success-toast');
               drawConsumptions();
