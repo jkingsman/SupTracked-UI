@@ -39,16 +39,17 @@ block content
               
             #addConsumption.col.s12
               form#addConsumption(action='#')
-                label(for='count') Count
-                p.range-field
-                  input.page-action#count(type='range', min='1', max='100', value='1')
                 .row
                   .col.s12
-                    label Drug
+                    label(for='count') Count
+                    input#count(type='text', value=1)
+                .row
+                  .col.s12
+                    label(for='addDrug') Drug
                     select#addDrug.browser-default
                 .row
                   .col.s12
-                    label Method
+                    label(for='addMethod') Method
                     select#addMethod.browser-default
                 .row
                   .col.s12
