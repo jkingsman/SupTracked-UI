@@ -135,12 +135,15 @@ function authRegister(username, password, server){
 function makeAuthRequest(endpoint, verb, data, responseType, cb){
   var auth = getCookie('auth');
   var server = getCookie('server');
+  var requestID = Math.floor(Math.random() * 16777215).toString(16); // random six dig hex
 
   if(auth.length < 1 && server.length < 1){
     // doesn't exist; send them to login and clear cookies
     window.location = "/index.html?logout";
     return;
   }
+
+  Materialize.toast('Request pending...', 10000, 'requestid-' + requestID);
 
   $.ajax({
     method: verb,
@@ -154,14 +157,15 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb){
     data: data
   })
   .done(function(msg, textStatus, xhr) {
-    // fire the callback
+    // hide the notification and fire the callback
+    $('.requestid-' + requestID).hide();
     cb(null, msg, xhr.status);
   })
   .fail(function(xhr){
+    $('.requestid-' + requestID).hide();
     // parse out the error message (either responseText or, failing that, statusText) and fire the callback
     var errorText;
     if(xhr.responseText !== undefined && (xhr.responseText.length > 0 || xhr.responseText !== '')){
-      console.log(xhr.responseText)
       var name = Object.keys(JSON.parse(xhr.responseText))[0];
       errorText = JSON.parse(xhr.responseText)[name];
     } else {
