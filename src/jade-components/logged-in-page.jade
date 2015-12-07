@@ -35,8 +35,10 @@ html(lang='en')
           li
             a(href='/media.html') Media
           li
+            a(href='/analytics.html') Analytics
+          li
             a.dropdown-button(href='#!', data-activates='configDropdown')
-              | Config
+              | Config+
               i.material-icons.right arrow_drop_down
             ul#configDropdown.dropdown-content
               li
@@ -45,8 +47,8 @@ html(lang='en')
                 a(href='/methods.html') Methods
               li
                 a(href='/user.html') User
-          li
-            a(href='/?logout') Logout
+              li
+                a(href='/?logout') Logout
         ul#nav-mobile.side-nav
           li
             a(href='/quick.html') 
@@ -60,6 +62,10 @@ html(lang='en')
             a(href='/media.html') 
               i.material-icons.left.mobile-pad perm_media
               |  Media
+          li
+            a(href='/analytics.html') 
+              i.material-icons.left.mobile-pad insert_chart
+              |  Analytics              
           li
             a(href='/drugs.html') 
               i.material-icons.left.mobile-pad view_week
