@@ -25,28 +25,35 @@ block content
               i.material-icons filter_drama
               | Filter
             .collapsible-body
-              form#filterForm
-                p
-                  label.active(for='filterTitle') Title
+              form#filterForm(style='margin: 25px;')
+                .input-field
                   input#filterTitle(type='text')
-                  label.active(for='filterNotes') Notes
+                  label(for='filterTitle') Title
+                .input-field  
                   input#filterNotes(type='text')
-                  label.active(for='filterLocation') Location
+                  label(for='filterNotes') Notes
+                .input-field  
                   input#filterLocation(type='text')
-                  label.active(for='filterFriends') Friends
+                  label(for='filterLocation') Location
+                .input-field  
                   input#filterFriends(type='text', list='friends')
                   datalist#friends
-                  label.active(for='filterDrug') Drug
+                  label(for='filterFriends') Friends
+                .input-field  
                   input#filterDrug(type='text', list='drugs')
                   datalist#drugs
-                  label.active(for='filterMethod') Method
+                  label(for='filterDrug') Drug
+                .input-field  
                   input#filterMethod(type='text', list='methods')
                   datalist#methods
-                  label.active(for='filterStartDate') Start Date
+                  label(for='filterMethod') Method
+                .input-field  
                   input#filterStartDate(type='text')
-                  label.active(for='filterEndDate') End Date
+                  label.active(for='filterStartDate') Start Date
+                .input-field  
                   input#filterEndDate(type='text')
-                  label Rating
+                  label.active(for='filterEndDate') End Date
+                .input-field  
                   select#filterRating.browser-default
                     option(value='0').selected All Ratings
                     option(value='1') Horrific
@@ -55,9 +62,9 @@ block content
                     option(value='4') Good
                     option(value='5') Great
                     option(value='6') Spectacular
-                  button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
-                    | Filter
-                    i.material-icons.right search
+                button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+                  | Filter
+                  i.material-icons.right search
         ul.collection#experiences-collection
         
       .fixed-action-btn(style='bottom: 45px; right: 24px;')
