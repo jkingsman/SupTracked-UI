@@ -251,7 +251,7 @@ function editConsumption(id) {
         var picker = $input.pickadate('picker');
 
         var date = new Date(consumption.date * 1000);
-        picker.set('select', date);
+        picker.set('select', date.toISOString().slice(0, 10), {format: 'yyyy-mm-dd'});
 
         $('#editTime').val(date.toISOString().slice(11, 16).replace(/:/, ''));
         $('#edittimeLabel').addClass('active');
