@@ -108,7 +108,7 @@ function prepareFilter() {
 $('#filterForm').submit(function(event) {
   event.preventDefault();
   document.activeElement.blur();
-  
+
   var filterCriteria = {};
 
   if ($('#filterTitle').val().length > 0) {
@@ -154,11 +154,11 @@ $('#filterForm').submit(function(event) {
 
       data.forEach(function(experience) {
         // how we do a ghetto high speed search without parsing json
-        var conString = JSON.stringify(experience.consumptions);
-        if (conString.indexOf($('#filterLocation').val()) === -1 ||
-          conString.indexOf($('#filterFriends').val()) === -1 ||
-          conString.indexOf($('#filterDrug').val()) === -1 ||
-          conString.indexOf($('#filterMethod').val()) === -1) {
+        var conString = JSON.stringify(experience.consumptions).toLowerCase();
+        if (conString.indexOf($('#filterLocation').val().toLowerCase()) === -1 ||
+          conString.indexOf($('#filterFriends').val().toLowerCase()) === -1 ||
+          conString.indexOf($('#filterDrug').val().toLowerCase()) === -1 ||
+          conString.indexOf($('#filterMethod').val().toLowerCase()) === -1) {
           // don't match our criteria
           return;
         }
