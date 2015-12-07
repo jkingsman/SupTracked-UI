@@ -41,7 +41,7 @@ function loadMore() {
           experience.title = '[none]';
         }
 
-        // compile thr consumptions, grouped by drug
+        // compile the consumptions, grouped by drug
         var groupedConsumptionList = {};
 
         experience.consumptions.forEach(function(consumption) {
@@ -65,7 +65,37 @@ function loadMore() {
           stringifiedConsumptions.push('no consumptions');
         }
 
-        $('#experiences-collection').append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + stringifiedConsumptions.join('<br />') + '</div></li>');
+        // compile friends list
+        var groupedFriendsList = [];
+        var groupedFriendsString = 'Solo Experience';
+
+        experience.consumptions.forEach(function(consumption) {
+          consumption.friends.forEach(function(friend){
+            if(groupedFriendsList.indexOf(friend.name) === -1){
+              groupedFriendsList.push(friend.name);
+            }
+          });
+        });
+
+        if(groupedFriendsList.length > 0){
+          groupedFriendsString = groupedFriendsList.join(', ');
+        }
+
+        // compile locations
+        var groupedLocationsList = [];
+        var groupedLocationsString = '[no location]';
+
+        experience.consumptions.forEach(function(consumption) {
+          if(groupedLocationsList.indexOf(consumption.location) === -1){
+            groupedLocationsList.push(consumption.location);
+          }
+        });
+
+        if(groupedLocationsList.length > 0){
+          groupedLocationsString = groupedLocationsList.join(', ');
+        }
+
+        $('#experiences-collection').append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<span class="right hide-on-med-and-down" style="max-width: 50%;">' + groupedFriendsString + ' at <strong>' + groupedLocationsString + '</strong></span><h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + stringifiedConsumptions.join('<br />') + '</div></li>');
       });
 
       $('#loading').hide();
@@ -192,7 +222,38 @@ $('#filterForm').submit(function(event) {
           stringifiedConsumptions.push('no consumptions');
         }
 
-        $('#experiences-collection').append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + stringifiedConsumptions.join('<br />') + '</div></li>');
+        // compile friends list
+        var groupedFriendsList = [];
+        var groupedFriendsString = 'Solo Experience';
+
+        experience.consumptions.forEach(function(consumption) {
+          consumption.friends.forEach(function(friend){
+            if(groupedFriendsList.indexOf(friend.name) === -1){
+              groupedFriendsList.push(friend.name);
+            }
+          });
+        });
+
+        if(groupedFriendsList.length > 0){
+          groupedFriendsString = groupedFriendsList.join(', ');
+        }
+
+        // compile locations
+        var groupedLocationsList = [];
+        var groupedLocationsString = '[no location]';
+
+        experience.consumptions.forEach(function(consumption) {
+          if(groupedLocationsList.indexOf(consumption.location) === -1){
+            groupedLocationsList.push(consumption.location);
+          }
+        });
+
+        if(groupedLocationsList.length > 0){
+          groupedLocationsString = groupedLocationsList.join(', ');
+        }
+
+
+        $('#experiences-collection').append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<span class="right hide-on-med-and-down" style="max-width: 50%;">' + groupedFriendsString + ' at <strong>' + groupedLocationsString + '</strong></span><h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + stringifiedConsumptions.join('<br />') + '</div></li>');
       });
     });
 });
