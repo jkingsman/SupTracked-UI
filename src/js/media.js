@@ -56,10 +56,15 @@ function loadMore() {
           favoriteIcon = '<i class="material-icons" style="color: gold;">thumb_up</i>';
         }
 
+        var mediaTags = '<br>[no tags]';
+        if (media.tags.length > 0) {
+          mediaTags = '<br>' + media.tags;
+        }
+
         $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card" id="cardid-' + media.id + '"><div class="card-image">' +
           '<a id="imagelink' + media.id + '"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" style="background-color: rgba(0, 0, 0, 0.5);">' + favoriteIcon + media.title + '</span><a/></div>' +
           '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons icon-padding">reorder</i></a>' +
-          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + association + '</p></div>' +
+          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<br>' + mediaTags + association + '</p></div>' +
           '</div></div>');
 
         makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
@@ -238,10 +243,15 @@ $('#filterForm').submit(function(event) {
           favoriteIcon = '<i class="material-icons" style="color: gold;">thumb_up</i>';
         }
 
+        var mediaTags = '<br>[no tags]';
+        if (media.tags.length > 0) {
+          mediaTags = '<br>' + media.tags;
+        }
+
         $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
           '<a id="imagelink' + media.id + '"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title">' + favoriteIcon + media.title + '</span><a/></div>' +
           '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons" style="position: relative; top: 6px;">reorder</i></a>' +
-          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + association + '</p></div>' +
+          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<br>' + mediaTags + association + '</p></div>' +
           '</div></div>');
 
         makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
