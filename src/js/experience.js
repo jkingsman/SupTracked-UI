@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,makeAuthBlobRequest,Materialize,micromarkdown,getCookie */
+/* globals makeAuthRequest,makeAuthBlobRequest,Materialize,micromarkdown,getCookie,cleanMarkdown */
 "use strict";
 
 var experienceID = location.search.slice(1);
@@ -507,19 +507,7 @@ $(document).ready(function() {
     $('#notesArea').text(data.notes);
     $('#notesArea').trigger('autoresize');
 
-    // load markdown
-    var breaksToBR = micromarkdown.parse($('#notesArea').val()).replace(/(?:\r\n|\r|\n)/g, '<br />');
-
-    // scrub out unnecessary breaks
-    breaksToBR = breaksToBR.replace(/(<br>\s*)+<br>/gm, '<br>');
-
-    //scrub out breaks before and after all h1-4
-    breaksToBR = breaksToBR.replace(/<\/h1>[\s<br />\s]+/g, '</h1>').replace(/[\s<br />\s]+<h1>/g, '<h1>');
-    breaksToBR = breaksToBR.replace(/<\/h2>[\s<br />\s]+/g, '</h2>').replace(/[\s<br />\s]+<h2>/g, '<h2>');
-    breaksToBR = breaksToBR.replace(/<\/h3>[\s<br />\s]+/g, '</h3>').replace(/[\s<br />\s]+<h3>/g, '<h3>');
-    breaksToBR = breaksToBR.replace(/<\/h4>[\s<br />\s]+/g, '</h4>').replace(/[\s<br />\s]+<h4>/g, '<h4>');
-    
-    $('#notesMarkdown').html(breaksToBR);
+    $('#notesMarkdown').html(cleanMarkdown(micromarkdown.parse($('#notesArea').val())));
 
     // lift the curtain
     $('#loading').hide();

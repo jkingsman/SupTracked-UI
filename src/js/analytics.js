@@ -1,11 +1,8 @@
-/* globals makeAuthRequest,Materialize */
+/* globals makeAuthRequest,Materialize,micromarkdown,cleanMarkdown */
 
 "use strict";
 
-var drug = {
-  name: '(none)',
-  id: 0
-};
+var drug, allDrugs, allConsumptions = [];
 var analyticsCount = 0;
 var analyticsFinished = 0;
 
@@ -16,8 +13,16 @@ function startAnalytics() {
   vitals();
 }
 
+// don't show select if we're already navigating
+if (location.hash.length > 1) {
+  $('#selection').hide();
+  $('#loading').show();
+}
+
 // populate the drug dropdown
 makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
+  allDrugs = data;
+
   data.sort(function(a, b) {
     a = a.name.toLowerCase();
     b = b.name.toLowerCase();
@@ -35,18 +40,81 @@ makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
   });
 
   $('#loadingOpt').remove();
+
+  // we have a hash
+  if (location.hash.length > 1) {
+    $('#drug').val(location.hash.substr(1));
+    $('#drugSelect').submit();
+  }
 });
 
 // catch form submission
 $('#drugSelect').submit(function(event) {
   event.preventDefault();
-  drug.id = $('#drug').val();
-  drug.name = $("#drug option:selected").html();
 
-  $('.drugName').text(drug.name);
   $('#selection').hide();
   $('#loading').show();
-  startAnalytics();
+
+  allDrugs.forEach(function(singleDrug) {
+    if (singleDrug.id === parseInt($('#drug').val())) {
+      location.hash = singleDrug.id;
+      drug = singleDrug;
+      return;
+    }
+  });
+
+  document.title = drug.name.substr(0, 1).toUpperCase() + drug.name.substr(1) + ' | SupTracked';
+  $('.drugName').text(drug.name);
+
+  $('#unit').html(drug.unit);
+  $('#classification').html(drug.classification);
+  $('#family').html(drug.family);
+
+  switch (parseInt(drug.rarity)) {
+    case 0:
+      $('#rarity').html('<span class="blue white-text" style="padding: 3px; border-radius: 24px;">Very Common</span>');
+      break;
+    case 1:
+      $('#rarity').html('<span class="green white-text" style="padding: 3px; border-radius: 24px;">Common</span>');
+      break;
+    case 2:
+      $('#rarity').html('<span class="purple white-text" style="padding: 3px; border-radius: 24px;">Uncommon</span>');
+      break;
+    case 3:
+      $('#rarity').html('<span class="red white-text" style="padding: 3px; border-radius: 24px;">Rare</span>');
+      break;
+    default:
+      $('#rarity').html('<span class="grey white-text" style="padding: 3px; border-radius: 24px;">???</span>');
+  }
+
+  $('#notes').html(cleanMarkdown(micromarkdown.parse(drug.notes)));
+
+  // compile all consumptions
+  makeAuthRequest('/consumption/search', 'POST', JSON.stringify({
+    drug_id: drug.id
+  }), 'json', function(err, data, code) {
+    if (data) {
+      data.forEach(function(experience) {
+        experience.consumptions.forEach(function(consumption) {
+          if (consumption.drug.id === drug.id) {
+            consumption.title = experience.title;
+            consumption.exp_id = experience.id;
+            allConsumptions.push(consumption);
+          }
+        });
+      });
+
+      // sort in ascending date
+      allConsumptions.sort(function(a, b) {
+        return (a.date < b.date) ? -1 : (a.date > b.date) ? 1 : 0;
+      });
+
+      // off we go!
+      startAnalytics();
+    } else{
+      analyticsFinished = analyticsCount;
+    }
+  });
 });
 
 // set up the completion listener

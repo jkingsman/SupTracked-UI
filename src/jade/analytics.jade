@@ -21,7 +21,7 @@ block content
 								.card-action
 									.row
 										.col.s6.offset-s6.right-align
-											button.btn.waves-effect.waves-light(type='submit', value='create')
+											button.btn.waves-effect.waves-light.page-action(type='submit', value='create')
 												| Analyze
 												i.material-icons.right trending_up
 		.section#loading(style='display: none;')
@@ -41,9 +41,24 @@ block content
 				.row
 					.col.m12
 						.row
-							h5
+							h4
 								span.drugName(style='text-transform: capitalize;')
-								|  Analytics
+								|  Data Sheet
+						.row
+							strong Unit: 
+							span#unit
+							br
+							strong Classification: 
+							span#classification
+							br
+							strong Family: 
+							span#family
+							br
+							strong Rarity: 
+							span#rarity
+							hr
+							span#notes
+							hr
 					.col.m12
 						.row
 							include ./analytics/vitals.jade
