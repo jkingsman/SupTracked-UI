@@ -147,8 +147,10 @@ function saveNew() {
   });
 }
 
-function deleteDrug(){
-  makeAuthRequest('/drug', 'DELETE', JSON.stringify({id: parseInt($('#drugList').val())}), 'json', function(err, data, code) {
+function deleteDrug() {
+  makeAuthRequest('/drug', 'DELETE', JSON.stringify({
+    id: parseInt($('#drugList').val())
+  }), 'json', function(err, data, code) {
     if (code !== 200) {
       Materialize.toast('Drug delete error: ' + err, 6000, 'warning-toast');
       return;

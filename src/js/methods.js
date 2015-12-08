@@ -125,8 +125,10 @@ function saveNew() {
   });
 }
 
-function deleteMethod(){
-  makeAuthRequest('/method', 'DELETE', JSON.stringify({id: parseInt($('#methodList').val())}), 'json', function(err, data, code) {
+function deleteMethod() {
+  makeAuthRequest('/method', 'DELETE', JSON.stringify({
+    id: parseInt($('#methodList').val())
+  }), 'json', function(err, data, code) {
     if (code !== 200) {
       Materialize.toast('Method delete error: ' + err, 6000, 'warning-toast');
       return;

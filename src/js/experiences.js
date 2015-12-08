@@ -70,14 +70,14 @@ function loadMore() {
         var groupedFriendsString = 'Solo Experience';
 
         experience.consumptions.forEach(function(consumption) {
-          consumption.friends.forEach(function(friend){
-            if(groupedFriendsList.indexOf(friend.name) === -1){
+          consumption.friends.forEach(function(friend) {
+            if (groupedFriendsList.indexOf(friend.name) === -1) {
               groupedFriendsList.push(friend.name);
             }
           });
         });
 
-        if(groupedFriendsList.length > 0){
+        if (groupedFriendsList.length > 0) {
           groupedFriendsString = groupedFriendsList.join(', ');
         }
 
@@ -86,12 +86,12 @@ function loadMore() {
         var groupedLocationsString = '[no location]';
 
         experience.consumptions.forEach(function(consumption) {
-          if(groupedLocationsList.indexOf(consumption.location) === -1){
+          if (groupedLocationsList.indexOf(consumption.location) === -1) {
             groupedLocationsList.push(consumption.location);
           }
         });
 
-        if(groupedLocationsList.length > 0){
+        if (groupedLocationsList.length > 0) {
           groupedLocationsString = groupedLocationsList.join(', ');
         }
 
@@ -227,14 +227,14 @@ $('#filterForm').submit(function(event) {
         var groupedFriendsString = 'Solo Experience';
 
         experience.consumptions.forEach(function(consumption) {
-          consumption.friends.forEach(function(friend){
-            if(groupedFriendsList.indexOf(friend.name) === -1){
+          consumption.friends.forEach(function(friend) {
+            if (groupedFriendsList.indexOf(friend.name) === -1) {
               groupedFriendsList.push(friend.name);
             }
           });
         });
 
-        if(groupedFriendsList.length > 0){
+        if (groupedFriendsList.length > 0) {
           groupedFriendsString = groupedFriendsList.join(', ');
         }
 
@@ -243,12 +243,12 @@ $('#filterForm').submit(function(event) {
         var groupedLocationsString = '[no location]';
 
         experience.consumptions.forEach(function(consumption) {
-          if(groupedLocationsList.indexOf(consumption.location) === -1){
+          if (groupedLocationsList.indexOf(consumption.location) === -1) {
             groupedLocationsList.push(consumption.location);
           }
         });
 
-        if(groupedLocationsList.length > 0){
+        if (groupedLocationsList.length > 0) {
           groupedLocationsString = groupedLocationsList.join(', ');
         }
 

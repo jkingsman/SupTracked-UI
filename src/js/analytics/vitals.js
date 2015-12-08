@@ -5,9 +5,11 @@ var analyticsCount, analyticsFinished;
 
 analyticsCount += 1;
 
-function vitals(id){
+function vitals(id) {
   "use strict";
 
 
-  setTimeout(function(){analyticsFinished += 1;}, 500);
+  setTimeout(function() {
+    analyticsFinished += 1;
+  }, 500);
 }

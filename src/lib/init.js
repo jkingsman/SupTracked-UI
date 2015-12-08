@@ -9,7 +9,7 @@
 
 $(document).on('click', 'a', function(event) {
   "use strict";
-  if (($(event.target).attr('class') === undefined || $(event.target).attr('class').indexOf('page-action') === -1) &&  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  if (($(event.target).attr('class') === undefined || $(event.target).attr('class').indexOf('page-action') === -1) && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
     event.preventDefault();
     window.location = $(this).attr("href");
   }

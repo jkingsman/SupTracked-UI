@@ -9,15 +9,18 @@ picker.set('select', new Date());
 var date = new Date();
 
 
-$(document).on("click", ":submit", function(event){
+$(document).on("click", ":submit", function(event) {
   event.preventDefault();
   document.activeElement.blur();
 
   // load up the date and time
   var datetime = Math.floor(Date.parse($('#date').val() + ' 00:00:00 GMT') / 1000);
 
-  makeAuthRequest('/experience', 'POST', JSON.stringify({title: $('#title').val(), date: datetime}), 'json', function(err, data, code){
-    if(err){
+  makeAuthRequest('/experience', 'POST', JSON.stringify({
+    title: $('#title').val(),
+    date: datetime
+  }), 'json', function(err, data, code) {
+    if (err) {
       Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
       return;
     }
