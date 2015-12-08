@@ -44,7 +44,11 @@ block content
 							h4
 								span.drugName(style='text-transform: capitalize;')
 								|  Data Sheet
-						.row
+				hr
+				.row
+					.col.m12
+						h5 Basic Data
+						.col.m12
 							strong Unit: 
 							span#unit
 							br
@@ -56,12 +60,16 @@ block content
 							br
 							strong Rarity: 
 							span#rarity
-							hr
-							span#notes
-							hr
+				hr
+				.row
 					.col.m12
-						.row
-							include ./analytics/vitals.jade
+						h5 Notes
+						.col.m12
+							span#notes
+				hr
+				.row
+					.col.m12
+						include ./analytics/vitals.jade
 block scripts
 	script(src='js/analytics.js')
 	script(src='js/analytics_display.js')
