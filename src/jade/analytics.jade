@@ -1,13 +1,52 @@
 extends ../jade-components/logged-in-page.jade
 
 block title
-  title Analytics | SupTracked
+	title Analytics | SupTracked
 
 block content
-    main
-      .container
-        h4 Analytics
-
+	main
+		.section#selection
+			.container
+				.row
+					.col.s12.m4.offset-m4
+						form#drugSelect
+							.card
+								.card-content
+									span.card-title.blue-text.text-darken-2 Analytics
+									.row
+										.input-field.col.s12
+											labels Drug
+											select#drug.browser-default
+												option('disabled')#loadingOpt Loading...
+								.card-action
+									.row
+										.col.s6.offset-s6.right-align
+											button.btn.waves-effect.waves-light(type='submit', value='create')
+												| Analyze
+												i.material-icons.right trending_up
+		.section#loading(style='display: none;')
+			.container
+				.row
+					.col.m12
+						h5.center-align Analyzing 
+							span.drugName
+							|  usage (
+							span#analyticsComplete 0
+							| %)
+						br 
+						.progress
+							.determinate#analyticsProgress(style='width: 0%;')
+		.section#analytics(style='display: none;')
+			.container
+				.row
+					.col.m12
+						.row
+							h5
+								span.drugName(style='text-transform: capitalize;')
+								|  Analytics
+					.col.m12
+						.row
+							include ./analytics/vitals.jade
 block scripts
-  script(src='js/analytics.js')
-  script(src='js/analytics_display.js')
+	script(src='js/analytics.js')
+	script(src='js/analytics_display.js')

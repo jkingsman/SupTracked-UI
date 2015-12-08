@@ -1,2 +1,1 @@
-console.log("doing general");
-console.log("doing other");
+function vitals(i){"use strict";setTimeout(function(){analyticsFinished+=1},500)}var analyticsCount,analyticsFinished;analyticsCount+=1;
