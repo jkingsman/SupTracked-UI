@@ -1,162 +1,162 @@
 extends ../jade-components/logged-in-page.jade
 
 block title
-  title View Experience | SupTracked
+	title View Experience | SupTracked
 
 block content
-  main
-    .container
-      .section#loading
-        h5.center-align Loading experience
-        br
-        .progress
-          .indeterminate
-      .section#noExperience(style='display: none;')
-        h5.center-align
-          i.material-icons error
-          | No such experience!
-      .section#main(style='display: none;')
-        .row
-          .col.s12
-            h3#title
-            h6#date
-            ul.tabs
-              li.tab.col.s3.active
-                a.active(href='#consumptions')
-                  | Cons
-                  span.hide-on-med-and-down umptions
-              li.tab.col.s3
-                a(href='#meta') Meta
-              li.tab.col.s3
-                a(href='#media') Media
-          #consumptions.col.s12
-            ul.collection#consumptionsCollection
-              li.collection-item#noConsumptions
-            a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick='$("#addConsumptionModal").openModal();', style='width: 100%;') Add Consumption
-            hr
-            textarea#notesArea.materialize-textarea(style='display: none;')
-            #notesMarkdown
-            
-          #meta.col.s12
-            .row
-              .input-field.col.s12
-                input#metaTitle(type='text', required)
-                label.active#addTitleLabel(for='metaTitle') Title
-            .row
-              .input-field.col.s12
-                input.datepicker#metaDate(type='date', required)
-                label.active(for='metaDate') Date
-            .row
-              .input-field.col.s12
-                textarea#metaPanic.materialize-textarea(length='120')
-                label.active#metaPanicLabel(for='metaPanic') Panic Message
-            .row
-              label Rating
-              select#metaRating.browser-default
-                option(value='0').selected No Rating
-                option(value='1') Horrific
-                option(value='2') Bad
-                option(value='3') Meh
-                option(value='4') Good
-                option(value='5') Great
-                option(value='6') Spectacular
-            .row
-              label.tooltipped(data-position='right', data-delay='50', data-tooltip='Add App notes as a function of time elapsed since the selected consumption.', style='border-bottom: 1px dashed #ADADAD;') T-Time
-              select#metaTTime.browser-default
-            .row
-              hr
-              a.btn.waves-effect.waves-light.page-action(onClick='deleteExperience();', style='width: 100%;')
-                i.material-icons.left report_problem
-                i.material-icons.right report_problem
-                | Delete
-          #media.col.s12
-          
-    #addConsumptionModal.modal
-      .modal-content
-        h4 Add Consumption
-        form#addConsumption
-          .row
-            .input-field.col.s2
-              input#addCount(type='text', value='1', required)
-              label.active(for='addCount') Count
-            .input-field.col.s5
-              input.datepicker#addDate(type='date', required)
-              label.active(for='addDate') Date
-            .input-field.col.s5
-              input#addTime(type='text', required)
-              label.active#addtimeLabel(for='addTime') Time
-          .row
-            .input-field.col.s12
-              input#addLocation(type='text', required, list='locations')
-              label.active(for='addLocation') Location
-          .row
-            .col.s12
-              label Drug
-              select#addDrug.browser-default
-          .row
-            .col.s12
-              label Method
-              select#addMethod.browser-default
-          .row
-            .col.s12
-              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
-                | Create
-                i.material-icons.right add
-    #editConsumptionModal.modal
-      .modal-content
-        ul.tabs
-          li.tab.col.s4.active
-            a.active(href='#editConsumptionTab') Edit
-          li.tab.col.s4
-            a(href='#editFriendsTab') Friends
+	main
+		.container
+			.section#loading
+				h5.center-align Loading experience
+				br
+				.progress
+					.indeterminate
+			.section#noExperience(style='display: none;')
+				h5.center-align
+					i.material-icons error
+					| No such experience!
+			.section#main(style='display: none;')
+				.row
+					.col.s12
+						h3#title
+						h6#date
+						ul.tabs
+							li.tab.col.s3.active
+								a.active(href='#consumptions')
+									| Cons
+									span.hide-on-med-and-down umptions
+							li.tab.col.s3
+								a(href='#meta') Meta
+							li.tab.col.s3
+								a(href='#media') Media
+					#consumptions.col.s12
+						ul.collection#consumptionsCollection
+							li.collection-item#noConsumptions
+						a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick='$("#addConsumptionModal").openModal();', style='width: 100%;') Add Consumption
+						hr
+						textarea#notesArea.materialize-textarea(style='display: none;')
+						#notesMarkdown
 
-        #editConsumptionTab
-         form#editConsumption
-           input#editID(type='hidden')
-           .row
-             .input-field.col.s2
-               input#editCount(type='text', value='1', required)
-               label.active(for='editCount') Count
-             .input-field.col.s5
-               input.datepicker#editDate(type='date', required)
-               label.active(for='editDate') Date
-             .input-field.col.s5
-               input#editTime(type='text', required)
-               label.active#edittimeLabel(for='editTime') Time
-           .row
-             .input-field.col.s12
-               input#editLocation(type='text', required, list='locations')
-               label.active#editLocationLabel(for='editLocation') Location
-               datalist#locations
-           .row
-             .col.s12
-               label Drug
-               select#editDrug.browser-default
-            .row
-             .col.s12
-               label Method
-               select#editMethod.browser-default
-           .row
-             .col.s12
-               button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%;')
-                 i.material-icons.right done
-                 | Done
-        #editFriendsTab
-          .row
-            .col.s6
-              #editFriendBox
-            .col.s6
-              h5 Add Friend
-              form#addFriendForm
-                .row
-                  .col.s8
-                    label(for='addFriend') Friend Name
-                    input#addFriend(type='text', list='friends')
-                    datalist#friends
-                  .col.s4
-                    button.btn.waves-effect.waves-light(type='submit')
-                      | Add
+					#meta.col.s12
+						.row
+							.input-field.col.s12
+								input#metaTitle(type='text', required)
+								label.active#addTitleLabel(for='metaTitle') Title
+						.row
+							.input-field.col.s12
+								input.datepicker#metaDate(type='date', required)
+								label.active(for='metaDate') Date
+						.row
+							.input-field.col.s12
+								textarea#metaPanic.materialize-textarea(length='120')
+								label.active#metaPanicLabel(for='metaPanic') Panic Message
+						.row
+							label Rating
+							select#metaRating.browser-default
+								option(value='0').selected No Rating
+								option(value='1') Horrific
+								option(value='2') Bad
+								option(value='3') Meh
+								option(value='4') Good
+								option(value='5') Great
+								option(value='6') Spectacular
+						.row
+							label.tooltipped(data-position='right', data-delay='50', data-tooltip='Add App notes as a function of time elapsed since the selected consumption.', style='border-bottom: 1px dashed #ADADAD;') T-Time
+							select#metaTTime.browser-default
+						.row
+							hr
+							a.btn.waves-effect.waves-light.page-action(onClick='deleteExperience();', style='width: 100%;')
+								i.material-icons.left report_problem
+								i.material-icons.right report_problem
+								| Delete
+					#media.col.s12
+
+		#addConsumptionModal.modal
+			.modal-content
+				h4 Add Consumption
+				form#addConsumption
+					.row
+						.input-field.col.s2
+							input#addCount(type='text', value='1', required)
+							label.active(for='addCount') Count
+						.input-field.col.s5
+							input.datepicker#addDate(type='date', required)
+							label.active(for='addDate') Date
+						.input-field.col.s5
+							input#addTime(type='text', required)
+							label.active#addtimeLabel(for='addTime') Time
+					.row
+						.input-field.col.s12
+							input#addLocation(type='text', required, list='locations')
+							label.active(for='addLocation') Location
+					.row
+						.col.s12
+							label Drug
+							select#addDrug.browser-default
+					.row
+						.col.s12
+							label Method
+							select#addMethod.browser-default
+					.row
+						.col.s12
+							button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+								| Create
+								i.material-icons.right add
+		#editConsumptionModal.modal
+			.modal-content
+				ul.tabs
+					li.tab.col.s4.active
+						a.active(href='#editConsumptionTab') Edit
+					li.tab.col.s4
+						a(href='#editFriendsTab') Friends
+
+				#editConsumptionTab
+					form#editConsumption
+						input#editID(type='hidden')
+						.row
+							.input-field.col.s2
+								input#editCount(type='text', value='1', required)
+								label.active(for='editCount') Count
+							.input-field.col.s5
+								input.datepicker#editDate(type='date', required)
+								label.active(for='editDate') Date
+							.input-field.col.s5
+								input#editTime(type='text', required)
+								label.active#edittimeLabel(for='editTime') Time
+						.row
+							.input-field.col.s12
+								input#editLocation(type='text', required, list='locations')
+								label.active#editLocationLabel(for='editLocation') Location
+								datalist#locations
+						.row
+							.col.s12
+								label Drug
+								select#editDrug.browser-default
+						.row
+							.col.s12
+								label Method
+								select#editMethod.browser-default
+						.row
+							.col.s12
+								button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%;')
+									i.material-icons.right done
+									| Done
+				#editFriendsTab
+					.row
+						.col.s6
+							#editFriendBox
+						.col.s6
+							h5 Add Friend
+							form#addFriendForm
+								.row
+									.col.s8
+										label(for='addFriend') Friend Name
+										input#addFriend(type='text', list='friends')
+										datalist#friends
+									.col.s4
+										button.btn.waves-effect.waves-light(type='submit')
+											| Add
 
 
 block scripts
-  script(src='js/experience.js')
+	script(src='js/experience.js')

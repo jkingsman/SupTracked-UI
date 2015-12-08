@@ -1,134 +1,134 @@
 extends ../jade-components/logged-in-page.jade
 
 block title
-  title Media | SupTracked
+	title Media | SupTracked
 
 block content
-  main
-    .container
-      .section#loading
-        h5.center-align Loading media
-        br 
-        .progress
-          .indeterminate
-      .section#emptyMedia(style='display: none;')
-        ul.collection
-          li.collection-item.avatar
-            i.material-icons.circle report_problem
-            span.title No Media Found
-            a.secondary-content(href='#', onClick='newMedia();')
-              i.material-icons add
-              
-      .section#media(style='display: none;')
-        ul.collapsible(data-collapsible='accordion')
-          li
-            .collapsible-header
-              i.material-icons filter_drama
-              | Filter
-            .collapsible-body
-              form#filterForm
-                p
-                  label.active(for='filterTitle') Title
-                  input#filterTitle(type='text')
-                  label.active(for='filterTags') Tags
-                  input#filterTags(type='text')
-                  label.active(for='filterStartDate') Start Date
-                  input#filterStartDate(type='text')
-                  label.active(for='filterEndDate') End Date
-                  input#filterEndDate(type='text')
-                  input#filterExplicit(type='checkbox', checked)
-                  label(for='filterExplicit') Explicit
-                  input#filterNonExplicit(type='checkbox', checked)
-                  label(for='filterNonExplicit', style='margin-left: 30px;', checked) Non-explicit
-                  br
-                  input#filterFavorite(type='checkbox', checked)
-                  label(for='filterFavorite') Favorite
-                  input#filterNonFavorite(type='checkbox', checked)
-                  label(for='filterNonFavorite', style='margin-left: 30px;') Non-favorite
-                  button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
-                    | Filter
-                    i.material-icons.right search
-        
-      .fixed-action-btn(style='bottom: 45px; right: 24px;')
-        a.btn-floating.btn-large.red.page-action(href='#', onClick='$("#addMediaModal").openModal();')
-          i.large.material-icons add
-          
-    #addMediaModal.modal
-      .modal-content
-        h4 Add Media
-        form#addMedia
-          .row
-            .input-field.col.s12
-              input#title(type='text', required)
-              label.active(for='title') Title
-            .input-field.col.s12
-              input#tags(type='text', required)
-              label.active(for='tags') Tags
-          .row
-            input#timeCurrent(name='time', type='radio', checked='', value='current')
-            label(for='timeCurrent') Current Time
-            input#timeCustom(name='time', type='radio', value='custom')
-            label.margin-left-40(for='timeCustom') Custom Time
-          .row#customTimeArea(style='display: none;')
-            .input-field.col.s12
-              input#customTime(type='text')
-              label.active(for='customTime') Custom Time
-          .row
-            .col.s12
-              label(for='experience') Experience
-              select#experience.browser-default
-          .row
-            input#explicit(type='checkbox')
-            label(for='explicit') Explicit
-            br
-            input#favorite(type='checkbox')
-            label(for='favorite') Favorite
-          .row
-            .file-field.input-field
-              .btn
-                span File
-                input#mediaFile(type='file', required)
-              .file-path-wrapper
-                input.file-path.validate(type='text')
-          .row
-            .col.s12
-              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
-                | Create
-                i.material-icons.right add
-            
-    #editMediaModal.modal
-      .modal-content
-        h4 Edit Media
-        form#editMedia
-          input#editID(type='hidden')
-          input#assocType(type='hidden')
-          .row
-            .input-field.col.s12
-              input#editTitle(type='text', required)
-              label.active#editTitleLabel(for='editTitle') Title
-            .input-field.col.s12
-              input#editTags(type='text', required)
-              label.active#editTagsLabel(for='editTags') Tags
-            .input-field.col.s12
-              input#editTime(type='text')
-              label.active#editTimeLabel(for='editTime') Time
-          .row#editExperienceRow
-            .col.s12
-              label(for='editExperience') Experience
-              select#editExperience.browser-default
-          .row
-            input#editExplicit(type='checkbox')
-            label(for='editExplicit') Explicit
-            br
-            input#editFavorite(type='checkbox')
-            label(for='editFavorite') Favorite
-          .row
-            .col.s12
-              button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
-                | Save
-                i.material-icons.right done
-              a.btn.waves-effect.waves-light.page-action(style='margin-top: 25px; width: 100%', onClick='deleteMedia();')
-                | Delete
-                i.material-icons.right delete
+	main
+		.container
+			.section#loading
+				h5.center-align Loading media
+				br 
+				.progress
+					.indeterminate
+			.section#emptyMedia(style='display: none;')
+				ul.collection
+					li.collection-item.avatar
+						i.material-icons.circle report_problem
+						span.title No Media Found
+						a.secondary-content(href='#', onClick='newMedia();')
+							i.material-icons add
+
+			.section#media(style='display: none;')
+				ul.collapsible(data-collapsible='accordion')
+					li
+						.collapsible-header
+							i.material-icons filter_drama
+							| Filter
+						.collapsible-body
+							form#filterForm
+								p
+									label.active(for='filterTitle') Title
+									input#filterTitle(type='text')
+									label.active(for='filterTags') Tags
+									input#filterTags(type='text')
+									label.active(for='filterStartDate') Start Date
+									input#filterStartDate(type='text')
+									label.active(for='filterEndDate') End Date
+									input#filterEndDate(type='text')
+									input#filterExplicit(type='checkbox', checked)
+									label(for='filterExplicit') Explicit
+									input#filterNonExplicit(type='checkbox', checked)
+									label(for='filterNonExplicit', style='margin-left: 30px;', checked) Non-explicit
+									br
+									input#filterFavorite(type='checkbox', checked)
+									label(for='filterFavorite') Favorite
+									input#filterNonFavorite(type='checkbox', checked)
+									label(for='filterNonFavorite', style='margin-left: 30px;') Non-favorite
+									button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+										| Filter
+										i.material-icons.right search
+
+			.fixed-action-btn(style='bottom: 45px; right: 24px;')
+				a.btn-floating.btn-large.red.page-action(href='#', onClick='$("#addMediaModal").openModal();')
+					i.large.material-icons add
+
+		#addMediaModal.modal
+			.modal-content
+				h4 Add Media
+				form#addMedia
+					.row
+						.input-field.col.s12
+							input#title(type='text', required)
+							label.active(for='title') Title
+						.input-field.col.s12
+							input#tags(type='text', required)
+							label.active(for='tags') Tags
+					.row
+						input#timeCurrent(name='time', type='radio', checked='', value='current')
+						label(for='timeCurrent') Current Time
+						input#timeCustom(name='time', type='radio', value='custom')
+						label.margin-left-40(for='timeCustom') Custom Time
+					.row#customTimeArea(style='display: none;')
+						.input-field.col.s12
+							input#customTime(type='text')
+							label.active(for='customTime') Custom Time
+					.row
+						.col.s12
+							label(for='experience') Experience
+							select#experience.browser-default
+					.row
+						input#explicit(type='checkbox')
+						label(for='explicit') Explicit
+						br
+						input#favorite(type='checkbox')
+						label(for='favorite') Favorite
+					.row
+						.file-field.input-field
+							.btn
+								span File
+								input#mediaFile(type='file', required)
+							.file-path-wrapper
+								input.file-path.validate(type='text')
+					.row
+						.col.s12
+							button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+								| Create
+								i.material-icons.right add
+
+		#editMediaModal.modal
+			.modal-content
+				h4 Edit Media
+				form#editMedia
+					input#editID(type='hidden')
+					input#assocType(type='hidden')
+					.row
+						.input-field.col.s12
+							input#editTitle(type='text', required)
+							label.active#editTitleLabel(for='editTitle') Title
+						.input-field.col.s12
+							input#editTags(type='text', required)
+							label.active#editTagsLabel(for='editTags') Tags
+						.input-field.col.s12
+							input#editTime(type='text')
+							label.active#editTimeLabel(for='editTime') Time
+					.row#editExperienceRow
+						.col.s12
+							label(for='editExperience') Experience
+							select#editExperience.browser-default
+					.row
+						input#editExplicit(type='checkbox')
+						label(for='editExplicit') Explicit
+						br
+						input#editFavorite(type='checkbox')
+						label(for='editFavorite') Favorite
+					.row
+						.col.s12
+							button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+								| Save
+								i.material-icons.right done
+							a.btn.waves-effect.waves-light.page-action(style='margin-top: 25px; width: 100%', onClick='deleteMedia();')
+								| Delete
+								i.material-icons.right delete
 block scripts          
-  script(src='js/media.js')
+	script(src='js/media.js')

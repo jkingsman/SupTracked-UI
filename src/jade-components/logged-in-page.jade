@@ -1,90 +1,90 @@
 doctype html
 html(lang='en')
-  head
-    block title
-    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
-    meta(name='viewport', content='width=device-width, initial-scale=.75, maximum-scale=.75, user-scalable=no')
+	head
+		block title
+		meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+		meta(name='viewport', content='width=device-width, initial-scale=.75, maximum-scale=.75, user-scalable=no')
 
-    // CSS
-    link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
-    link(href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic,300,500,500italic,300italic,100,100italic', rel='stylesheet')
-    link(href='style.css', type='text/css', rel='stylesheet', media='screen')
+		// CSS
+		link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+		link(href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,700,700italic,300,500,500italic,300italic,100,100italic', rel='stylesheet')
+		link(href='style.css', type='text/css', rel='stylesheet', media='screen')
 
-    // Add to homescreen for Chrome on Android
-    meta(name='mobile-web-app-capable', content='yes')
-    link(rel='icon', sizes='192x192', href='img/android-desktop.png')
+		// Add to homescreen for Chrome on Android
+		meta(name='mobile-web-app-capable', content='yes')
+		link(rel='icon', sizes='192x192', href='img/android-desktop.png')
 
-    // Add to homescreen for Safari on iOS
-    meta(name='apple-mobile-web-app-capable', content='yes')
-    meta(name='apple-mobile-web-app-status-bar-style', content='black')
-    meta(name='apple-mobile-web-app-title', content='SupTracked')
-    link(rel='apple-touch-icon-precomposed', href='img/ios-desktop.png')
-    link(rel='shortcut icon', href='img/favicon.png')
-  body        
-    nav.light-blue.lighten-1
-      .nav-wrapper.container
-        span
-          a#logo-container.brand-logo(href='/experiences.html') 
-            i.material-icons.left.mobile-pad dashboard
-            | SupTracked
-        ul.right.hide-on-med-and-down
-          li
-            a(href='/quick.html') Quick
-          li
-            a(href='/experiences.html') Experiences
-          li
-            a(href='/media.html') Media
-          li
-            a(href='/analytics.html') Analytics
-          li
-            a.dropdown-button(href='#!', data-activates='configDropdown')
-              | Config+
-              i.material-icons.right arrow_drop_down
-            ul#configDropdown.dropdown-content
-              li
-                a(href='/drugs.html') Drugs
-              li
-                a(href='/methods.html') Methods
-              li
-                a(href='/user.html') User
-              li
-                a(href='/?logout') Logout
-        ul#nav-mobile.side-nav
-          li
-            a(href='/quick.html') 
-              i.material-icons.left.mobile-pad stay_primary_portrait
-              |  Quick
-          li
-            a(href='/experiences.html') 
-              i.material-icons.left.mobile-pad list
-              |  Experiences
-          li
-            a(href='/media.html') 
-              i.material-icons.left.mobile-pad perm_media
-              |  Media
-          li
-            a(href='/analytics.html') 
-              i.material-icons.left.mobile-pad insert_chart
-              |  Analytics              
-          li
-            a(href='/drugs.html') 
-              i.material-icons.left.mobile-pad view_week
-              |  Configure Drugs
-          li
-            a(href='/methods.html') 
-              i.material-icons.left.mobile-pad dns
-              |  Configure Methods
-          li
-            a(href='/user.html') 
-              i.material-icons.left.mobile-pad perm_identity
-              |  Configure User
-          li
-            a(href='/?logout')
-              i.material-icons.left.mobile-pad person_pin
-              |  Logout
-        a.button-collapse(href='#', data-activates='nav-mobile')
-          i.material-icons menu
-    block content
-            
-    script(src='lib.js')
-    block scripts
+		// Add to homescreen for Safari on iOS
+		meta(name='apple-mobile-web-app-capable', content='yes')
+		meta(name='apple-mobile-web-app-status-bar-style', content='black')
+		meta(name='apple-mobile-web-app-title', content='SupTracked')
+		link(rel='apple-touch-icon-precomposed', href='img/ios-desktop.png')
+		link(rel='shortcut icon', href='img/favicon.png')
+	body        
+		nav.light-blue.lighten-1
+			.nav-wrapper.container
+				span
+					a#logo-container.brand-logo(href='/experiences.html') 
+						i.material-icons.left.mobile-pad dashboard
+						| SupTracked
+				ul.right.hide-on-med-and-down
+					li
+						a(href='/quick.html') Quick
+					li
+						a(href='/experiences.html') Experiences
+					li
+						a(href='/media.html') Media
+					li
+						a(href='/analytics.html') Analytics
+					li
+						a.dropdown-button(href='#!', data-activates='configDropdown')
+							| Config+
+							i.material-icons.right arrow_drop_down
+						ul#configDropdown.dropdown-content
+							li
+								a(href='/drugs.html') Drugs
+							li
+								a(href='/methods.html') Methods
+							li
+								a(href='/user.html') User
+							li
+								a(href='/?logout') Logout
+				ul#nav-mobile.side-nav
+					li
+						a(href='/quick.html') 
+							i.material-icons.left.mobile-pad stay_primary_portrait
+							|  Quick
+					li
+						a(href='/experiences.html') 
+							i.material-icons.left.mobile-pad list
+							|  Experiences
+					li
+						a(href='/media.html') 
+							i.material-icons.left.mobile-pad perm_media
+							|  Media
+					li
+						a(href='/analytics.html') 
+							i.material-icons.left.mobile-pad insert_chart
+							|  Analytics              
+					li
+						a(href='/drugs.html') 
+							i.material-icons.left.mobile-pad view_week
+							|  Configure Drugs
+					li
+						a(href='/methods.html') 
+							i.material-icons.left.mobile-pad dns
+							|  Configure Methods
+					li
+						a(href='/user.html') 
+							i.material-icons.left.mobile-pad perm_identity
+							|  Configure User
+					li
+						a(href='/?logout')
+							i.material-icons.left.mobile-pad person_pin
+							|  Logout
+				a.button-collapse(href='#', data-activates='nav-mobile')
+					i.material-icons menu
+		block content
+
+		script(src='lib.js')
+		block scripts

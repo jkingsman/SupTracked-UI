@@ -1,75 +1,75 @@
 extends ../jade-components/logged-in-page.jade
 
 block title
-  title Experiences | SupTracked
+	title Experiences | SupTracked
 
 block content
-  main
-    .container
-      .section#loading
-        h5.center-align Loading experiences
-        br 
-        .progress
-          .indeterminate
-      .section#emptyExperiences(style='display: none;')
-        ul.collection
-          li.collection-item.avatar
-            i.material-icons.circle report_problem
-            span.title No Experiences Found
-            a.secondary-content(href='newexperience.html')
-              i.material-icons add
-      .section#experiences(style='display: none;')
-        ul.collapsible(data-collapsible='accordion')
-          li
-            .collapsible-header
-              i.material-icons filter_drama
-              | Filter
-            .collapsible-body
-              form#filterForm(style='margin: 25px;')
-                .input-field
-                  input#filterTitle(type='text')
-                  label(for='filterTitle') Title
-                .input-field  
-                  input#filterNotes(type='text')
-                  label(for='filterNotes') Notes
-                .input-field  
-                  input#filterLocation(type='text')
-                  label(for='filterLocation') Location
-                .input-field  
-                  input#filterFriends(type='text', list='friends')
-                  datalist#friends
-                  label(for='filterFriends') Friends
-                .input-field  
-                  input#filterDrug(type='text', list='drugs')
-                  datalist#drugs
-                  label(for='filterDrug') Drug
-                .input-field  
-                  input#filterMethod(type='text', list='methods')
-                  datalist#methods
-                  label(for='filterMethod') Method
-                .input-field  
-                  input#filterStartDate(type='text')
-                  label.active(for='filterStartDate') Start Date
-                .input-field  
-                  input#filterEndDate(type='text')
-                  label.active(for='filterEndDate') End Date
-                .input-field  
-                  select#filterRating.browser-default
-                    option(value='0').selected All Ratings
-                    option(value='1') Horrific
-                    option(value='2') Bad
-                    option(value='3') Meh
-                    option(value='4') Good
-                    option(value='5') Great
-                    option(value='6') Spectacular
-                button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
-                  | Filter
-                  i.material-icons.right search
-        ul.collection#experiences-collection
-        
-      .fixed-action-btn(style='bottom: 45px; right: 24px;')
-        a.btn-floating.btn-large.red(href='newexperience.html')
-          i.large.material-icons add
-            
+	main
+		.container
+			.section#loading
+				h5.center-align Loading experiences
+				br 
+				.progress
+					.indeterminate
+			.section#emptyExperiences(style='display: none;')
+				ul.collection
+					li.collection-item.avatar
+						i.material-icons.circle report_problem
+						span.title No Experiences Found
+						a.secondary-content(href='newexperience.html')
+							i.material-icons add
+			.section#experiences(style='display: none;')
+				ul.collapsible(data-collapsible='accordion')
+					li
+						.collapsible-header
+							i.material-icons filter_drama
+							| Filter
+						.collapsible-body
+							form#filterForm(style='margin: 25px;')
+								.input-field
+									input#filterTitle(type='text')
+									label(for='filterTitle') Title
+								.input-field  
+									input#filterNotes(type='text')
+									label(for='filterNotes') Notes
+								.input-field  
+									input#filterLocation(type='text')
+									label(for='filterLocation') Location
+								.input-field  
+									input#filterFriends(type='text', list='friends')
+									datalist#friends
+									label(for='filterFriends') Friends
+								.input-field  
+									input#filterDrug(type='text', list='drugs')
+									datalist#drugs
+									label(for='filterDrug') Drug
+								.input-field  
+									input#filterMethod(type='text', list='methods')
+									datalist#methods
+									label(for='filterMethod') Method
+								.input-field  
+									input#filterStartDate(type='text')
+									label.active(for='filterStartDate') Start Date
+								.input-field  
+									input#filterEndDate(type='text')
+									label.active(for='filterEndDate') End Date
+								.input-field  
+									select#filterRating.browser-default
+										option(value='0').selected All Ratings
+										option(value='1') Horrific
+										option(value='2') Bad
+										option(value='3') Meh
+										option(value='4') Good
+										option(value='5') Great
+										option(value='6') Spectacular
+								button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
+									| Filter
+									i.material-icons.right search
+				ul.collection#experiences-collection
+
+			.fixed-action-btn(style='bottom: 45px; right: 24px;')
+				a.btn-floating.btn-large.red(href='newexperience.html')
+					i.large.material-icons add
+
 block scripts          
-  script(src='js/experiences.js')
+	script(src='js/experiences.js')

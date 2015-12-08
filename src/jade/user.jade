@@ -1,41 +1,41 @@
 extends ../jade-components/logged-in-page.jade
 
 block title
-  title User | SupTracked
+	title User | SupTracked
 
 block content
-    main
-      .container
-        h4 Edit User
-        .row
-          .input-field.col.s12
-            input#username(type='text', disabled)
-            label#usernameLabel(for='username') Username 
-          .input-field.col.s12
-            input#emergcontact(type='text')
-            label#emergcontactLabel(for='emergcontact') Emergency Contact Phone Number(s; separate with commas only)
-          .input-field.col.s12
-            input#phone(type='text')
-            label#phoneLabel(for='phone') Your Phone Number (+1555123456)
+	main
+		.container
+			h4 Edit User
+			.row
+				.input-field.col.s12
+					input#username(type='text', disabled)
+					label#usernameLabel(for='username') Username 
+				.input-field.col.s12
+					input#emergcontact(type='text')
+					label#emergcontactLabel(for='emergcontact') Emergency Contact Phone Number(s; separate with commas only)
+				.input-field.col.s12
+					input#phone(type='text')
+					label#phoneLabel(for='phone') Your Phone Number (+1555123456)
 
-        h4 Password change
-        form#updatePass
-          .input-field.col.s12
-            input#password(type='password')
-            label(for='password') New Password
-          .input-field.col.s12
-            input#passwordConfirm(type='password')
-            label(for='passwordConfirm') Confirm
-          button.waves-effect.waves-light.btn#changePass(style='width: 100%;') Change Password
-          
-        h4 User Audit Log
-        p 
-          | View 
-          a(href="/user.html?500") 500 
-          a(href="/user.html?1000") 1000 
-          a(href="/user.html?2000") 2000 
-          | entries
-        ul.collection#auditLog
-        
+			h4 Password change
+			form#updatePass
+				.input-field.col.s12
+					input#password(type='password')
+					label(for='password') New Password
+				.input-field.col.s12
+					input#passwordConfirm(type='password')
+					label(for='passwordConfirm') Confirm
+				button.waves-effect.waves-light.btn#changePass(style='width: 100%;') Change Password
+
+			h4 User Audit Log
+			p 
+				| View 
+				a(href="/user.html?500") 500 
+				a(href="/user.html?1000") 1000 
+				a(href="/user.html?2000") 2000 
+				| entries
+			ul.collection#auditLog
+
 block scripts
-  script(src='js/user.js')
+	script(src='js/user.js')

@@ -1,77 +1,77 @@
 extends ../jade-components/logged-in-page.jade
 
 block title
-  title Quick | SupTracked
+	title Quick | SupTracked
 
 block content
-  main
-    .container
-      .row
-        .col.l8.offset-l2.m12.s12
-          h3#title
-          .row
-            .input-field
-              form#addQuicknote
-                input#note(type='text', required)
-                label(for='note') Add a note...
-                button.btn.waves-effect.waves-light(type='submit', value='create', style='width: 100%;')
-                  | Add Note
-          .row
-            form#addMedia
-              .file-field.input-field
-                .btn
-                  span Media
-                  input#media(type='file')
-                .file-path-wrapper
-                  input.file-path.validate#mediaPath(type='text')   
-          .row
-            .col.s12
-              ul.tabs
-                li.tab.col.s4
-                  a.active(href='#consumptions') List
-                li.tab.col.s4
-                  a(href='#addConsumption') Add
-                li.tab.col.s4
-                  a(href='#panic') Panic
-                            
-            #consumptions.col.s12
-              ul.collection#consumptionsCollection
-              
-            #addConsumption.col.s12
-              form#addConsumption(action='#')
-                .row
-                  .col.s12
-                    label(for='count') Count
-                    input#count(type='text', value=1)
-                .row
-                  .col.s12
-                    label(for='addDrug') Drug
-                    select#addDrug.browser-default
-                .row
-                  .col.s12
-                    label(for='addMethod') Method
-                    select#addMethod.browser-default
-                .row
-                  .col.s12
-                    label(for='addLocation') Location
-                    input#addLocation(type='text', list='addLocationAutofill')
-                    datalist#addLocationAutofill
-                button.btn.waves-effect.waves-light(type='submit', value='create', style='width: 100%;')
-                  | Add Consumption
-                  
-            #panic.col.s12
-              button.btn.waves-effect.orange.waves-light#panicButton(value='create', style='width: 100%; margin-top: 10px;', onClick='confirmPanic();')
-                | Send Panic Message
-          
-          .row
-            h6.center-align
-              a.fullLink(href='/experiences.html', title="Open in Current Tab") Full Expererience 
-              //
-                we have to put the page-action (which stops the iOS window.location
-                intercept and forces opening in a new window. The only catch
-                is that the code looks at the click event target, which in this
-                case is actually the icon, not the plain link
-              a.fullLink(href='/experiences.html', target='_blank', title="Open in New Tab")
-                i.material-icons.icon-padding.page-action tab
+	main
+		.container
+			.row
+				.col.l8.offset-l2.m12.s12
+					h3#title
+					.row
+						.input-field
+							form#addQuicknote
+								input#note(type='text', required)
+								label(for='note') Add a note...
+								button.btn.waves-effect.waves-light(type='submit', value='create', style='width: 100%;')
+									| Add Note
+					.row
+						form#addMedia
+							.file-field.input-field
+								.btn
+									span Media
+									input#media(type='file')
+								.file-path-wrapper
+									input.file-path.validate#mediaPath(type='text')   
+					.row
+						.col.s12
+							ul.tabs
+								li.tab.col.s4
+									a.active(href='#consumptions') List
+								li.tab.col.s4
+									a(href='#addConsumption') Add
+								li.tab.col.s4
+									a(href='#panic') Panic
+
+						#consumptions.col.s12
+							ul.collection#consumptionsCollection
+
+						#addConsumption.col.s12
+							form#addConsumption(action='#')
+								.row
+									.col.s12
+										label(for='count') Count
+										input#count(type='text', value=1)
+								.row
+									.col.s12
+										label(for='addDrug') Drug
+										select#addDrug.browser-default
+								.row
+									.col.s12
+										label(for='addMethod') Method
+										select#addMethod.browser-default
+								.row
+									.col.s12
+										label(for='addLocation') Location
+										input#addLocation(type='text', list='addLocationAutofill')
+										datalist#addLocationAutofill
+								button.btn.waves-effect.waves-light(type='submit', value='create', style='width: 100%;')
+									| Add Consumption
+
+						#panic.col.s12
+							button.btn.waves-effect.orange.waves-light#panicButton(value='create', style='width: 100%; margin-top: 10px;', onClick='confirmPanic();')
+								| Send Panic Message
+
+					.row
+						h6.center-align
+							a.fullLink(href='/experiences.html', title="Open in Current Tab") Full Expererience 
+							//
+								we have to put the page-action (which stops the iOS window.location
+								intercept and forces opening in a new window. The only catch
+								is that the code looks at the click event target, which in this
+								case is actually the icon, not the plain link
+							a.fullLink(href='/experiences.html', target='_blank', title="Open in New Tab")
+								i.material-icons.icon-padding.page-action tab
 block scripts          
-  script(src='js/quick.js')
+	script(src='js/quick.js')

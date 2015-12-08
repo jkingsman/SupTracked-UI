@@ -1,44 +1,44 @@
 extends ../jade-components/logged-out-page.jade
 
 block title
-  title Log In | SupTracked
+	title Log In | SupTracked
 
 block content
-  main
-    .container
-      .section
-        // Icon Section
-        .row
-          .col.s12.m6.offset-m3
-            form
-              .row
-                .input-field.col.s12
-                  i.material-icons.prefix account_circle
-                  input#username(type='text', required)
-                  label(for='username') Username
-              .row
-                .input-field.col.s12
-                  i.material-icons.prefix lock
-                  input#password(type='password', required)
-                  label(for='password') Password
-              .row
-                .input-field.col.s12
-                  i.material-icons.prefix cloud
-                  input#server.validate(type='text', value='http://127.0.0.1:3000')
-                  label(for='server') Server
+	main
+		.container
+			.section
+				// Icon Section
+				.row
+					.col.s12.m6.offset-m3
+						form
+							.row
+								.input-field.col.s12
+									i.material-icons.prefix account_circle
+									input#username(type='text', required)
+									label(for='username') Username
+							.row
+								.input-field.col.s12
+									i.material-icons.prefix lock
+									input#password(type='password', required)
+									label(for='password') Password
+							.row
+								.input-field.col.s12
+									i.material-icons.prefix cloud
+									input#server.validate(type='text', value='http://127.0.0.1:3000')
+									label(for='server') Server
 
 
-              .row
-                .col.s6
-                  button.btn.waves-effect.waves-light(type='submit', value='login')
-                    | Log In
-                    i.material-icons.right flight
+							.row
+								.col.s6
+									button.btn.waves-effect.waves-light(type='submit', value='login')
+										| Log In
+										i.material-icons.right flight
 
-                .col.s6.right-align
-                  button.btn.waves-effect.waves-light(type='submit', value='register')
-                    | Register
-                    i.material-icons.right add
+								.col.s6.right-align
+									button.btn.waves-effect.waves-light(type='submit', value='register')
+										| Register
+										i.material-icons.right add
 
 
 block scripts
-  script(src='js/index.js')
+	script(src='js/index.js')
