@@ -57,7 +57,7 @@ function loadMore() {
         }
 
         var mediaTags = '<br>[no tags]';
-        if (media.tags.length > 0) {
+        if (media.tags) {
           mediaTags = '<br>' + media.tags;
         }
 
