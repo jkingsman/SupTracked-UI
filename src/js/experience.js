@@ -397,7 +397,7 @@ function drawMedia() {
 
       var mediaUrl = getCookie('server') + '/media/file/' + media.id;
       $('#row' + Math.floor(index / 4)).append('<div class="col s12 m3"><div class="card"><div class="card-image">' +
-        '<a id="imagelink' + media.id + '"><img id="image' + media.id + '"/><span class="card-title">' + media.title + '</span><a/></div>' +
+        '<a id="imagelink' + media.id + '"><img id="image' + media.id + '"/><span class="card-title" style="background-color: rgba(0, 0, 0, 0.5);">' + media.title + '</span><a/></div>' +
         '<div class="card-content"><p>' + new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '</p></div>' +
         '</div></div>');
 
