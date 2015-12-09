@@ -2,19 +2,21 @@
 
 "use strict";
 
-var drug, allDrugs, allConsumptions = [];
+var drug, allDrugs, allConsumptions = [],
+  allExperiences;
 var analyticsCount = 0;
 var analyticsFinished = 0;
 
 // just get jshint off our back. these are defined in their respective files
-var vitals, experienceList;
+var vitals, experience_list;
 
 function startAnalytics() {
   vitals();
+  experience_list();
 }
 
 // don't show select if we're already navigating
-if (location.hash.length > 1) {
+if (location.search.length > 1) {
   $('#selection').hide();
   $('#loading').show();
 }
@@ -41,9 +43,9 @@ makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
 
   $('#loadingOpt').remove();
 
-  // we have a hash
-  if (location.hash.length > 1) {
-    $('#drug').val(location.hash.substr(1));
+  // we have a search
+  if (location.search.length > 1) {
+    $('#drug').val(location.search.substr(1));
     $('#drugSelect').submit();
   }
 });
@@ -57,7 +59,10 @@ $('#drugSelect').submit(function(event) {
 
   allDrugs.forEach(function(singleDrug) {
     if (singleDrug.id === parseInt($('#drug').val())) {
-      location.hash = singleDrug.id;
+      if (location.search.length < 1) {
+        // only set if we haven't set already, otherwise the page refreshes and we infiniloop
+        location.search = singleDrug.id;
+      }
       drug = singleDrug;
       return;
     }
@@ -93,6 +98,8 @@ $('#drugSelect').submit(function(event) {
   makeAuthRequest('/consumption/search', 'POST', JSON.stringify({
     drug_id: drug.id
   }), 'json', function(err, data, code) {
+    allExperiences = data;
+
     if (data) {
       data.forEach(function(experience) {
         experience.consumptions.forEach(function(consumption) {
@@ -111,7 +118,7 @@ $('#drugSelect').submit(function(event) {
 
       // off we go!
       startAnalytics();
-    } else{
+    } else {
       analyticsFinished = analyticsCount;
     }
   });

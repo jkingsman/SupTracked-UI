@@ -44,9 +44,20 @@ block content
 							h4
 								span.drugName(style='text-transform: capitalize;')
 								|  Data Sheet
+						h5 Index
+						ul
+							li
+								a(href='#basic') Basic Data
+							li
+								a(href='#notes') Notes
+							li
+								a(href='#vitals') Vital Signs
+							li
+								a(href='#experience_list') Experience List
 				hr
 				.row
 					.col.m12
+						a(name='basic')
 						h5 Basic Data
 						.col.m12
 							strong Unit: 
@@ -61,6 +72,7 @@ block content
 							strong Rarity: 
 							span#rarity
 				hr
+				a(name='notes')
 				.row
 					.col.m12
 						h5 Notes
@@ -70,6 +82,10 @@ block content
 				.row
 					.col.m12
 						include ./analytics/vitals.jade
+				hr
+				.row
+					.col.m12
+						include ./analytics/experience_list.jade
 block scripts
 	script(src='js/analytics.js')
 	script(src='js/analytics_display.js')

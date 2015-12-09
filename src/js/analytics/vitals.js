@@ -5,7 +5,7 @@ var analyticsCount, analyticsFinished, allDrugs, allConsumptions, drug;
 
 analyticsCount += 1;
 
-function vitals(id) {
+function vitals() {
   "use strict";
 
   // get ranking
