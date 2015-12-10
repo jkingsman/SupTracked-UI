@@ -529,7 +529,7 @@ $("#notesArea").on('change keyup paste', function() {
         return;
       }
 
-      Materialize.toast('Notes saved', 1000);
+      Materialize.toast('Notes saved', 1000, 'success-toast');
     });
   }, 1000);
 });
