@@ -14,6 +14,12 @@ if (getCookie('server').length > 0 && getCookie('auth').length > 0 && location.s
 } else {
   // if they're not at the login screen, take them there
   if (window.location.pathname !== '/' && window.location.pathname !== '/index.html') {
+    // set the cookie for where they were trying to go
+    var days = 2;
+    var setDate = new Date();
+    setDate.setTime(setDate.getTime()+(days*24*60*60*1000));
+    document.cookie = "location=" + window.location.pathname + '; expires=' + setDate.toUTCString();
+
     window.location = "/";
   }
 }
@@ -85,17 +91,23 @@ function authLogin(username, password, server) {
       url: server + '/user',
     })
     .done(function(msg) {
-      // set 24 hr expiration
-      var now = new Date();
-      var time = now.getTime();
-      time += 86400 * 1000;
-      now.setTime(time);
+      // set 48 hr expiration
+      var days = 2;
+      var setDate = new Date();
+      setDate.setTime(setDate.getTime()+(days*24*60*60*1000));
 
-      document.cookie = "server=" + server + '; expires=' + now.toUTCString();
-      document.cookie = "auth=" + btoa(username + ':' + password) + '; expires=' + now.toUTCString();
+      document.cookie = "server=" + server + '; expires=' + setDate.toUTCString();
+      document.cookie = "auth=" + btoa(username + ':' + password) + '; expires=' + setDate.toUTCString();
 
       Materialize.toast("Logging in...", 6000);
-      window.location = "/experiences.html";
+
+      // redirect them, if applicable
+      if(getCookie('location').length > 0){
+        window.location = getCookie('location');
+        document.cookie = 'location=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      } else {
+        window.location = '/experiences.html';
+      }
     })
     .fail(displayJSONError);
 }
