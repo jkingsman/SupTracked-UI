@@ -247,7 +247,30 @@ $('#addQuicknote').submit(function(event) {
         }
       });
     } else {
-      newNotes = experience.notes + '\n' + ('0' + new Date().getHours()).slice(-2) + ('0' + new Date().getMinutes()).slice(-2) + ' -- ' + $('#note').val();
+      // current day epoch
+      var monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+      ];
+
+      var date = new Date();
+      var day = date.getDate();
+      var monthIndex = date.getMonth();
+      var year = date.getFullYear();
+
+      var currentDateEpoch = Math.floor(Date.parse(day + ' ' + monthNames[monthIndex] + ', ' + year + ' 00:00:00 GMT') / 1000);
+
+      var dateBlock;
+      if (experience.date === currentDateEpoch) {
+        // we're on the same day; procees as planned
+        dateBlock = ('0' + new Date().getHours()).slice(-2) + ('0' + new Date().getMinutes()).slice(-2);
+      } else {
+        dateBlock = new Date().getMonth() + '-' + new Date().getDate() + ' ' + ('0' + new Date().getHours()).slice(-2) + ('0' + new Date().getMinutes()).slice(-2);
+      }
+
+      newNotes = experience.notes + '\n' + dateBlock + ' -- ' + $('#note').val();
     }
 
     makeAuthRequest('/experience', 'PUT', JSON.stringify({
