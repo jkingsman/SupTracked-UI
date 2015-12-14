@@ -1,4 +1,4 @@
-/* globals Materialize */
+/* globals Materialize, newReqToast,delReqToast */
 /*jshint -W003 */
 "use strict";
 
@@ -17,7 +17,7 @@ if (getCookie('server').length > 0 && getCookie('auth').length > 0 && location.s
     // set the cookie for where they were trying to go
     var days = 2;
     var setDate = new Date();
-    setDate.setTime(setDate.getTime()+(days*24*60*60*1000));
+    setDate.setTime(setDate.getTime() + (days * 24 * 60 * 60 * 1000));
     document.cookie = "location=" + window.location.pathname + '; expires=' + setDate.toUTCString();
 
     window.location = "/";
@@ -94,7 +94,7 @@ function authLogin(username, password, server) {
       // set 48 hr expiration
       var days = 2;
       var setDate = new Date();
-      setDate.setTime(setDate.getTime()+(days*24*60*60*1000));
+      setDate.setTime(setDate.getTime() + (days * 24 * 60 * 60 * 1000));
 
       document.cookie = "server=" + server + '; expires=' + setDate.toUTCString();
       document.cookie = "auth=" + btoa(username + ':' + password) + '; expires=' + setDate.toUTCString();
@@ -102,7 +102,7 @@ function authLogin(username, password, server) {
       Materialize.toast("Logging in...", 6000);
 
       // redirect them, if applicable
-      if(getCookie('location').length > 0){
+      if (getCookie('location').length > 0) {
         window.location = getCookie('location');
         document.cookie = 'location=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
       } else {
@@ -149,7 +149,7 @@ function authRegister(username, password, server) {
 function makeAuthRequest(endpoint, verb, data, responseType, cb) {
   var auth = getCookie('auth');
   var server = getCookie('server');
-  var requestID = Math.floor(Math.random() * 16777215).toString(16); // random six dig hex
+  var requestID = Math.floor(Math.random() * 16777215).toString(16); // random six digit hex
 
   if (auth.length < 1 && server.length < 1) {
     // doesn't exist; send them to login and clear cookies
@@ -157,7 +157,7 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb) {
     return;
   }
 
-  Materialize.toast('Request pending...', 10000, 'requestid-' + requestID);
+  newReqToast("api");
 
   $.ajax({
       method: verb,
@@ -172,11 +172,10 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb) {
     })
     .done(function(msg, textStatus, xhr) {
       // hide the notification and fire the callback
-      $('.requestid-' + requestID).hide();
+      delReqToast("api");
       cb(null, msg, xhr.status);
     })
     .fail(function(xhr) {
-      $('.requestid-' + requestID).hide();
       // parse out the error message (either responseText or, failing that, statusText) and fire the callback
       var errorText;
       if (xhr.responseText !== undefined && (xhr.responseText.length > 0 || xhr.responseText !== '')) {
@@ -186,6 +185,7 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb) {
         errorText = xhr.statusText;
       }
 
+      delReqToast("api");
       cb(errorText, null, xhr.status);
     });
 }
@@ -218,10 +218,13 @@ function makeAuthBlobRequest(endpoint, cb) {
     return;
   }
 
+  newReqToast("blob");
+
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = function() {
     if (this.readyState === 4 && this.status === 200) {
       //this.response is what you're looking for
+      delReqToast("blob");
       cb(this.response);
     }
   };

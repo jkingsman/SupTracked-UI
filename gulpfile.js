@@ -44,7 +44,7 @@ gulp.task('css', function () {
 
 //lib
 gulp.task('js-lib', function () {
-  gulp.src(['./src/lib/jquery-2.1.1.min.js', './src/lib/materialize.js', './src/lib/init.js', './src/lib/request.js', './src/lib/micromarkdown.js'])
+  gulp.src(['./src/lib/jquery-2.1.1.min.js', './src/lib/materialize.js', './src/lib/requestToast.js', './src/lib/init.js', './src/lib/request.js', './src/lib/micromarkdown.js'])
   .pipe(uglify())
   .pipe(concat('lib.js'))
   .pipe(gulp.dest('./dist'))
