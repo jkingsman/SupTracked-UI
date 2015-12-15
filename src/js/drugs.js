@@ -113,9 +113,6 @@ $("#name, #unit, #classification, #family, #rarity, #notes").on('change keyup pa
           return;
         }
 
-        // redraw the dropdown and reselect the Drug
-        populateDropdown(parseInt($('#drugList').val()));
-
         Materialize.toast('Drug saved', 1000);
       });
     }, 1000);
