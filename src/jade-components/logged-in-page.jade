@@ -7,31 +7,9 @@ html(lang='en')
 		nav.light-blue.lighten-1
 			.nav-wrapper.container
 				span
-					a#logo-container.brand-logo(href='/experiences.html') 
+					a#logo-container.brand-logo.center(href='/experiences.html') 
 						i.material-icons.left.mobile-pad dashboard
 						| SupTracked
-				ul.right.hide-on-med-and-down
-					li
-						a(href='/quick.html') Quick
-					li
-						a(href='/experiences.html') Experiences
-					li
-						a(href='/media.html') Media
-					li
-						a(href='/analytics.html') Analytics
-					li
-						a.dropdown-button(href='#!', data-activates='configDropdown')
-							| Config+
-							i.material-icons.right arrow_drop_down
-						ul#configDropdown.dropdown-content
-							li
-								a(href='/drugs.html') Drugs
-							li
-								a(href='/methods.html') Methods
-							li
-								a(href='/user.html') User
-							li
-								a(href='/?logout') Logout
 				ul#nav-mobile.side-nav
 					li
 						a(href='/quick.html') 
@@ -41,6 +19,10 @@ html(lang='en')
 						a(href='/experiences.html') 
 							i.material-icons.left.mobile-pad list
 							|  Experiences
+					li
+						a(href='/experience.html?recent') 
+							i.material-icons.left.mobile-pad trending_flat
+							|  Last Experience
 					li
 						a(href='/media.html') 
 							i.material-icons.left.mobile-pad perm_media
@@ -52,20 +34,20 @@ html(lang='en')
 					li
 						a(href='/drugs.html') 
 							i.material-icons.left.mobile-pad view_week
-							|  Configure Drugs
+							|  Drugs
 					li
 						a(href='/methods.html') 
 							i.material-icons.left.mobile-pad dns
-							|  Configure Methods
+							|  Methods
 					li
 						a(href='/user.html') 
 							i.material-icons.left.mobile-pad perm_identity
-							|  Configure User
+							|  User
 					li
 						a(href='/?logout')
 							i.material-icons.left.mobile-pad person_pin
 							|  Logout
-				a.button-collapse(href='#', data-activates='nav-mobile')
+				a.button-collapse(href='#', data-activates='nav-mobile', style='display: block')
 					i.material-icons menu
 		block content
 
