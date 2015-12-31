@@ -483,6 +483,20 @@ $('#editConsumption').submit(function(event) {
 });
 
 $(document).ready(function() {
+  // catch recent before we keep keep going
+  if(experienceID === 'recent'){
+    var recentLimiter = JSON.stringify({limit: 1});
+    makeAuthRequest('/experience/search', 'POST', recentLimiter, 'json', function(err, data, code){
+      if(code !== 200){
+        // no recents; back to Experiences
+        window.location = '/experiences.html';
+        return;
+      }
+      window.location = '/experience.html?' + data[0].id;
+    });
+    return;
+  }
+
   makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
     if (code === 404) {
       // no Experiences
