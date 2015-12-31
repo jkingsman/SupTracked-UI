@@ -36,12 +36,9 @@ function cleanMarkdown(text) {
 
 // toggle menu display with alt
 $(document).on('click', function(event) {
+  "use strict";
   if (event.altKey) {
-    if (window.getComputedStyle(document.getElementById("nav-mobile"), null).left.substring(0, 1) === '-') {
-      // if first char of nav-mobile left is negative, it's collapsed; open it
+      // show sidenav on alt+click
       $('.button-collapse').sideNav('show');
-    } else {
-      $('.button-collapse').sideNav('hide');
     }
-  }
 });
