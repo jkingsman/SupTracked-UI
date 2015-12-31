@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,Materialize,getCookie,makeAuthBlobRequest,server */
+/* globals makeAuthRequest,Materialize,getCookie,makeAuthBlobRequest,server,micromarkdown,cleanMarkdown  */
 /* jshint -W089 */
 
 "use strict";
@@ -404,6 +404,7 @@ updateExperienceObject(function() {
   });
 
   $('#title').html(experience.title);
+  $('#notes').html(cleanMarkdown(micromarkdown.parse(experience.notes)));
   $('.fullLink').attr('href', '/experience.html?' + experience.id);
   drawConsumptions();
 });

@@ -62,7 +62,14 @@ block content
 						#panic.col.s12
 							button.btn.waves-effect.orange.waves-light#panicButton(value='create', style='width: 100%; margin-top: 10px;', onClick='confirmPanic();')
 								| Send Panic Message
-
+					.row
+						ul.collapsible(data-collapsible='accordion')
+							li
+								.collapsible-header
+									i.material-icons receipt
+									| Notes
+								.collapsible-body
+									p#notes No notes.
 					.row
 						h6.center-align
 							a.fullLink(href='/experiences.html', title="Open in Current Tab") Full Expererience 
