@@ -336,6 +336,9 @@ $('#media').change(function() {
 // init tabs
 $(document).ready(function() {
   $('ul.tabs').tabs();
+
+  // autofocus notes on load; does nothing on iphone
+  $('#note').focus();
 });
 
 if (location.search.slice(1) === 'hiddenNav') {
