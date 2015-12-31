@@ -33,3 +33,15 @@ function cleanMarkdown(text) {
 
   return text;
 }
+
+// toggle menu display with alt
+$(document).on('click', function(event) {
+  if (event.altKey) {
+    if (window.getComputedStyle(document.getElementById("nav-mobile"), null).left.substring(0, 1) === '-') {
+      // if first char of nav-mobile left is negative, it's collapsed; open it
+      $('.button-collapse').sideNav('show');
+    } else {
+      $('.button-collapse').sideNav('hide');
+    }
+  }
+});
