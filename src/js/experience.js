@@ -5,6 +5,8 @@ var experienceID = location.search.slice(1);
 var noteSaveNotificationTimeout;
 var metaSaveNotificationTimeout;
 
+var consumptions;
+
 // we futz with the meta values after the listener is added; padd it out so the first update doesn't fire the message
 var initialMetaMsgFired = 0;
 
@@ -77,6 +79,8 @@ function drawConsumptions() {
       data.sort(function(a, b) {
         return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
       });
+
+      consumptions = data;
 
       data.forEach(function(consumption) {
         // build friends list
@@ -410,6 +414,33 @@ function drawMedia() {
   });
 }
 
+function openNewModal() {
+  // populate location with most common loc
+  // build the location list
+
+  if (consumptions) {
+    var locations = consumptions.map(function(consumption) {
+      return consumption.location;
+    });
+
+    // get the counts
+    var counts = {};
+    var max = 0;
+    var commonLocation;
+    locations.forEach(function(singleLocation) {
+      counts[singleLocation] = (counts[singleLocation] || 0) + 1;
+      if (counts[singleLocation] > max) {
+        commonLocation = singleLocation;
+      }
+    });
+
+    $('#addLocation').val(commonLocation);
+    $('#locationLabel').addClass('active');
+  }
+
+  $("#addConsumptionModal").openModal();
+}
+
 // create Add Experience submit listener
 $('#addConsumption').submit(function(event) {
   event.preventDefault();
@@ -484,10 +515,12 @@ $('#editConsumption').submit(function(event) {
 
 $(document).ready(function() {
   // catch recent before we keep keep going
-  if(experienceID === 'recent'){
-    var recentLimiter = JSON.stringify({limit: 1});
-    makeAuthRequest('/experience/search', 'POST', recentLimiter, 'json', function(err, data, code){
-      if(code !== 200){
+  if (experienceID === 'recent') {
+    var recentLimiter = JSON.stringify({
+      limit: 1
+    });
+    makeAuthRequest('/experience/search', 'POST', recentLimiter, 'json', function(err, data, code) {
+      if (code !== 200) {
         // no recents; back to Experiences
         window.location = '/experiences.html';
         return;
