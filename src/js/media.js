@@ -319,8 +319,7 @@ $('#editMedia').submit(function(event) {
 });
 
 $('#addMedia').submit(function(event) {
-  event.efault();
-
+  event.preventDefault();
 
   // assemble this horrible date
   var customDate = $('#customTime').val().split(' ')[0];
