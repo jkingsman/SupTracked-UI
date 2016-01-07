@@ -47,36 +47,50 @@ function vitals() {
   $('#useLast').html(new Date(allConsumptions[allConsumptions.length - 1].date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- <a href="/experience.html?' + allConsumptions[allConsumptions.length - 1].exp_id + '">' + allConsumptions[allConsumptions.length - 1].title + '</a>');
 
   // longest streak calc
-  var topStreak = {};
-  var currentStreak = {};
-  allConsumptions.forEach(function(consumption, index) {
-    if (index === 0) {
-      currentStreak.startDate = consumption.date;
-      currentStreak.days = 1;
-      topStreak = currentStreak;
-      return;
-    }
 
-    var dayDiff = new Date(consumption.date * 1000).getDate() - new Date(allConsumptions[index - 1].date * 1000).getDate();
-
-    if (dayDiff < 2) {
-      // less than two days; streak continues
-      if (dayDiff === 1) {
-        // increment the day
-        currentStreak.days += 1;
-      }
-    } else {
-      // push the streak we just finished and start a new one
-      if (currentStreak.days > topStreak.days) {
-        // we have a new best
-        topStreak = currentStreak;
-      }
-      currentStreak.startDate = consumption.date;
-      currentStreak.days = 1;
-    }
+  // create an array of dates used (represented in days since the epoch) and drop the duplicatess
+  var datesUsed = allConsumptions.map(function(consumption) {
+    return Math.floor(new Date(consumption.date * 1000) / 8.64e7);
   });
 
-  $('#streak').html(topStreak.days + ' days <i>(starting on ' + new Date(topStreak.startDate * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ')</i>');
+  // drop the duplicates
+  datesUsed = datesUsed.filter(function(item, pos) {
+    return datesUsed.indexOf(item) === pos;
+  });
+
+  var streaks = [];
+  var currentStreak = {};
+  datesUsed.forEach(function(date, index) {
+      // edge case - first entry
+      if (index === 0) {
+        // first entry
+        currentStreak.startDate = date;
+        currentStreak.days = 1;
+        return;
+      }
+
+      // edge case - last entry
+      if(index === datesUsed.length - 1){
+        streaks.push({startDate: currentStreak.startDate, days: currentStreak.days});
+        return;
+      }
+
+      if(date - datesUsed[index - 1] === 1){
+        // date difference is one; they're consecutive
+        currentStreak.days += 1;
+      } else {
+        // streak is broken
+        streaks.push({startDate: currentStreak.startDate, days: currentStreak.days});
+        currentStreak.startDate = date;
+        currentStreak.days = 1;
+      }
+  });
+
+  streaks.sort(function(a, b) {
+    return (a.days < b.days) ? 1 : (a.days > b.days) ? -1 : 0;
+  });
+
+  $('#streak').html(streaks[0].days + ' days <i>(starting on ' + new Date(streaks[0].startDate * 86400 * 1000).toISOString().slice(0, 10) + ')</i>');
 
   // biggest break calc
   var earlyConIndex, lateConIndex, lateIsPresent = false,
