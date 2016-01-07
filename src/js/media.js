@@ -61,10 +61,10 @@ function loadMore() {
           mediaTags = '<br>' + media.tags;
         }
 
-        $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card" id="cardid-' + media.id + '"><div class="card-image">' +
-          '<a id="imagelink' + media.id + '"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" style="background-color: rgba(0, 0, 0, 0.5);">' + favoriteIcon + media.title + '</span><a/></div>' +
-          '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons icon-padding">reorder</i></a>' +
-          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<br>' + mediaTags + association + '</p></div>' +
+        $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
+          '<a id="imagelink' + media.id + '"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" id="title-' + media.id + '">' + favoriteIcon + media.title + '</span><a/></div>' +
+          '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons" style="position: relative; top: 6px;">reorder</i></a>' +
+          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span id="tags-' + media.id + '">' + mediaTags + '</span>' + association + '</p></div>' +
           '</div></div>');
 
         makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
@@ -249,9 +249,9 @@ $('#filterForm').submit(function(event) {
         }
 
         $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
-          '<a id="imagelink' + media.id + '"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title">' + favoriteIcon + media.title + '</span><a/></div>' +
+          '<a id="imagelink' + media.id + '"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" id="title-' + media.id + '">' + favoriteIcon + media.title + '</span><a/></div>' +
           '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons" style="position: relative; top: 6px;">reorder</i></a>' +
-          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<br>' + mediaTags + association + '</p></div>' +
+          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span id="tags-' + media.id + '">' + mediaTags + '</span>' + association + '</p></div>' +
           '</div></div>');
 
         makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
@@ -312,9 +312,8 @@ $('#editMedia').submit(function(event) {
 
     $("#editMediaModal").closeModal();
     Materialize.toast('Media updated', 6000, 'success-toast');
-    setTimeout(function() {
-      window.location = '/media.html';
-    }, 1000);
+    $('#title-' + $('#editID').val()).html($('#editTitle').val());
+    $('#tags-' + $('#editID').val()).html('<br>' + $('#editTags').val());
   });
 });
 
