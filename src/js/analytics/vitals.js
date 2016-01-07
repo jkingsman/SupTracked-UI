@@ -21,12 +21,12 @@ function vitals() {
 
   var precedeString = '';
   if (ranking > 0) {
-    precedeString = 'preceded by <a href="/analytics.html?cacheBust=' + Math.floor(Math.random() * 16777215).toString(16) + '#' + allDrugs[ranking - 1].id + '">' + rankings[ranking - 1] + '</a>';
+    precedeString = 'preceded by <a href="/analytics.html?' + allDrugs[ranking - 1].id + '">' + rankings[ranking - 1] + '</a>';
   }
 
   var followString = '';
   if (ranking !== (rankings.length - 1)) {
-    followString = 'followed by <a href="/analytics.html?cacheBust=' + Math.floor(Math.random() * 16777215).toString(16) + '#' + allDrugs[ranking + 1].id + '">' + rankings[ranking + 1] + '</a>';
+    followString = 'followed by <a href="/analytics.html?' + allDrugs[ranking + 1].id + '">' + rankings[ranking + 1] + '</a>';
   }
 
   var surroundingString;
@@ -45,6 +45,38 @@ function vitals() {
   // first and last usage
   $('#useFirst').html(new Date(allConsumptions[0].date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- <a href="/experience.html?' + allConsumptions[0].exp_id + '">' + allConsumptions[0].title + '</a>');
   $('#useLast').html(new Date(allConsumptions[allConsumptions.length - 1].date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- <a href="/experience.html?' + allConsumptions[allConsumptions.length - 1].exp_id + '">' + allConsumptions[allConsumptions.length - 1].title + '</a>');
+
+  // longest streak calc
+  var topStreak = {};
+  var currentStreak = {};
+  allConsumptions.forEach(function(consumption, index) {
+    if (index === 0) {
+      currentStreak.startDate = consumption.date;
+      currentStreak.days = 1;
+      topStreak = currentStreak;
+      return;
+    }
+
+    var dayDiff = new Date(consumption.date * 1000).getDate() - new Date(allConsumptions[index - 1].date * 1000).getDate();
+
+    if (dayDiff < 2) {
+      // less than two days; streak continues
+      if (dayDiff === 1) {
+        // increment the day
+        currentStreak.days += 1;
+      }
+    } else {
+      // push the streak we just finished and start a new one
+      if (currentStreak.days > topStreak.days) {
+        // we have a new best
+        topStreak = currentStreak;
+      }
+      currentStreak.startDate = consumption.date;
+      currentStreak.days = 1;
+    }
+  });
+
+  $('#streak').html(topStreak.days + ' days <i>(starting on ' + new Date(topStreak.startDate * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ')</i>');
 
   // biggest break calc
   var earlyConIndex, lateConIndex, lateIsPresent = false,
