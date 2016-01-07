@@ -18,7 +18,7 @@ if (getCookie('server').length > 0 && getCookie('auth').length > 0 && location.s
     var days = 2;
     var setDate = new Date();
     setDate.setTime(setDate.getTime() + (days * 24 * 60 * 60 * 1000));
-    document.cookie = "location=" + window.location.pathname + '; expires=' + setDate.toUTCString();
+    document.cookie = "location=" + window.location.pathname + window.location.search + '; expires=' + setDate.toUTCString();
 
     window.location = "/";
   }
