@@ -61,29 +61,35 @@ function vitals() {
   var streaks = [];
   var currentStreak = {};
   datesUsed.forEach(function(date, index) {
-      // edge case - first entry
-      if (index === 0) {
-        // first entry
-        currentStreak.startDate = date;
-        currentStreak.days = 1;
-        return;
-      }
+    // edge case - first entry
+    if (index === 0) {
+      // first entry
+      currentStreak.startDate = date;
+      currentStreak.days = 1;
+      return;
+    }
 
-      // edge case - last entry
-      if(index === datesUsed.length - 1){
-        streaks.push({startDate: currentStreak.startDate, days: currentStreak.days});
-        return;
-      }
+    // edge case - last entry
+    if (index === datesUsed.length - 1) {
+      streaks.push({
+        startDate: currentStreak.startDate,
+        days: currentStreak.days
+      });
+      return;
+    }
 
-      if(date - datesUsed[index - 1] === 1){
-        // date difference is one; they're consecutive
-        currentStreak.days += 1;
-      } else {
-        // streak is broken
-        streaks.push({startDate: currentStreak.startDate, days: currentStreak.days});
-        currentStreak.startDate = date;
-        currentStreak.days = 1;
-      }
+    if (date - datesUsed[index - 1] === 1) {
+      // date difference is one; they're consecutive
+      currentStreak.days += 1;
+    } else {
+      // streak is broken
+      streaks.push({
+        startDate: currentStreak.startDate,
+        days: currentStreak.days
+      });
+      currentStreak.startDate = date;
+      currentStreak.days = 1;
+    }
   });
 
   streaks.sort(function(a, b) {
