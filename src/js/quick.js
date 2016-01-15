@@ -356,8 +356,12 @@ updateExperienceObject(function() {
     });
 
     if (experience.consumptions.length > 0) {
+      var addedDrugIds = [];
       experience.consumptions.forEach(function(consumption) {
-        $('#addDrug').append('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
+        if (addedDrugIds.indexOf(consumption.drug.id) < 0) {
+          $('#addDrug').append('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
+          addedDrugIds.push(consumption.drug.id);
+        }
       });
       $('#addDrug').append('<option disabled>──────────────</option>');
     }
@@ -381,8 +385,12 @@ updateExperienceObject(function() {
     });
 
     if (experience.consumptions.length > 0) {
+      var addedMethodIds = [];
       experience.consumptions.forEach(function(consumption) {
-        $('#addMethod').append('<option value="' + consumption.method.id + '">' + consumption.method.name + '</option>');
+        if (addedMethodIds.indexOf(consumption.method.id) < 0) {
+          $('#addMethod').append('<option value="' + consumption.method.id + '">' + consumption.method.name + '</option>');
+          addedMethodIds.push(consumption.method.id);
+        }
       });
       $('#addMethod').append('<option disabled>──────────────</option>');
     }

@@ -356,6 +356,20 @@ function setUpConsumptions() {
       return;
     }
 
+    if (consumptions.length > 0) {
+      var addedDrugIds = [];
+      consumptions.forEach(function(consumption) {
+        if (addedDrugIds.indexOf(consumption.drug.id) < 0) {
+          $('#addDrug').append('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
+          $('#editDrug').append('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
+          addedDrugIds.push(consumption.drug.id);
+        }
+      });
+
+      $('#addDrug').append('<option disabled>──────────────</option>');
+      $('#editDrug').append('<option disabled>──────────────</option>');
+    }
+
     data.forEach(function(drug) {
       $('#addDrug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
       $('#editDrug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
@@ -374,6 +388,18 @@ function setUpConsumptions() {
       $('#addMethod').append('<option value="" disabled selected>None</option>');
       $('#editMethod').append('<option value="" disabled selected>None</option>');
       return;
+    }
+
+    if (consumptions.length > 0) {
+      var addedMethodIds = [];
+      consumptions.forEach(function(consumption) {
+        if (addedMethodIds.indexOf(consumption.method.id) < 0) {
+          $('#addMethod').append('<option value="' + consumption.method.id + '">' + consumption.method.name + '</option>');
+          $('#editMethod').append('<option value="' + consumption.method.id + '">' + consumption.method.name + '</option>');
+          addedMethodIds.push(consumption.method.id);
+        }
+      });
+      $('#addMethod').append('<option disabled>──────────────</option>');
     }
 
     data.forEach(function(method) {
