@@ -81,13 +81,13 @@ function populateRecents(){
     });
 
     $('#addDrug').prepend('<option id="emptyAddDrugDelimiter" disabled>──────────────</option>');
-    $('#editDrug').prepend('<option id="emptyAddDrugDelimiter" disabled>──────────────</option>');
+    $('#editDrug').prepend('<option id="emptyEditDrugDelimiter" disabled>──────────────</option>');
 
     var addedDrugIds = [];
     consumptions.forEach(function(consumption) {
       if (addedDrugIds.indexOf(consumption.drug.id) < 0) {
         $('#emptyAddDrugDelimiter').before('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
-        $('#emptyAddDrugDelimiter').before('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
+        $('#emptyEditDrugDelimiter').before('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
         addedDrugIds.push(consumption.drug.id);
       }
     });
