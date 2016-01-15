@@ -79,6 +79,8 @@ function populateRecents(){
         addedMethodIds.push(consumption.method.id);
       }
     });
+    $("#addMethod").val($("#addDrug option:first").val());
+    $("#editMethod").val($("#editDrug option:first").val());
 
     $('#addDrug').prepend('<option id="emptyAddDrugDelimiter" disabled>──────────────</option>');
     $('#editDrug').prepend('<option id="emptyEditDrugDelimiter" disabled>──────────────</option>');
@@ -91,6 +93,8 @@ function populateRecents(){
         addedDrugIds.push(consumption.drug.id);
       }
     });
+    $("#addDrug").val($("#addDrug option:first").val());
+    $("#editDrug").val($("#editDrug option:first").val());
   }
 }
 
