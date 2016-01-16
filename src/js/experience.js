@@ -6,6 +6,7 @@ var noteSaveNotificationTimeout;
 var metaSaveNotificationTimeout;
 
 var consumptions;
+var recentsPopulated = false;
 
 // we futz with the meta values after the listener is added; padd it out so the first update doesn't fire the message
 var initialMetaMsgFired = 0;
@@ -112,7 +113,10 @@ function drawConsumptions() {
         return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
       });
 
-      consumptions = data;
+      if(!recentsPopulated){
+        consumptions = data;
+        recentsPopulated = true;
+      }
 
       // now that things are loaded, populate the recents
       populateRecents();
