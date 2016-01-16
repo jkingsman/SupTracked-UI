@@ -37,7 +37,7 @@ function populateDropdown(selected) {
         selectedString = 'selected ';
       }
 
-      $('#drugList').append('<option ' + selectedString + 'value="' + drug.id + '">' + drug.name + '</option>');
+      $('#drugList').append('<option ' + selectedString + 'value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
     });
 
     // all done; trigger change event
