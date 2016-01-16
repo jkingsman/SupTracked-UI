@@ -113,13 +113,13 @@ function drawConsumptions() {
         return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
       });
 
+      consumptions = data;
+
       if(!recentsPopulated){
-        consumptions = data;
+        // now that things are loaded, populate the recents
+        populateRecents();
         recentsPopulated = true;
       }
-
-      // now that things are loaded, populate the recents
-      populateRecents();
 
       data.forEach(function(consumption) {
         // build friends list
