@@ -1,0 +1,16 @@
+extends ../jade-components/logged-in-page.jade
+
+block title
+	title Raw Access | SupTracked
+
+block content
+	main
+		.container
+			h4 Raw Access
+			p Be careful with loading this data - make sure you clear things afterwards. This also uses very raw and dangerous interpolation of data. You can't break the data, but you can mess the page up.
+			br
+			p Current data status: 
+				span(style="color: red;")#status Not loaded
+
+block scripts
+	script(src='js/raw.js')
