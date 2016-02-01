@@ -6,9 +6,7 @@
 var fullData;
 var results;
 
-makeAuthRequest('/experience/search', 'POST', JSON.stringify({
-  'limit': 10
-}), 'json', function(err, data, code) {
+makeAuthRequest('/experience/search', 'POST', null, 'json', function(err, data, code) {
   if (code === 404) {
     Materialize.toast("No experiences", 6000, 'danger-toast');
     return;
