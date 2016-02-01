@@ -25,6 +25,29 @@ makeAuthRequest('/experience/search', 'POST', JSON.stringify({
   $('#status').css('color', 'green');
 });
 
+console.log('use `help()` for more info');
+function help(){
+  console.log('queryConsumption(data, field, value, compType)');
+  console.log('\/\/ data - raw array');
+  console.log('\/\/ field - fieldname (date, or drug.name, drug.id)');
+  console.log('\/\/ value - comparison value');
+  console.log('\/\/ compType - EQ, GT, LT, GE, LE, INC');
+  console.log('----------------------------------');
+
+  console.log('\/\/ data - raw array');
+  console.log('\/\/ field - fieldname (ttime, etc.)');
+  console.log('\/\/ value - comparison value');
+  console.log('\/\/ compType - EQ, GT, LT, GE, LE, INC');
+  console.log('function queryExperience(data, field, value, compType)');
+  console.log('----------------------------------');
+
+  console.log('function intersect(data1, data2)');
+  console.log('----------------------------------');
+
+  console.log('\/\/ direction: -1 ASC, 1 DESC');
+  console.log('function sortByField(data, field, direction)');
+}
+
 // entry is a JSON entry
 // keyarray is an array of descending json key names
 function getKeyVal(entry, keyArray) {
