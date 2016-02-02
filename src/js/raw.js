@@ -1,4 +1,5 @@
 /* globals makeAuthRequest,Materialize */
+/* jshint multistr: true */
 /* jshint -W089 */
 
 "use strict";
@@ -24,7 +25,8 @@ makeAuthRequest('/experience/search', 'POST', null, 'json', function(err, data, 
 });
 
 console.log('use `help()` for more info');
-function help(){
+
+function help() {
   console.log('queryConsumption(data, field, value, compType)');
   console.log('\/\/ data - raw array');
   console.log('\/\/ field - fieldname (date, or drug.name, drug.id)');
@@ -36,14 +38,33 @@ function help(){
   console.log('\/\/ field - fieldname (ttime, etc.)');
   console.log('\/\/ value - comparison value');
   console.log('\/\/ compType - EQ, GT, LT, GE, LE, INC');
-  console.log('function queryExperience(data, field, value, compType)');
+  console.log('queryExperience(data, field, value, compType)');
   console.log('----------------------------------');
 
-  console.log('function intersect(data1, data2)');
+  console.log('intersect(data1, data2)');
   console.log('----------------------------------');
 
   console.log('\/\/ direction: -1 ASC, 1 DESC');
-  console.log('function sortByField(data, field, direction)');
+  console.log('sortByField(data, field, direction)');
+  console.log('----------------------------------');
+
+  console.log('\/\/ experiences - data to break consumptions out of');
+  console.log('extractConsumptions(experiences)');
+  console.log('----------------------------------');
+
+  console.log('Example query to get total ethanol consumption since date:');
+  console.log("var consumptionsSinceDate = extractConsumptions(queryConsumption(fullData, 'date', 1451635200, 'GT'));\
+var alcoholOnly = consumptionsSinceDate.filter(function(consumption) {\
+    return consumption.drug.name == 'ethanol (spirit)';\
+});\
+var counts = [];\
+alcoholOnly.forEach(function(consumption) {\
+    counts.push(consumption.count);\
+});\
+var total = counts.reduce(function(accum, count) {\
+    return accum + count;\
+});\
+console.log((Math.round(total * 10) / 10) + ' ' + alcoholOnly[0].drug.unit)");
 }
 
 // entry is a JSON entry
@@ -149,6 +170,19 @@ function queryConsumption(data, field, value, compType) {
   });
 }
 
+// experiences - data to break consumptions out of
+function extractConsumptions(experiences) {
+  var consumptionList = [];
+
+  experiences.forEach(function(experience) {
+    experience.consumptions.forEach(function(consumption) {
+      consumptionList.push(consumption);
+    });
+  });
+
+  return consumptionList;
+}
+
 // data - raw array
 // field - fieldname (ttime, etc.)
 // value - comparison value
@@ -171,18 +205,18 @@ function queryExperience(data, field, value, compType) {
 }
 
 // two data arrays
-function intersect(data1, data2){
+function intersect(data1, data2) {
   var loadedIDs = [];
   var allExperiences = [];
-  data1.forEach(function (experience){
-    if(loadedIDs.indexOf(experience.id) < 0){
+  data1.forEach(function(experience) {
+    if (loadedIDs.indexOf(experience.id) < 0) {
       // don't have it; load it
       allExperiences.push(experience);
     }
   });
 
-  data2.forEach(function (experience){
-    if(loadedIDs.indexOf(experience.id) < 0){
+  data2.forEach(function(experience) {
+    if (loadedIDs.indexOf(experience.id) < 0) {
       // don't have it; load it
       allExperiences.push(experience);
     }
