@@ -81,7 +81,7 @@ function hourly() {
 
   setTimeout(function() {
     $('#hourly').highcharts().reflow();
-  }, 1000);
+  }, 2000);
 
   analyticsFinished += 1;
 }
@@ -145,7 +145,7 @@ function daily() {
 
   setTimeout(function() {
     $('#daily').highcharts().reflow();
-  }, 1000);
+  }, 2000);
 
   analyticsFinished += 1;
 }
