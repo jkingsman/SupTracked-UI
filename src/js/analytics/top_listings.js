@@ -60,7 +60,11 @@ function top_listings() {
     return '<li>' + friendName + ' (' + friendCount[friendName] + ' consumptions)</li>';
   }).join('') + '</ol>';
 
-  $('#topFriends').append(friendHTML);
+  if(friendNames.length === 0){
+    $('#topFriends').append("<i>None</i>");
+  } else {
+    $('#topFriends').append(friendHTML);
+  }
 
   analyticsFinished += 1;
 }
