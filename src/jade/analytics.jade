@@ -56,6 +56,8 @@ block content
 								a(href='#experience_list') Experience List
 							li
 								a(href='#top') Top
+							li
+								a(href='#hours_days') Top
 				hr
 				.row
 					.col.m12
@@ -92,6 +94,13 @@ block content
 				.row
 					.col.m12
 						include ./analytics/top_listings.jade
+				hr
+				.row
+					.col.m12
+						include ./analytics/hours_days.jade
 block scripts
+	script(src='https://code.highcharts.com/highcharts.js')
+	script(src='https://code.highcharts.com/modules/exporting.js')
 	script(src='js/analytics.js')
 	script(src='js/analytics_display.js')
+	

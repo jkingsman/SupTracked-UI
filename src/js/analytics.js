@@ -8,12 +8,13 @@ var analyticsCount = 0;
 var analyticsFinished = 0;
 
 // just get jshint off our back. these are defined in their respective files
-var vitals, experience_list, top_listings;
+var vitals, experience_list, top_listings, hours_days;
 
 function startAnalytics() {
   vitals();
   experience_list();
   top_listings();
+  hours_days();
 }
 
 // don't show select if we're already navigating
