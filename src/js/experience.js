@@ -142,7 +142,7 @@ function drawConsumptions() {
           '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">call_split</i></a>' +
           '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
           '<a href="#" title="Clone Friend and Location Data" onClick="cloneData(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">input</i></a>' +
-          '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
+          '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + '<a target="_BLANK" href="/analytics.html?' + consumption.drug.id + '">' + consumption.drug.name + '</a>, ' + consumption.method.name + '</span>' +
           '</li>');
       });
     }
