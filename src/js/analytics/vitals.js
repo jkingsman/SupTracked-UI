@@ -29,6 +29,13 @@ function vitals() {
     followString = 'followed by <a href="/analytics.html?' + allDrugs[ranking + 1].id + '">' + rankings[ranking + 1] + '</a>';
   }
 
+  var totalDosage = 0;
+  allConsumptions.forEach(function(consumption){
+    if(consumption.drug.id === drug.id){
+      totalDosage += consumption.count;
+    }
+  });
+
   var surroundingString;
   if (precedeString && followString) {
     surroundingString = '(' + precedeString + ' and ' + followString + ')';
@@ -40,7 +47,7 @@ function vitals() {
     surroundingString = '';
   }
 
-  $('#ranking').html('#' + (ranking + 1) + ' by usage with ' + allDrugs[ranking].use_count + ' uses <i>' + surroundingString + '</i>');
+  $('#ranking').html('#' + (ranking + 1) + ' by usage with ' + allDrugs[ranking].use_count + ' uses/' + totalDosage + ' ' + drug.unit + ' <i>' + surroundingString + '</i>');
 
   // first and last usage
   $('#useFirst').html(new Date(allConsumptions[0].date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- <a href="/experience.html?' + allConsumptions[0].exp_id + '">' + allConsumptions[0].title + '</a>');
