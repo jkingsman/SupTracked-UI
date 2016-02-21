@@ -558,6 +558,7 @@ $(document).ready(function() {
     var recentLimiter = JSON.stringify({
       limit: 1
     });
+    
     makeAuthRequest('/experience/search', 'POST', recentLimiter, 'json', function(err, data, code) {
       if (code !== 200) {
         // no recents; back to Experiences

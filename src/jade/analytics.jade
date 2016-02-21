@@ -44,6 +44,8 @@ block content
 							h4
 								span.drugName(style='text-transform: capitalize;')
 								|  Data Sheet
+				.row
+					.col.m6
 						h5 Index
 						ul
 							li
@@ -57,34 +59,33 @@ block content
 							li
 								a(href='#top') Top
 							li
-								a(href='#hours_days') Top
-				hr
-				.row
-					.col.m12
-						a(name='basic')
-						h5 Basic Data
-						.col.m12
-							strong Unit: 
-							span#unit
-							br
-							strong Classification: 
-							span#classification
-							br
-							strong Family: 
-							span#family
-							br
-							strong Rarity: 
-							span#rarity
+								a(href='#hours_days') Hourly/Daily Breakdown
+								
+					.col.m6
+						.row
+							.col.m12
+								a(name='basic')
+								h5 Basic Data
+								.col.m12
+									strong Unit: 
+									span#unit
+									br
+									strong Classification: 
+									span#classification
+									br
+									strong Family: 
+									span#family
+									br
+									strong Rarity: 
+									span#rarity
 				hr
 				a(name='notes')
 				.row
-					.col.m12
+					.col.m6
 						h5 Notes
 						.col.m12
 							span#notes
-				hr
-				.row
-					.col.m12
+					.col.m6
 						include ./analytics/vitals.jade
 				hr
 				.row
