@@ -413,7 +413,7 @@ updateExperienceObject(function() {
 
   if(experience.notes === null){
     // so micromarkdown doesn't choke
-    experience.notes = '';
+    experience.notes = '[none]';
   }
 
   $('#title').html(experience.title);
