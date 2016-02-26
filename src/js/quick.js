@@ -411,6 +411,11 @@ updateExperienceObject(function() {
     });
   });
 
+  if(experience.notes === null){
+    // so micromarkdown doesn't choke
+    experience.notes = '';
+  }
+
   $('#title').html(experience.title);
   $('#notes').html(cleanMarkdown(micromarkdown.parse(experience.notes)));
   $('.fullLink').attr('href', '/experience.html?' + experience.id);
