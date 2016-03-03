@@ -45,6 +45,7 @@ function setUpMeta() {
       $('#metaTTime').val(data.ttime);
     }
 
+    $('#locations').empty();
     makeAuthRequest('/consumption/locations', 'GET', null, 'json', function(err, data, code) {
       data.forEach(function(location) {
         $('#locations').append('<option value="' + location.location + '"></option>');
@@ -319,6 +320,7 @@ function editConsumption(id) {
           });
         }
 
+        $('#friends').empty();
         makeAuthRequest('/consumption/friends', 'GET', null, 'json', function(err, data, code) {
           data.forEach(function(friend) {
             $('#friends').append('<option value="' + friend.name + '"></option>');
@@ -558,7 +560,7 @@ $(document).ready(function() {
     var recentLimiter = JSON.stringify({
       limit: 1
     });
-    
+
     makeAuthRequest('/experience/search', 'POST', recentLimiter, 'json', function(err, data, code) {
       if (code !== 200) {
         // no recents; back to Experiences
