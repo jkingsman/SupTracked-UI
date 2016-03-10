@@ -82,6 +82,7 @@ function displayJSONError(xhr) {
  * @param {String} server
  */
 function authLogin(username, password, server) {
+  Materialize.toast("Logging in...", 6000);
   $.ajax({
       method: 'GET',
       beforeSend: function(xhr) {
@@ -98,8 +99,6 @@ function authLogin(username, password, server) {
 
       document.cookie = "server=" + server + '; expires=' + setDate.toUTCString();
       document.cookie = "auth=" + btoa(username + ':' + password) + '; expires=' + setDate.toUTCString();
-
-      Materialize.toast("Logging in...", 6000);
 
       // redirect them, if applicable
       if (getCookie('location').length > 0) {
