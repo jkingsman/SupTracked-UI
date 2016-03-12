@@ -18,6 +18,65 @@ makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code)
   }
 });
 
+// expects an array of media
+function showMedia(mediaCollection, callback) {
+  mediaCollection.forEach(function(media, index) {
+    if (index % 3 === 0) {
+      // we're beginning a new row
+      $('#media').append('<div id="row' + rowsProcessed + '" class="row"></div>');
+      rowsProcessed += 1;
+    }
+
+    var mediaUrl = getCookie('server') + '/media/file/' + media.id;
+
+    var association = '';
+    var editString = '';
+    if (media.association_type === 'experience') {
+      association = '<br><a href="/experience.html?' + media.association + '">View Experience (' + media.exp_title + ')</a>';
+      editString = '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons" style="position: relative; top: 6px;">reorder</i></a>';
+    }
+
+    var explicitBlurStyle = '';
+    if (media.explicit) {
+      explicitBlurStyle = 'style="-webkit-filter: blur(15px); filter: blur(15px);"';
+    }
+
+    var favoriteIcon = '';
+    if (media.favorite) {
+      favoriteIcon = '<i class="material-icons" style="color: gold;">thumb_up</i>';
+    }
+
+    var mediaTags = '<br>[no tags]';
+    if (media.tags) {
+      mediaTags = '<br>' + media.tags;
+    }
+
+    $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
+      '<a id="imagelink' + media.id + '" target="_blank"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" id="title-' + media.id + '" style="background-color: rgba(0, 0, 0, 0.5);">' + favoriteIcon + media.title + '</span><a/></div>' +
+      '<div class="card-content"><p>' + editString +
+      new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span id="tags-' + media.id + '">' + mediaTags + '</span>' + association + '</p></div>' +
+      '</div></div>');
+
+    makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
+      var converter = new FileReader();
+      converter.onload = function(e) {
+        var result = e.target.result.replace('application/octet-stream', 'image/png');
+        $('#image' + media.id).attr('src', result);
+        $('#imagelink' + media.id).attr('href', result);
+      };
+      converter.readAsDataURL(imgData);
+    });
+
+    if (index === mediaCollection.length - 1) {
+      imagesPopulated = true;
+
+      if(typeof callback === 'function'){
+        callback();
+      }
+    }
+  });
+}
+
 function loadMore() {
   if (!atEnd) {
     makeAuthRequest('/media/search', 'POST', JSON.stringify({
@@ -32,58 +91,10 @@ function loadMore() {
         atEnd = true;
       }
 
-      data.forEach(function(media, index) {
-        if (index % 3 === 0) {
-          // we're beginning a new row
-          $('#media').append('<div id="row' + rowsProcessed + '" class="row"></div>');
-          rowsProcessed += 1;
-        }
-
-        var mediaUrl = getCookie('server') + '/media/file/' + media.id;
-
-        var association = '';
-        if (media.association_type === 'experience') {
-          association = '<br><a href="/experience.html?' + media.association + '">View Experience</a>';
-        }
-
-        var explicitBlurStyle = '';
-        if (media.explicit) {
-          explicitBlurStyle = 'style="-webkit-filter: blur(15px); filter: blur(15px);"';
-        }
-
-        var favoriteIcon = '';
-        if (media.favorite) {
-          favoriteIcon = '<i class="material-icons" style="color: gold;">thumb_up</i>';
-        }
-
-        var mediaTags = '<br>[no tags]';
-        if (media.tags) {
-          mediaTags = '<br>' + media.tags;
-        }
-
-        $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
-          '<a id="imagelink' + media.id + '" target="_blank"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" id="title-' + media.id + '" style="background-color: rgba(0, 0, 0, 0.5);">' + favoriteIcon + media.title + '</span><a/></div>' +
-          '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons" style="position: relative; top: 6px;">reorder</i></a>' +
-          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span id="tags-' + media.id + '">' + mediaTags + '</span>' + association + '</p></div>' +
-          '</div></div>');
-
-        makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
-          var converter = new FileReader();
-          converter.onload = function(e) {
-            var result = e.target.result.replace('application/octet-stream', 'image/png');
-            $('#image' + media.id).attr('src', result);
-            $('#imagelink' + media.id).attr('href', result);
-          };
-          converter.readAsDataURL(imgData);
-
-          if (index === data.length - 1) {
-            imagesPopulated = true;
-          }
-        });
+      showMedia(data, function(){
+        $('#loading').hide();
+        $('#media').show();
       });
-
-      $('#loading').hide();
-      $('#media').show();
     });
   }
 }
@@ -224,55 +235,7 @@ $('#filterForm').submit(function(event) {
       $(".row").remove(); // clear existing entries
       $(window).off("scroll", autoLoader); // stop listening for scroll; we're loading them all at once now
 
-      data.forEach(function(media, index) {
-        if (index % 3 === 0) {
-          // we're beginning a new row
-          $('#media').append('<div id="row' + rowsProcessed + '" class="row"></div>');
-          rowsProcessed += 1;
-        }
-
-        var mediaUrl = getCookie('server') + '/media/file/' + media.id;
-
-        var association = '';
-        if (media.association_type === 'experience') {
-          association = '<br><a href="/experience.html?' + media.association + '">View Experience</a>';
-        }
-
-        var explicitBlurStyle = '';
-        if (media.explicit) {
-          explicitBlurStyle = 'style="-webkit-filter: blur(15px); filter: blur(15px);"';
-        }
-
-        var favoriteIcon = '';
-        if (media.favorite) {
-          favoriteIcon = '<i class="material-icons" style="color: gold;">thumb_up</i>';
-        }
-
-        var mediaTags = '<br>[no tags]';
-        if (media.tags.length > 0) {
-          mediaTags = '<br>' + media.tags;
-        }
-
-        $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
-          '<a id="imagelink' + media.id + '" target="_blank"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" id="title-' + media.id + '" style="background-color: rgba(0, 0, 0, 0.5);">' + favoriteIcon + media.title + '</span><a/></div>' +
-          '<div class="card-content"><p>' + '<a class="page-action" style="font-size: 18px;" onclick="editMedia(' + media.id + ');"><i class="material-icons" style="position: relative; top: 6px;">reorder</i></a>' +
-          new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span id="tags-' + media.id + '">' + mediaTags + '</span>' + association + '</p></div>' +
-          '</div></div>');
-
-        makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
-          var converter = new FileReader();
-          converter.onload = function(e) {
-            var result = e.target.result.replace('application/octet-stream', 'image/png');
-            $('#image' + media.id).attr('src', result);
-            $('#imagelink' + media.id).attr('href', result);
-          };
-          converter.readAsDataURL(imgData);
-
-          if (index === data.length - 1) {
-            imagesPopulated = true;
-          }
-        });
-      });
+      showMedia(data, null);
     });
 });
 
