@@ -112,9 +112,9 @@ var autoLoader = function() {
 
 function prepareFilter() {
   var today = new Date();
-  var dateString = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2) + ' ' + ('0' + today.getHours()).slice(-2) + ('0' + today.getMinutes()).slice(-2);
+  var dateString = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
   $('#filterEndDate').val(dateString);
-  $('#filterStartDate').val('1975-01-01 0000');
+  $('#filterStartDate').val('1975-01-01');
 
   makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
     data.forEach(function(drug) {
@@ -154,22 +154,12 @@ $('#filterForm').submit(function(event) {
   }
 
   // assemble start date
-  var startDate = $('#filterStartDate').val().split(' ')[0];
-  var startTime = $('#filterStartDate').val().split(' ')[1];
+  var startDate = $('#filterStartDate').val();
   var startDateStamp = Math.floor(new Date(startDate).getTime() / 1000);
 
-  // add hours and minutes
-  startDateStamp += Math.floor(startTime / 100) * 3600;
-  startDateStamp += (startTime - (Math.floor(startTime / 100) * 100)) * 60;
-
   // assemble end date
-  var endDate = $('#filterEndDate').val().split(' ')[0];
-  var endTime = $('#filterEndDate').val().split(' ')[1];
+  var endDate = $('#filterEndDate').val();
   var endDateStamp = Math.floor(new Date(endDate).getTime() / 1000);
-
-  // add hours and minutes
-  endDateStamp += Math.floor(endTime / 100) * 3600;
-  endDateStamp += (endTime - (Math.floor(endTime / 100) * 100)) * 60;
 
   filterCriteria.startdate = startDateStamp;
   filterCriteria.enddate = endDateStamp;
