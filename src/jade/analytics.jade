@@ -86,19 +86,51 @@ block content
 						.col.m12
 							span#notes
 					.col.m6
-						include ./analytics/vitals.jade
+						a(name='vitals')
+						h5 Vital Signs
+						.col.s12
+							strong Ranking: 
+							span#ranking
+							br
+							strong First Use: 
+							span#useFirst
+							br
+							strong Last Use: 
+							span#useLast
+							br
+							strong Longest Streak: 
+							span#streak
+							br
+							strong Longest Break: 
+							span#tBreak
 				hr
 				.row
 					.col.m12
-						include ./analytics/experience_list.jade
+						a(name='experience_list')
+						h5 Experience List
+						.col.s12
+							#heightLimiter(style='height: 300px; overflow: auto;')
+								ul.collection#experienceContainer
 				hr
 				.row
 					.col.m12
-						include ./analytics/top_listings.jade
+						a(name='top')
+						h5 Top
+						.col.s6
+							h6 Top Friends
+							div#topFriends
+						.col.s6
+							h6 Top Locations
+							div#topLocations
 				hr
 				.row
 					.col.m12
-						include ./analytics/hours_days.jade
+						a(name='hours_days')
+						h5 Hourly/Daily Breakdown
+						.col.s12(style='style="padding: 0; border: 0; margin: 0;')
+							div#hourly(height='600', style='margin: 0 auto;')
+						.col.s12(style='style="padding: 0; border: 0; margin: 0;')
+							div#daily(height='600', style='margin: 0 auto;')
 block scripts
 	script(src='https://code.highcharts.com/highcharts.js')
 	script(src='https://code.highcharts.com/modules/exporting.js')
