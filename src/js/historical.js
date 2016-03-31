@@ -7,7 +7,9 @@ var analyticsCount = 0;
 var analyticsFinished = 0;
 
 // just get jshint off our back. these are defined in their respective files
-var friends, drugs, basics, experience_list, hourly_daily_breakdown;
+var friends, drugs, basics, experience_list, hourly_daily_breakdown, calendar, media;
+
+var start, end;
 
 function startHistorical() {
   friends();
@@ -15,6 +17,8 @@ function startHistorical() {
   basics();
   experience_list();
   hourly_daily_breakdown();
+  calendar();
+  media();
 }
 
 function dateToFormat(dateObj) {
@@ -31,8 +35,8 @@ if (location.search.length === 0) {
   var weekAgo = new Date(new Date().setDate(new Date().getDate() - 7));
   window.location = '/historical.html?start=' + dateToFormat(weekAgo) + '&end=' + dateToFormat(today);
 } else {
-  var start = new Date(parseUrlParam('start')).getTime() / 1000;
-  var end = new Date(parseUrlParam('end')).getTime() / 1000;
+  start = new Date(parseUrlParam('start')).getTime() / 1000;
+  end = new Date(parseUrlParam('end')).getTime() / 1000;
 
   $('.start').html(parseUrlParam('start'));
   $('.end').html(parseUrlParam('end'));
