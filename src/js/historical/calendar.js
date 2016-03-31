@@ -13,13 +13,9 @@ function calendar() {
   currentDay.setDate(currentDay.getDate() + 1); // initial date jump
   endDay.setDate(endDay.getDate() + 1); // initial date jump
 
-  // set it back and forward to the most recent sunday
+  // set it back to the most recent sunday
   if (currentDay.getDay() !== 0) {
     currentDay.setDate(currentDay.getDate() - currentDay.getDay());
-  }
-
-  if (endDay.getDay() !== 0) {
-    endDay.setDate(endDay.getDate() + (6 - endDay.getDay()));
   }
 
   var column = 1;
