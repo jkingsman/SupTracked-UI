@@ -21,7 +21,7 @@ makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code)
 // expects an array of media
 function showMedia(mediaCollection, callback) {
   mediaCollection.forEach(function(media, index) {
-    if (index % 5 === 0) {
+    if (index % 6 === 0) {
       // we're beginning a new row
       $('#media').append('<div id="row' + rowsProcessed + '" class="row"></div>');
       rowsProcessed += 1;
