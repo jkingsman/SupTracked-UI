@@ -4,7 +4,7 @@
 "use strict";
 
 var currentBatch = 0;
-var batchSize = 24;
+var batchSize = 25;
 var atEnd = false;
 
 var imagesPopulated = false; // we don't let a new page load until the previous is done
@@ -21,7 +21,7 @@ makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code)
 // expects an array of media
 function showMedia(mediaCollection, callback) {
   mediaCollection.forEach(function(media, index) {
-    if (index % 3 === 0) {
+    if (index % 5 === 0) {
       // we're beginning a new row
       $('#media').append('<div id="row' + rowsProcessed + '" class="row"></div>');
       rowsProcessed += 1;
@@ -51,7 +51,7 @@ function showMedia(mediaCollection, callback) {
       mediaTags = '<br>' + media.tags;
     }
 
-    $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m4"><div class="card"><div class="card-image">' +
+    $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m2"><div class="card"><div class="card-image">' +
       '<a id="imagelink' + media.id + '" target="_blank"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" id="title-' + media.id + '" style="background-color: rgba(0, 0, 0, 0.5);">' + favoriteIcon + media.title + '</span><a/></div>' +
       '<div class="card-content"><p>' + editString +
       new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span id="tags-' + media.id + '">' + mediaTags + '</span>' + association + '</p></div>' +
