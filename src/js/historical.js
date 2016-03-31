@@ -2,12 +2,12 @@
 
 "use strict";
 
-var drug, allDrugs, allConsumptions = [], allExperiences;
+var drug, allDrugs = [], allConsumptions = [], allExperiences;
 var analyticsCount = 0;
 var analyticsFinished = 0;
 
 // just get jshint off our back. these are defined in their respective files
-var friends, drugs, basics, experience_list, hourly_daily_breakdown, calendar, media;
+var friends, drugs, basics, experience_list, hourly_daily_breakdown, calendar, media, drug_info;
 
 var start, end;
 
@@ -19,6 +19,7 @@ function startHistorical() {
   hourly_daily_breakdown();
   calendar();
   media();
+  drug_info();
 }
 
 function dateToFormat(dateObj) {
@@ -61,7 +62,13 @@ if (location.search.length === 0) {
       });
     });
 
-    startHistorical();
+    makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
+      data.forEach(function(drug){
+        allDrugs[drug.id] = drug;
+      });
+
+      startHistorical();
+    });
   });
 }
 

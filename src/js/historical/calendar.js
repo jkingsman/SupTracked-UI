@@ -23,7 +23,7 @@ function calendar() {
   }
 
   while(currentDay <= endDay){
-    console.log(dateToFormat(currentDay));
+    // console.log(dateToFormat(currentDay));
 
     currentDay.setDate(currentDay.getDate() + 1);
   }
