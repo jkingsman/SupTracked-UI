@@ -194,7 +194,7 @@ $('#filterForm').submit(function(event) {
             experience.title = '[none]';
           }
 
-          // compile thr consumptions, grouped by drug
+          // compile the consumptions, grouped by drug
           var groupedConsumptionList = {};
 
           experience.consumptions.forEach(function(consumption) {
