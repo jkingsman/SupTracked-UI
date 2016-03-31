@@ -1,0 +1,63 @@
+extends ../jade-components/logged-in-page.jade
+
+block title
+	title Historical | SupTracked
+
+block content
+	main
+
+		.container#loading
+			.container
+				.row
+					.col.m12
+						h5.center-align Loading historical data from  
+							span.start
+							|  to 
+							span.end
+							|  usage (
+							span#historicalComplete 0
+							| %)
+						br 
+						.progress
+							.determinate#historicalProgress(style='width: 0%;')
+		.container#noCon(style='display: none;')
+			.row
+				h4 No consumptions!
+		.container#cons(style='display: none;')
+			.row
+				h4
+					span.start
+					|  to 
+					span.end
+					|  by the Numbers
+			.row
+				.col.s12.m6
+					strong Counts: 
+					span#totals
+					br
+					strong Totals:
+					br
+					span#totalCons
+					strong Most consumptions: 
+					span#mostCon
+				.col.s12.m6
+					strong Top Friends: 
+					span#friends
+					br
+			.row
+				h5 Experience List
+				.col.s12
+					#heightLimiter(style='height: 300px; overflow: auto;')
+						ul.collection#experiences-collection
+			.row
+				h5 Hourly/Daily Breakdown
+					.col.s12(style='style="padding: 0; border: 0; margin: 0;')
+						div#hourly(height='600', style='margin: 0 auto;')
+					.col.s12(style='style="padding: 0; border: 0; margin: 0;')
+						div#daily(height='600', style='margin: 0 auto;')				
+
+block scripts
+	script(src='https://code.highcharts.com/highcharts.js')
+	script(src='https://code.highcharts.com/modules/exporting.js')
+	script(src='js/historical.js')
+	script(src='js/historical_display.js')

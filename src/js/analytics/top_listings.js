@@ -1,6 +1,6 @@
 /* globals makeAuthRequest,Materialize */
 
-// these are predefined in the master analytics.js file
+// these are predefined in the master historical.js file
 var analyticsCount, analyticsFinished, allDrugs, allConsumptions, drug;
 
 analyticsCount += 2;

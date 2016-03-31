@@ -53,7 +53,7 @@ gulp.task('js-lib', function () {
 
 //main
 gulp.task('js-main', function () {
-  gulp.src(['./src/js/*', '!src/js/analytics'])
+  gulp.src(['./src/js/*', '!src/js/analytics', '!src/js/historical'])
   .pipe(uglify({mangle: true,
     compress: {
       sequences: true,
@@ -89,6 +89,25 @@ gulp.task('js-analytics', function () {
   .pipe(connect.reload());
 });
 
+gulp.task('js-historical', function () {
+  gulp.src(['./src/js/historical/**/*'])
+  .pipe(uglify({mangle: true,
+    compress: {
+      sequences: true,
+      dead_code: true,
+      conditionals: true,
+      booleans: true,
+      unused: true,
+      if_return: true,
+      join_vars: true,
+      //drop_console: true
+    }
+  }))
+  .pipe(concat('historical_display.js'))
+  .pipe(gulp.dest('./dist/js'))
+  .pipe(connect.reload());
+});
+
 //move over remaining files
 gulp.task('copy', function () {
   gulp.src(['./src/img/**/*'])
@@ -104,11 +123,11 @@ gulp.task('webserver', function() {
   });
 });
 
-gulp.task('default', ['empty', 'hint', 'html', 'css', 'js-lib', 'js-main', 'js-analytics', 'copy']);
+gulp.task('default', ['empty', 'hint', 'html', 'css', 'js-lib', 'js-main', 'js-analytics', 'js-historical', 'copy']);
 
 //realtime watching
 gulp.task('realtime', function() {
-  gulp.watch('./src/**/*', ['hint', 'html', 'css', 'js-lib', 'js-main', 'js-analytics', 'copy']);
+  gulp.watch('./src/**/*', ['hint', 'html', 'css', 'js-lib', 'js-main', 'js-analytics', 'js-historical', 'copy']);
 });
 
 gulp.task('watch', ['realtime', 'default', 'webserver']);
