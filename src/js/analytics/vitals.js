@@ -53,6 +53,20 @@ function vitals() {
   $('#useFirst').html(new Date(allConsumptions[0].date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- <a href="/experience.html?' + allConsumptions[0].exp_id + '">' + allConsumptions[0].title + '</a>');
   $('#useLast').html(new Date(allConsumptions[allConsumptions.length - 1].date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- <a href="/experience.html?' + allConsumptions[allConsumptions.length - 1].exp_id + '">' + allConsumptions[allConsumptions.length - 1].title + '</a>');
 
+  // largest consumption
+  var consumptionDup = JSON.parse(JSON.stringify(allConsumptions));
+  consumptionDup.sort(function(a, b){
+    return b.count - a.count;
+  });
+
+  console.log(consumptionDup.slice(0, 3));
+
+  var topCons = consumptionDup.slice(0, 3).map(function(consumption){
+    return '<li>' + new Date(consumption.date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- ' + consumption.count + ' ' + drug.unit + ' -- <a href="/experience.html?' + consumption.exp_id + '">' + consumption.title + '</a></li>';
+  });
+
+  $('#largeDose').html('<ul class="pad-left-40">' + topCons.join('') + '</ul>');
+
   // longest streak calc
 
   // create an array of dates used (represented in days since the epoch) and drop the duplicatess
