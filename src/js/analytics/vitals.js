@@ -59,8 +59,6 @@ function vitals() {
     return b.count - a.count;
   });
 
-  console.log(consumptionDup.slice(0, 3));
-
   var topCons = consumptionDup.slice(0, 3).map(function(consumption){
     return '<li>' + new Date(consumption.date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- ' + consumption.count + ' ' + drug.unit + ' -- <a href="/experience.html?' + consumption.exp_id + '">' + consumption.title + '</a></li>';
   });
