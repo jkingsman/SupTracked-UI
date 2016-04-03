@@ -95,8 +95,9 @@ function populateRecents(){
         addedDrugIds.push(consumption.drug.id);
       }
     });
-    $("#addDrug").val($("#addDrug option:first").val());
-    $("#editDrug").val($("#editDrug option:first").val());
+
+    // select first of all
+    $('select option:first-child').attr("selected", "selected");
   }
 }
 
@@ -327,6 +328,8 @@ function editConsumption(id) {
           });
 
           $('#editConsumptionModal').openModal();
+          $('#editDate_root').attr('tabindex', '-1');
+          $('#editCount').focus();
         });
       }
     });
@@ -479,7 +482,9 @@ function openNewModal() {
     $('#locationLabel').addClass('active');
   }
 
-  $("#addConsumptionModal").openModal();
+  $('#addConsumptionModal').openModal();
+  $('#addDate_root').attr('tabindex', '-1');
+  $('#addCount').focus();
 }
 
 // create Add Experience submit listener
