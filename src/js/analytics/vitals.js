@@ -30,8 +30,8 @@ function vitals() {
   }
 
   var totalDosage = 0;
-  allConsumptions.forEach(function(consumption){
-    if(consumption.drug.id === drug.id){
+  allConsumptions.forEach(function(consumption) {
+    if (consumption.drug.id === drug.id) {
       totalDosage += consumption.count;
     }
   });
@@ -55,11 +55,11 @@ function vitals() {
 
   // largest consumption
   var consumptionDup = JSON.parse(JSON.stringify(allConsumptions));
-  consumptionDup.sort(function(a, b){
+  consumptionDup.sort(function(a, b) {
     return b.count - a.count;
   });
 
-  var topCons = consumptionDup.slice(0, 3).map(function(consumption){
+  var topCons = consumptionDup.slice(0, 3).map(function(consumption) {
     return '<li>' + new Date(consumption.date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- ' + consumption.count + ' ' + drug.unit + ' -- <a href="/experience.html?' + consumption.exp_id + '">' + consumption.title + '</a></li>';
   });
 
@@ -155,5 +155,37 @@ function vitals() {
   var diffDays = Math.floor(gap / 86400);
 
   $('#tBreak').html(earlyConString + ' to ' + lateConString + ' (' + diffDays + ' days)');
+
+  // most in an hour
+  allConsumptions.sort(function(a, b) {
+    return b.date - a.date;
+  });
+
+  var bestRecord = {start: allConsumptions[0], count: allConsumptions[0].count};
+  var rollingRecord = [allConsumptions[0]];
+
+  function checkCutOff(entry) {
+    return entry.date <= (rollingRecord[0].date + 3600);
+  }
+
+  for (var i = 1; i < allConsumptions.length; i += 1) {
+    rollingRecord.unshift(allConsumptions[i]);
+    rollingRecord = rollingRecord.filter(checkCutOff);
+
+    var currentScore = rollingRecord.reduce(function(total, currentVal){
+      return total + currentVal.count;
+    }, 0);
+
+    if(currentScore > bestRecord.count){
+      bestRecord.count = currentScore;
+      bestRecord.start = rollingRecord[0];
+    }
+  }
+
+  $('#hourRecord').html(bestRecord.count + ' ' + drug.unit + ' between ' +
+  new Date(bestRecord.start.date * 1000).toISOString().slice(11, 16) + ' and ' +
+  new Date((bestRecord.start.date + 3600) * 1000 ).toISOString().slice(11, 16) +
+  ' ' + new Date(bestRecord.start.date * 1000 ).toISOString().slice(0, 10) +
+  ' during <a href="/experience.html?' + bestRecord.start.exp_id + '">' + bestRecord.start.title + '</a>');
   analyticsFinished += 1;
 }
