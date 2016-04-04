@@ -774,7 +774,7 @@ $(document).ready(function() {
   }
 
   makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
-    if (code === 404) {
+    if (code === 404 || code === 400) {
       // no Experiences
       $('#loading').hide();
       $('#noExperience').show();
