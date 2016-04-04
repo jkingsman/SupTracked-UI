@@ -270,9 +270,19 @@ function duplicateConsumption(id) {
             return;
           }
 
-          // draw consumptions, which will include our new one
-          drawConsumptions();
-          Materialize.toast('Consumption duplicated', 6000, 'success-toast');
+          // clone friends
+          consumption.friends.forEach(function(friend, index){
+            makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
+              consumption_id: data.id,
+              name: friend.name
+            }), 'json', function(err, data, code) {
+              if(err || index === (consumption.friends.length - 1)){
+                // draw consumptions, which will include our new one
+                drawConsumptions();
+                Materialize.toast('Consumption duplicated', 6000, 'success-toast');
+              }
+            });
+          });
         });
       }
     });
