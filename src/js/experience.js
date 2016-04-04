@@ -298,13 +298,19 @@ function duplicateConsumption(id) {
             return;
           }
 
-          // clone friends
+          // clone friends if we have them
+          if(consumption.friends.length === 0){
+            Materialize.toast('Consumption duplicated', 6000, 'success-toast');
+            drawConsumptions();
+            return;
+          }
+
           consumption.friends.forEach(function(friend, index) {
             makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
               consumption_id: data.id,
               name: friend.name
             }), 'json', function(err, data, code) {
-              if (err || index === (consumption.friends.length - 1)) {
+              if (index === (consumption.friends.length - 1)) {
                 // draw consumptions, which will include our new one
                 drawConsumptions();
                 Materialize.toast('Consumption duplicated', 6000, 'success-toast');
