@@ -39,6 +39,15 @@ function top_listings() {
   var friendCount = {};
 
   allConsumptions.forEach(function(consumption){
+    if(consumption.friends.length === 0){
+      if(friendCount.hasOwnProperty('Solo')){
+        friendCount.Solo = friendCount.Solo + 1;
+      } else {
+        friendCount.Solo = 1;
+      }
+      return;
+    }
+
     consumption.friends.forEach(function(friend){
       if(friendCount.hasOwnProperty(friend.name)){
         friendCount[friend.name] = friendCount[friend.name] + 1;
@@ -57,7 +66,7 @@ function top_listings() {
   friendNames = friendNames.slice(0, 10);
 
   var friendHTML = '<ol>' + friendNames.map(function(friendName){
-    return '<li>' + friendName + ' (' + friendCount[friendName] + ' consumptions)</li>';
+    return '<li>' + friendName + ' (' + friendCount[friendName] + ' consumptions/' + Math.round((friendCount[friendName] / allConsumptions.length) * 100, -1) + '%)</li>';
   }).join('') + '</ol>';
 
   if(friendNames.length === 0){

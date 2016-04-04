@@ -10,6 +10,15 @@ function friends() {
 
   var friendCounts = [];
   allConsumptions.forEach(function(consumption) {
+    if(consumption.friends.length === 0){
+      if(friendCounts.hasOwnProperty('Solo')){
+        friendCounts.Solo = friendCounts.Solo + 1;
+      } else {
+        friendCounts.Solo = 1;
+      }
+      return;
+    }
+
     consumption.friends.forEach(function(friend) {
       if (friendCounts.hasOwnProperty(friend.name)) {
         friendCounts[friend.name] = friendCounts[friend.name] + 1;
