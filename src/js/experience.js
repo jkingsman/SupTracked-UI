@@ -11,6 +11,23 @@ var recentsPopulated = false;
 // we futz with the meta values after the listener is added; padd it out so the first update doesn't fire the message
 var initialMetaMsgFired = 0;
 
+// populate friends and locations
+function setUpFriendsLoc() {
+  $('#locations').empty();
+  makeAuthRequest('/consumption/locations', 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(location) {
+      $('#locations').append('<option value="' + location.location + '"></option>');
+    });
+  });
+
+  $('#friends').empty();
+  makeAuthRequest('/consumption/friends', 'GET', null, 'json', function(err, data, code) {
+    data.forEach(function(friend) {
+      $('#friends').append('<option value="' + friend.name + '"></option>');
+    });
+  });
+}
+
 // fill in title/rating, etc.
 function setUpMeta() {
   makeAuthRequest('/experience/' + experienceID, 'GET', null, 'json', function(err, data, code) {
@@ -44,13 +61,6 @@ function setUpMeta() {
     if (data.ttime) {
       $('#metaTTime').val(data.ttime);
     }
-
-    $('#locations').empty();
-    makeAuthRequest('/consumption/locations', 'GET', null, 'json', function(err, data, code) {
-      data.forEach(function(location) {
-        $('#locations').append('<option value="' + location.location + '"></option>');
-      });
-    });
   });
 }
 
@@ -68,36 +78,52 @@ function deleteExperience() {
   });
 }
 
-function populateRecents(){
+function populateRecents() {
   if (consumptions.length > 0) {
-    $('#addMethod').prepend('<option id="emptyAddMethodDelimiter" disabled>──────────────</option>');
-    $('#editMethod').prepend('<option id="emptyEditMethodDelimiter" disabled>──────────────</option>');
+
+    $('.method-input').each(function(entry) {
+      $(this).prepend('<option id="emptyMethodDelimiter" value="0" disabled>──────────────</option>');
+    });
 
     var addedMethodIds = [];
-    consumptions.forEach(function(consumption) {
+
+    // reverse so we can prepend neatly
+    var reverseOrder = consumptions.slice();
+    reverseOrder.reverse();
+
+    reverseOrder.forEach(function(consumption) {
       if (addedMethodIds.indexOf(consumption.method.id) < 0) {
-        $('#emptyAddMethodDelimiter').before('<option value="' + consumption.method.id + '">' + consumption.method.name + '</option>');
-        $('#emptyEditMethodDelimiter').before('<option value="' + consumption.method.id + '">' + consumption.method.name + '</option>');
+        $('.method-input').each(function(entry) {
+
+          $(this).prepend('<option value="' + consumption.method.id + '">' + consumption.method.name + '</option>');
+        });
         addedMethodIds.push(consumption.method.id);
       }
     });
-    $("#addMethod").val($("#addDrug option:first").val());
-    $("#editMethod").val($("#editDrug option:first").val());
 
-    $('#addDrug').prepend('<option id="emptyAddDrugDelimiter" disabled>──────────────</option>');
-    $('#editDrug').prepend('<option id="emptyEditDrugDelimiter" disabled>──────────────</option>');
+    $('.method-input').each(function(entry) {
+      $(this).val($('#' + $(this)[0].id + ' option:first').val());
+    });
+
+    $('.drug-input').each(function(entry) {
+      $(this).prepend('<option id="emptyDrugDelimiter" value="0" disabled>──────────────</option>');
+    });
 
     var addedDrugIds = [];
-    consumptions.forEach(function(consumption) {
+
+    reverseOrder.forEach(function(consumption) {
       if (addedDrugIds.indexOf(consumption.drug.id) < 0) {
-        $('#emptyAddDrugDelimiter').before('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
-        $('#emptyEditDrugDelimiter').before('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
+        $('.drug-input').each(function(entry) {
+
+          $(this).prepend('<option value="' + consumption.drug.id + '">' + consumption.drug.name + ' (' + consumption.drug.unit + ')</option>');
+        });
         addedDrugIds.push(consumption.drug.id);
       }
     });
 
-    // select first of all
-    $('select option:first-child').attr("selected", "selected");
+    $('.drug-input').each(function(entry) {
+      $(this).val($('#' + $(this)[0].id + ' option:first').val());
+    });
   }
 }
 
@@ -117,7 +143,7 @@ function drawConsumptions() {
 
       consumptions = data;
 
-      if(!recentsPopulated){
+      if (!recentsPopulated) {
         // now that things are loaded, populate the recents
         populateRecents();
         recentsPopulated = true;
@@ -136,9 +162,11 @@ function drawConsumptions() {
           friendString = friendList.join(', ');
         }
 
-        $('#consumptionsCollection').append('<li class="collection-item">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') +
+        $('#consumptionsCollection').append('<li class="collection-item" id="con-' + consumption.id + '">' +
+          '<span id="conDate">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '</span>' +
           '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
           '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
+          '<a href="#" title="Bulk Edit" onClick="bulkEdit()" class="secondary-content consumption-icon bulk-edit-button" style="display: none;"><i class="material-icons">library_books</i></a>' +
           '<a href="#" title="Edit" onClick="editConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">list</i></a>' +
           '<a href="#" title="Set to Now" onClick="setNow(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">alarm_on</i></a>' +
           '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">call_split</i></a>' +
@@ -271,12 +299,12 @@ function duplicateConsumption(id) {
           }
 
           // clone friends
-          consumption.friends.forEach(function(friend, index){
+          consumption.friends.forEach(function(friend, index) {
             makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
               consumption_id: data.id,
               name: friend.name
             }), 'json', function(err, data, code) {
-              if(err || index === (consumption.friends.length - 1)){
+              if (err || index === (consumption.friends.length - 1)) {
                 // draw consumptions, which will include our new one
                 drawConsumptions();
                 Materialize.toast('Consumption duplicated', 6000, 'success-toast');
@@ -331,19 +359,24 @@ function editConsumption(id) {
           });
         }
 
-        $('#friends').empty();
-        makeAuthRequest('/consumption/friends', 'GET', null, 'json', function(err, data, code) {
-          data.forEach(function(friend) {
-            $('#friends').append('<option value="' + friend.name + '"></option>');
-          });
-
-          $('#editConsumptionModal').openModal();
-          $('#editDate_root').attr('tabindex', '-1');
-          $('#editCount').focus();
-        });
+        $('#editConsumptionModal').openModal();
+        $('#editDate_root').attr('tabindex', '-1');
+        $('#editCount').focus();
       }
     });
   });
+}
+
+function addBeFriend() {
+  var id = $('#beAddFriend').val().replace(/ /g, '-') + '-add';
+  $('#beAddFriendBox').append('<div class="chip" id="' + id + '" onClick="$(\'#' + $('#beAddFriend').val().replace(/ /g, '-') + '-add\').remove();">' + $('#beAddFriend').val() + '</div>');
+  $('#beAddFriend').val('');
+}
+
+function delBeFriend() {
+  var id = $('#beDelFriend').val().replace(/ /g, '-') + '-del';
+  $('#beDelFriendBox').append('<div class="chip" id="' + id + '" onClick="$(\'#' + $('#beDelFriend').val().replace(/ /g, '-') + '-del\').remove();">' + $('#beDelFriend').val() + '</div>');
+  $('#beDelFriend').val('');
 }
 
 $('#addFriendForm').submit(function(event) {
@@ -396,6 +429,8 @@ function setUpConsumptions() {
   $('#addTime').val(('0' + date.getHours()).slice(-2) + ('0' + date.getMinutes()).slice(-2));
   $('#addtimeLabel').addClass('active');
 
+  setUpFriendsLoc();
+
   makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
     data.sort(function(a, b) {
       a = a.name.toLowerCase();
@@ -405,14 +440,16 @@ function setUpConsumptions() {
     });
 
     if (data.length < 1) {
-      $('#addDrug').append('<option value="" disabled selected>None</option>');
-      $('#editDrug').append('<option value="" disabled selected>None</option>');
+      $('.drug-input').each(function(entry) {
+        $(this).append('<option value="" disabled selected>None</option>');
+      });
       return;
     }
 
     data.forEach(function(drug) {
-      $('#addDrug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
-      $('#editDrug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+      $('.drug-input').each(function(entry) {
+        $(this).append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+      });
     });
   });
 
@@ -425,14 +462,16 @@ function setUpConsumptions() {
     });
 
     if (data.length < 1) {
-      $('#addMethod').append('<option value="" disabled selected>None</option>');
-      $('#editMethod').append('<option value="" disabled selected>None</option>');
+      $('.method-input').each(function(entry) {
+        $(this).append('<option value="" disabled selected>None</option>');
+      });
       return;
     }
 
     data.forEach(function(method) {
-      $('#addMethod').append('<option value="' + method.id + '">' + method.name + '</option>');
-      $('#editMethod').append('<option value="' + method.id + '">' + method.name + '</option>');
+      $('.method-input').each(function(entry) {
+        $(this).append('<option value="' + method.id + '">' + method.name + '</option>');
+      });
     });
   });
 }
@@ -497,6 +536,49 @@ function openNewModal() {
   $('#addCount').focus();
 }
 
+function bulkEdit() {
+  if ($('.bulk-edit-selected').length === 0) {
+    Materialize.toast("No consumptions selected", 1000, 'warning-toast');
+    return;
+  } else {
+    var bcIDs = [];
+    var bcCons = [];
+
+    $('.bulk-edit-selected').each(function(entry) {
+      bcIDs.push(Number($(this)[0].id.slice(4)));
+    });
+
+    consumptions.forEach(function(consumption) {
+      if (bcIDs.indexOf(consumption.id) > -1) {
+        bcCons.push(consumption);
+      }
+    });
+
+    // populate editing list
+    $('#beConList').empty();
+    $('#beEntrieCount').html(bcIDs.length);
+
+    bcCons.forEach(function(consumption) {
+      var optFriends = 'None';
+      if (consumption.friends.length > 0) {
+        optFriends = consumption.friends.map(function(friend) {
+          return friend.name;
+        }).join(', ');
+      }
+
+      var entryString = '<td>' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '</td>' +
+        '<td>' + consumption.count + '</td>' +
+        '<td>' + consumption.drug.unit + ' ' + consumption.drug.name + '</td>' +
+        '<td>' + consumption.method.name + '</td>' +
+        '<td>' + optFriends + '</td>';
+
+      $('#beConList').append('<tr>' + entryString + '</tr>');
+    });
+
+    $('#beConsumptionModal').openModal();
+  }
+}
+
 // create Add Experience submit listener
 $('#addConsumption').submit(function(event) {
   event.preventDefault();
@@ -532,6 +614,104 @@ $('#addConsumption').submit(function(event) {
   });
 });
 
+// bulk consumption edit listener
+$('#beConsumption').submit(function(event) {
+  event.preventDefault();
+  var ids = [];
+
+  $('.bulk-edit-selected').each(function(entry) {
+    ids.push(Number($(this)[0].id.slice(4)));
+  });
+
+  // start by doing all the non-friend stuff
+  var payload = {};
+  var dateOffset = 0;
+
+  if ($('#beChangeCount').is(':checked')) {
+    payload.count = Number($('#beCount').val());
+  }
+
+  if ($('#beChangeDate').is(':checked')) {
+    dateOffset = Number($('#beDate').val());
+  }
+
+  if ($('#beChangeLocation').is(':checked')) {
+    payload.location = $('#beLocation').val();
+  }
+
+  if ($('#beChangeDrug').is(':checked')) {
+    payload.drug_id = Number($('#beDrug').val());
+  }
+
+  if ($('#beChangeMethod').is(':checked')) {
+    payload.method_id = Number($('#beMethod').val());
+  }
+
+  var requests = [];
+  consumptions.forEach(function(consumption) {
+    if (ids.indexOf(consumption.id) > -1) {
+      var customPayload = JSON.parse(JSON.stringify(payload));
+      customPayload.id = consumption.id;
+      customPayload.date = consumption.date + dateOffset * 60 * 60;
+
+      requests.push({
+        path: '/consumption',
+        method: 'PUT',
+        payload: JSON.stringify(customPayload),
+        format: 'json'
+      });
+
+      $('#beAddFriendBox').children().each(function(newFriend) {
+        var name = $(this).html();
+        requests.push({
+          path: '/consumption/friend',
+          method: 'POST',
+          payload: JSON.stringify({
+            consumption_id: consumption.id,
+            name: name
+          }),
+          format: 'json'
+        });
+      });
+
+      var goodNameIDs = [];
+      $('#beDelFriendBox').children().each(function(delFriend) {
+        var name = $(this).html();
+        consumption.friends.forEach(function(friend) {
+          if (friend.name === name) {
+            goodNameIDs.push(friend.id);
+          }
+        });
+
+        goodNameIDs.forEach(function(id) {
+          requests.push({
+            path: '/consumption/friend',
+            method: 'DELETE',
+            payload: JSON.stringify({
+              id: id
+            }),
+            format: 'json'
+          });
+        });
+      });
+    }
+  });
+
+  requests.forEach(function(request, index) {
+    makeAuthRequest(request.path, request.method, request.payload, request.formay, function(err, data, code) {
+      if (code !== 200 && code !== 201) {
+        Materialize.toast(err + code, 6000, 'warning-toast');
+      }
+
+      if(index === requests.length - 1){
+        drawConsumptions();
+        setUpMeta();
+        Materialize.toast('Consumptions bulk edited', 6000, 'success-toast');
+        $('#beConsumptionModal').closeModal();
+      }
+    });
+  });
+});
 
 // consumption edit listener
 $('#editConsumption').submit(function(event) {
@@ -638,6 +818,20 @@ $("#notesArea").on('change keyup paste', function() {
   }, 1000);
 });
 
+$("#beAddFriend").on('keydown', function(e) {
+  if (e.which === 13) {
+    event.preventDefault();
+    addBeFriend();
+  }
+});
+
+$("#beDelFriend").on('keydown', function(e) {
+  if (e.which === 13) {
+    event.preventDefault();
+    delBeFriend();
+  }
+});
+
 // listen on meta change
 $("#metaTitle, #metaDate, #metaPanic, #metaRating, #metaTTime").on('change keyup paste', function() {
   if (initialMetaMsgFired) {
@@ -672,4 +866,15 @@ $("#metaTitle, #metaDate, #metaPanic, #metaRating, #metaTTime").on('change keyup
 $("#notesMarkdown").on("click", function() {
   $("#notesMarkdown").hide();
   $("#notesArea").show();
+});
+
+$(document).click(function(event) {
+  if ($(event.target)[0].id.startsWith('con-')) {
+    $(event.target).toggleClass('bulk-edit-selected');
+    if ($('.bulk-edit-selected').length > 0) {
+      $('.bulk-edit-button').show();
+    } else {
+      $('.bulk-edit-button').hide();
+    }
+  }
 });

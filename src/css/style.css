@@ -59,3 +59,7 @@
 .material-icons {
   font-size: 30px !important;
 }
+
+.bulk-edit-selected {
+  background-color: rgb(240, 248, 255) !important;
+}

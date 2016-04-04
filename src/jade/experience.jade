@@ -92,16 +92,98 @@ block content
 					.row
 						.col.s12
 							label Drug
-							select#addDrug.browser-default
+							select#addDrug.browser-default.drug-input
 					.row
 						.col.s12
 							label Method
-							select#addMethod.browser-default
+							select#addMethod.browser-default.method-input
 					.row
 						.col.s12
 							button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%')
 								| Create
 								i.material-icons.right add
+
+		#beConsumptionModal.modal
+			.modal-content
+				h4 Bulk Edit Consumptions
+				form#beConsumption
+					.row
+						p Editing 
+							span#beEntrieCount
+							|  entries:
+						table
+							thead
+								th Date
+								th Count
+								th Drug
+								th Method
+								th Friends
+							tbody#beConList
+						hr
+					.row
+						.col.s2
+							input#beChangeCount(type='checkbox')
+							label(for='beChangeCount') Edit Count
+						.input-field.col.s10
+							input#beCount(type='text', onfocus='$("#beChangeCount").prop("checked", true);')
+							label.active(for='beCount') Count
+					.row
+						.col.s2
+							input#beChangeDate(type='checkbox')
+							label(for='beChangeDate') Edit Date
+						.input-field.col.s10
+							input#beDate(type='text', onfocus='$("#beChangeDate").prop("checked", true);')
+							label.active(for='beDate') +/- hours
+					.row
+						.col.s2
+							input#beChangeLocation(type='checkbox')
+							label(for='beChangeLocation') Edit Location
+						.input-field.col.s10
+							input#beLocation(type='text', list='locations', onfocus='$("#beChangeLocation").prop("checked", true);')
+							label.active#beLocationLabel(for='beLocation') Location
+					.row
+						.col.s2
+							input#beChangeDrug(type='checkbox')
+							label(for='beChangeDrug') Edit Drug
+						.col.s10
+							label Drug
+							select#beDrug.browser-default.drug-input(onclick='$("#beChangeDrug").prop("checked", true);')
+					.row
+						.col.s2
+							input#beChangeMethod(type='checkbox')
+							label(for='beChangeMethod') Edit Method
+						.col.s10
+							label Method
+							select#beMethod.browser-default.method-input(onclick='$("#beChangeMethod").prop("checked", true);')
+					hr
+					.row
+						.col.s6
+							h4 Add Friends
+							div#beAddFriendBox(style='height: 1px;')
+						.col.s6
+								.row
+									.col.s8
+										label(for='beAddFriend') Friend Name
+										input#beAddFriend(type='text', list='friends')
+									.col.s4
+										a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick='addBeFriend();', style='width: 100%;') Add
+					.row
+						.col.s6
+							h4 Remove Friends
+							div#beDelFriendBox(style='height: 1px;')
+						.col.s6
+								.row
+									.col.s8
+										label(for='beDelFriend') Friend Name
+										input#beDelFriend(type='text', list='friends')
+									.col.s4
+										a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick='delBeFriend();', style='width: 100%;') Remove
+					.row
+						.col.s12
+							button.btn.waves-effect.waves-light(type='submit', value='be', style='margin-top: 25px; width: 100%')
+								| Bulk Edit
+								i.material-icons.right add
+																						
 		#editConsumptionModal.modal
 			.modal-content
 				ul.tabs
@@ -131,11 +213,11 @@ block content
 						.row
 							.col.s12
 								label Drug
-								select#editDrug.browser-default
+								select#editDrug.browser-default.drug-input
 						.row
 							.col.s12
 								label Method
-								select#editMethod.browser-default
+								select#editMethod.browser-default.method-input
 						.row
 							.col.s12
 								button.btn.waves-effect.waves-light(type='submit', value='create', style='margin-top: 25px; width: 100%;')
@@ -144,7 +226,7 @@ block content
 				#editFriendsTab
 					.row
 						.col.s6
-							#editFriendBox
+							#editFriendBox(style='height: 1px;')
 						.col.s6
 							h5 Add Friend
 							form#addFriendForm
