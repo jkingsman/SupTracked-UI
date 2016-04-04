@@ -142,14 +142,13 @@ function authRegister(username, password, server) {
  * @param {String} endpoint the endpoint URL the data should go to
  * @param {String} verb HTTP very the data should be sent with
  * @param {String} data JSON data to be sent
- * @param {String} responseType 'json' or 'text'; json will parse and give the JSON as the data to the callback. Text should only be used when no data is returned, and the callback data param will be null (adding 'nonotify' to the end will suppress the API pending notification)
+ * @param {String} responseType 'json' or 'text'; json will parse and give the JSON as the data to the callback. Text should only be used when no data is returned, and the callback data param will be null
  * @param {callback} cb callback that handles the response
  */
 function makeAuthRequest(endpoint, verb, data, responseType, cb) {
   var auth = getCookie('auth');
   var server = getCookie('server');
   var requestID = Math.floor(Math.random() * 16777215).toString(16); // random six digit hex
-  var notify = true;
 
   if (auth.length < 1 && server.length < 1) {
     // doesn't exist; send them to login and clear cookies
@@ -157,14 +156,7 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb) {
     return;
   }
 
-  if(responseType.includes('nonotify')){
-    responseType = responseType.slice(0, -8);
-    notify = false;
-  }
-
-  if(notify){
-    newReqToast("api");
-  }
+  newReqToast("api");
 
   $.ajax({
       method: verb,
@@ -179,9 +171,7 @@ function makeAuthRequest(endpoint, verb, data, responseType, cb) {
     })
     .done(function(msg, textStatus, xhr) {
       // hide the notification and fire the callback
-      if(notify){
-        delReqToast("api");
-      }
+      delReqToast("api");
       cb(null, msg, xhr.status);
     })
     .fail(function(xhr) {

@@ -68,7 +68,7 @@ function deleteExperience() {
   });
 }
 
-function populateRecents() {
+function populateRecents(){
   if (consumptions.length > 0) {
     $('#addMethod').prepend('<option id="emptyAddMethodDelimiter" disabled>──────────────</option>');
     $('#editMethod').prepend('<option id="emptyEditMethodDelimiter" disabled>──────────────</option>');
@@ -117,7 +117,7 @@ function drawConsumptions() {
 
       consumptions = data;
 
-      if (!recentsPopulated) {
+      if(!recentsPopulated){
         // now that things are loaded, populate the recents
         populateRecents();
         recentsPopulated = true;
@@ -559,16 +559,6 @@ $('#editConsumption').submit(function(event) {
   });
 });
 
-var dirtyNotesNotified = false;
-function checkNotes() {
-  makeAuthRequest('/experience/' + experienceID, 'GET', null, 'jsonnonotify', function(err, data, code) {
-    if(($('#notesArea').text() !== data.notes) && !dirtyNotesNotified){
-      dirtyNotesNotified = true;
-      Materialize.toast('Notes changed! Refresh to see the most revent version.', 100000, 'warning-toast');
-    }
-  });
-}
-
 $(document).ready(function() {
   // catch recent before we keep keep going
   if (experienceID === 'recent') {
@@ -673,5 +663,3 @@ $("#notesMarkdown").on("click", function() {
   $("#notesMarkdown").hide();
   $("#notesArea").show();
 });
-
-setInterval(checkNotes, 2000);
