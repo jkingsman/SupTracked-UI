@@ -59,7 +59,7 @@ block content
 							li
 								a(href='#top') Top
 							li
-								a(href='#hours_days') Hourly/Daily Breakdown
+								a(href='#hours_days') Hourly/Daily/Weekly Breakdown
 								
 					.col.m6
 						.row
@@ -132,11 +132,16 @@ block content
 				.row
 					.col.m12
 						a(name='hours_days')
-						h5 Hourly/Daily Breakdown
-						.col.s12(style='style="padding: 0; border: 0; margin: 0;')
-							div#hourly(height='600', style='margin: 0 auto;')
-						.col.s12(style='style="padding: 0; border: 0; margin: 0;')
-							div#daily(height='600', style='margin: 0 auto;')
+						h5 Hourly/Daily/Weekly Breakdown
+						.row
+							.col.s12(style='style="padding: 0; border: 0; margin: 0;')
+								div#hourly(height='600', style='margin: 0 auto;')
+						.row
+							.col.s12(style='style="padding: 0; border: 0; margin: 0;')
+								div#daily(height='600', style='margin: 0 auto;')
+						.row
+							.col.s12(style='style="padding: 0; border: 0; margin: 0;')
+								div#weekly(height='600', style='margin: 0 auto;')
 block scripts
 	script(src='https://code.highcharts.com/highcharts.js')
 	script(src='https://code.highcharts.com/modules/exporting.js')

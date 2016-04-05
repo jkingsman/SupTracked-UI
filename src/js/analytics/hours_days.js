@@ -3,7 +3,7 @@
 // these are predefined in the master analytics.js file
 var analyticsCount, analyticsFinished, allDrugs, allConsumptions, drug;
 
-analyticsCount += 2;
+analyticsCount += 3;
 
 function hourly() {
   "use strict";
@@ -150,8 +150,122 @@ function daily() {
   analyticsFinished += 1;
 }
 
+function computeRegressionPts(data){
+  "use strict";
+  // from http://www.mathportal.org/calculators/statistics-calculator/correlation-and-regression-calculator.php
+
+  var sumX = 0;
+  var sumY = 0;
+  var sumXY = 0;
+  var sumXX = 0;
+  var n = data.length;
+
+  data.forEach(function(y, x){
+    sumX += x;
+    sumY += y;
+    sumXY += y*x;
+    sumXX += x*x;
+  });
+
+  var a = ((sumY * sumXX) - (sumX * sumXY)) / ((n * sumXX) - (sumX * sumX));
+  var b = ((n * sumXY) - (sumX * sumY)) / ((n * sumXX) - (sumX * sumX));
+
+  return [[0, a], [n - 1, ((n - 1) * b) + a]];
+}
+
+function weekly() {
+  "use strict";
+  var weeks = [];
+  var weekRanges = [];
+
+  var weekStart = new Date();
+  if (weekStart.getDay() !== 0) {
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+  }
+
+  for (var i = 0; i <= 25; i += 1) {
+    weeks[i] = 0;
+    weekRanges.push('Week of ' + (weekStart.getMonth() + 1) + '/' + weekStart.getDate());
+    weekStart.setDate(weekStart.getDate() - 7);
+  }
+
+  var today = new Date();
+  if (today.getDay() !== 0) {
+    today.setDate(today.getDate() - today.getDay());
+  }
+  var dateOffset = today.getTimezoneOffset() * 60000;
+  allConsumptions.forEach(function(consumption) {
+    var conDate = new Date((consumption.date * 1000) + dateOffset);
+    var diff = (today - conDate) / (1000 * 60 * 60 * 24);
+    var weekDiff = Math.floor(diff / 7) + 1;
+    if (weekDiff <= 25) {
+      weeks[weekDiff] += 1;
+    }
+  });
+
+  weeks.reverse();
+  weekRanges.reverse();
+
+  var regPts = computeRegressionPts(weeks);
+
+  $('#weekly').highcharts({
+    chart: {
+      type: 'column'
+    },
+    title: {
+      text: 'Consumptions by Week'
+    },
+    xAxis: {
+      categories: weekRanges,
+      crosshair: true
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Consumptions'
+      }
+    },
+    tooltip: {
+      headerFormat: '<span style="font-size:10px">{point.key}: </span>',
+      pointFormat: '<b>{point.y} consumptions</b>',
+      shared: true,
+      useHTML: true
+    },
+    plotOptions: {
+      column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+      }
+    },
+    series: [{
+      name: drug.name,
+      data: weeks
+    }, {
+      type: 'line',
+      name: 'Trend',
+      data: regPts,
+      marker: {
+        enabled: false
+      },
+      states: {
+        hover: {
+          lineWidth: 0
+        }
+      },
+      enableMouseTracking: false
+    }]
+  });
+
+  setTimeout(function() {
+    $('#weekly').highcharts().reflow();
+  }, 2000);
+
+  analyticsFinished += 1;
+}
+
 function hours_days() {
   "use strict";
   hourly();
   daily();
+  weekly();
 }
