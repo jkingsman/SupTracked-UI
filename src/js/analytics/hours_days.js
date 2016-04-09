@@ -199,7 +199,7 @@ function weekly() {
     var diff = (today - conDate) / (1000 * 60 * 60 * 24);
     var weekDiff = Math.floor(diff / 7) + 1;
     if (weekDiff <= 25) {
-      weeks[weekDiff] += 1;
+      weeks[weekDiff] += consumption.count;
     }
   });
 
@@ -213,7 +213,7 @@ function weekly() {
       type: 'column'
     },
     title: {
-      text: 'Consumptions by Week'
+      text: drug.unit + ' per Week'
     },
     xAxis: {
       categories: weekRanges,
@@ -222,12 +222,12 @@ function weekly() {
     yAxis: {
       min: 0,
       title: {
-        text: 'Consumptions'
+        text: drug.unit + ' of ' + drug.name
       }
     },
     tooltip: {
       headerFormat: '<span style="font-size:10px">{point.key}: </span>',
-      pointFormat: '<b>{point.y} consumptions</b>',
+      pointFormat: '<b>{point.y} ' + drug.unit + '</b>',
       shared: true,
       useHTML: true
     },
