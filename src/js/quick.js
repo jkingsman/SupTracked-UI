@@ -21,6 +21,17 @@ function updateExperienceObject(cb) {
 }
 
 function drawConsumptions() {
+  var interactions;
+  if (experience.interactions) {
+    interactions = JSON.parse(experience.interactions);
+  } else {
+    interactions = [];
+  }
+
+  if(interactions.length > 0){
+    $('#interactionWarning').show();
+  }
+
   $('#consumptionsCollection').empty();
   if (experience.consumptions.length === 0) {
     $('#consumptionsCollection').append('<li class="collection-item"><div>No consumptions</div></li>');

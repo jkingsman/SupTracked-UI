@@ -64,6 +64,14 @@ block content
 							label.tooltipped(data-position='right', data-delay='50', data-tooltip='Add App notes as a function of time elapsed since the selected consumption.', style='border-bottom: 1px dashed #ADADAD;') T-Time
 							select#metaTTime.browser-default
 						.row
+							h5 Interactions
+							p Possible interactions: 
+								span#interactionList
+							.col.s12
+								#heightLimiter(style='height: 150px; overflow: auto;')
+									div#drugCollection
+							
+						.row
 							hr
 							a.btn.waves-effect.waves-light.page-action(onClick='deleteExperience();', style='width: 100%;')
 								i.material-icons.left report_problem
@@ -74,6 +82,7 @@ block content
 		#addConsumptionModal.modal
 			.modal-content
 				h4 Add Consumption
+				h5.big-warning#interactionWarning(style="display: none;") Warning! Interactions possible! Proceed with caution.
 				form#addConsumption
 					.row
 						.input-field.col.s2
