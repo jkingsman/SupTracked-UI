@@ -166,5 +166,5 @@ makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
 });
 
 $('#drug').change(function(){
-  drugSelected();
+  location.search = $('#drug').val();
 });
