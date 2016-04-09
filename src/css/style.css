@@ -69,3 +69,11 @@
   background-color: rgb(86, 86, 86);
   padding: 2px;
 }
+
+ul.inlineMenu > li {
+    display: inline;
+}
+
+ul.inlineMenu > li:not(:last-child):after {
+    content: " // ";
+}
