@@ -5,42 +5,23 @@ block title
 
 block content
 	main
-		.section#selection
-			.container
-				.row
-					.col.s12.m4.offset-m4
-						form#drugSelect
-							.card
-								.card-content
-									span.card-title.blue-text.text-darken-2 Analytics
-									.row
-										.input-field.col.s12
-											labels Drug
-											select#drug.browser-default
-												option('disabled')#loadingOpt Loading...
-								.card-action
-									.row
-										.col.s6
-											div#autoLoad(style='display: none;')
-												i Autoload in 
-													span#autoloadCountdown 5
-													| ... 
-													br
-													| Click anywhere to cancel
-											div#autoLoadCancel(style='display: none;')
-												i Autoload cancelled.
-		.section#loading(style='display: none;')
+		.section#loading
 			.container
 				.row
 					.col.m12
 						h5.center-align Analyzing 
 							span.drugName
 							|  usage (
-							span#analyticsComplete 0
-							| %)
+							span#analyticsComplete
+							| )
 						br 
 						.progress
 							.determinate#analyticsProgress(style='width: 0%;')
+		.section#none(style='display: none;')
+			.container
+				.row
+					.col.m12
+						h5.center-align No consumptions! 
 		.section#analytics(style='display: none;')
 			.container
 				.row
@@ -49,6 +30,9 @@ block content
 							h4
 								span.drugName(style='text-transform: capitalize;')
 								|  Data Sheet
+							.input-field.col.s12
+								labels Drug
+									select#drug.browser-default
 				.row
 					.col.m12
 						h5 Index

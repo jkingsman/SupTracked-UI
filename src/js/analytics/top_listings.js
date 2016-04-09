@@ -31,7 +31,7 @@ function top_listings() {
     return '<li>' + location + ' (' + locationCount[location] + ' consumptions/' + Math.round((locationCount[location] / allConsumptions.length) * 100, -1) + '%)</li>';
   }).join('') + '</ol>';
 
-  $('#topLocations').append(locationHTML);
+  $('#topLocations').empty().append(locationHTML);
 
   analyticsFinished += 1;
 
@@ -70,9 +70,9 @@ function top_listings() {
   }).join('') + '</ol>';
 
   if(friendNames.length === 0){
-    $('#topFriends').append("<i>None</i>");
+    $('#topFriends').empty().append("<i>None</i>");
   } else {
-    $('#topFriends').append(friendHTML);
+    $('#topFriends').empty().append(friendHTML);
   }
 
   analyticsFinished += 1;

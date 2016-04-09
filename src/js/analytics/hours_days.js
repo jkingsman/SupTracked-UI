@@ -19,7 +19,7 @@ function hourly() {
     hours[hoursVal] += 1;
   });
 
-  $('#hourly').highcharts({
+  $('#hourly').empty().highcharts({
     chart: {
       type: 'column'
     },
@@ -100,7 +100,7 @@ function daily() {
     days[dayNumber] += 1;
   });
 
-  $('#daily').highcharts({
+  $('#daily').empty().highcharts({
     chart: {
       type: 'column'
     },
@@ -208,7 +208,7 @@ function weekly() {
 
   var regPts = computeRegressionPts(weeks);
 
-  $('#weekly').highcharts({
+  $('#weekly').empty().highcharts({
     chart: {
       type: 'column'
     },

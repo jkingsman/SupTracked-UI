@@ -16,9 +16,6 @@ var autoStart, countdown = 5,
 var hasSelected = false;
 
 function drugSelected() {
-  $('#selection').hide();
-  $('#loading').show();
-
   if ($('#drug').val().indexOf('dup') > -1) {
     $('#drug').val($('#drug').val().split('-')[1]); // break out dups from menu
   }
@@ -87,63 +84,30 @@ function drugSelected() {
       // off we go!
       startAnalytics();
     } else {
+      $('#selection').hide();
+      $('#none').show();
       analyticsFinished = analyticsCount;
     }
   });
 }
 
-function autoLoad(cancel) {
-  if(cancel){
-      clearInterval(autoStart);
-      $('#autoLoadCancel').show();
-      $('#autoLoad').hide();
-      return;
-  }
-
-  $('#autoLoad').show();
-  $('#loading').hide();
-
-  autoStart = setInterval(function() {
-    countdown -= 1;
-    $('#autoloadCountdown').html(countdown);
-    if (countdown === 0) {
-      drugSelected();
-    }
-  }, 1000);
-
-  $(document).click(function() {
-    clearInterval(autoStart);
-    $('#autoLoadCancel').show();
-    $('#autoLoad').hide();
-  });
-}
-
 // set up the completion listener
-function startPercentageUpdate() {
-  updateInterval = setInterval(function updateCompletion() {
-    // update the percentages
-    var current = Number($('#analyticsComplete').text());
-    var perDone = Math.round(analyticsFinished / analyticsCount) * 100;
-    var jitteryPerDone = current + Math.floor(Math.random() * (10)) + 1; // add jitter for authenticity
+updateInterval = setInterval(function updateCompletion() {
+  var percentage = Math.round(analyticsFinished / analyticsCount) * 100;
+  $('#analyticsComplete').text(percentage + '%');
+  $('#analyticsProgress').css('width', percentage + '%');
 
-    var percentage = perDone > jitteryPerDone ? perDone : jitteryPerDone;
-
-    // dont' whine till we have something to bother the dom with
-    $('#analyticsComplete').text(percentage);
-    $('#analyticsProgress').css('width', percentage + '%');
-
-    if (analyticsFinished === analyticsCount || window.location.hash.substring(1).indexOf('skip') > -1) {
-      // we're done here;  display it after an aesthetic delay for the progress bar to hit 100%
+  if (analyticsFinished === analyticsCount || window.location.hash.substring(1).indexOf('skip') > -1) {
+    // we're done here; display it after an aesthetic delay for the progress bar to hit 100%
+    setTimeout(function() {
       clearInterval(updateInterval);
       $('#loading').hide();
       $('#analytics').show();
-    }
-  }, 100);
-}
+    }, 500);
+  }
+}, 100);
 
 function startAnalytics() {
-  autoLoad(true);
-  startPercentageUpdate();
   vitals();
   experience_list();
   top_listings();
@@ -154,7 +118,7 @@ function startAnalytics() {
 // populate the drug dropdown
 makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
   if (data.length < 1) {
-    $('#drug').append('<option value="" disabled selected>None</option>');
+    $('#none').show();
     return;
   }
 
@@ -187,36 +151,20 @@ makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
     }
   });
 
-  $('#loadingOpt').remove();
-
   var allIds = allDrugs.map(function(drug) {
     return drug.id;
   });
 
   // we have a search
-  if (location.search.length > 1 && allIds.indexOf(location.search.substr(1)) > -1) {
+  if (location.search.length > 1 && allIds.indexOf(Number(location.search.substr(1))) > -1) {
     $('#drug').val(location.search.substr(1));
     drugSelected();
   } else {
-    makeAuthRequest('/consumption/search', 'POST', JSON.stringify({
-      limit: 1
-    }), 'json', function(err, data, code) {
-      if (data) {
-        $('#drug').val(data[0].consumptions[0].drug.id);
-        $('#autoLoad').show();
-        autoLoad(false);
-      }
-    });
+    $('#drug').val(drugsByUsage[0]);
+    drugSelected();
   }
 });
 
-// catch form submission
-$('#drug').change(drugSelected);
-// horribly ghetto way to account for clicking and keeping the same one
-$('#drug').click(function() {
-  if (hasSelected) {
-    drugSelected();
-  } else {
-    hasSelected = true;
-  }
+$('#drug').change(function(){
+  drugSelected();
 });
