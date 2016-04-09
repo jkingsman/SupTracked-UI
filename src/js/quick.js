@@ -3,7 +3,7 @@
 
 "use strict";
 
-var experience;
+var experience, drugTotals = [];
 
 function updateExperienceObject(cb) {
   makeAuthRequest('/experience/search', 'POST', JSON.stringify({
@@ -16,6 +16,30 @@ function updateExperienceObject(cb) {
     }
 
     experience = data[0];
+    experience.consumptions.sort(function(a, b) {
+      return a.date - b.date;
+    });
+
+    // compile the consumptions, grouped by drug
+    var groupedConsumptionList = {};
+
+    experience.consumptions.forEach(function(consumption) {
+      if (groupedConsumptionList.hasOwnProperty(consumption.drug.name)) {
+        groupedConsumptionList[consumption.drug.name].count += consumption.count;
+      } else {
+        groupedConsumptionList[consumption.drug.name] = {};
+        groupedConsumptionList[consumption.drug.name].count = consumption.count;
+        groupedConsumptionList[consumption.drug.name].unit = consumption.drug.unit;
+      }
+    });
+
+    // group the consumptions into strings by drug
+    if (Object.keys(groupedConsumptionList).length > 0) {
+      for (var drug in groupedConsumptionList) {
+        drugTotals.push([groupedConsumptionList[drug].count, groupedConsumptionList[drug].unit, drug]);
+      }
+    }
+
     cb();
   });
 }
@@ -51,6 +75,69 @@ function drawConsumptions() {
       $('#addLocation').val(consumption.location);
     });
   }
+}
+
+var youTookTimer;
+function drawBP() {
+  if(drugTotals.length === 0){
+    $('#notEnough').show();
+    $('#loadingSpinner').removeClass('active');
+  }
+
+  // box 1
+  var lastCon = experience.consumptions[0];
+  if (lastCon.drug.unit.length < 5) {
+    $('#youTook').html(lastCon.count + ' ' + lastCon.drug.unit);
+    $('#youTookOf').html('of ' + lastCon.drug.name);
+  } else {
+    $('#youTook').html(lastCon.count);
+    $('#youTookOf').html(lastCon.drug.unit + ' of ' + lastCon.drug.name);
+  }
+
+  youTookTimer = setInterval(function() {
+    var secsDiff = ((new Date().getTime() / 1000) - experience.consumptions[0].date - (new Date().getTimezoneOffset() * 60));
+    var hours = Math.floor(secsDiff / 3600);
+    var minutes = Math.floor((secsDiff - (hours * 3600)) / 60);
+    var seconds = Math.floor((secsDiff - (hours * 3600) - (minutes * 60)));
+
+    $('#youTookTime').html(('00' + hours).substr(-2) + ':' + ('00' + minutes).substr(-2) + ':' + ('00' + seconds).substr(-2));
+  }, 1000);
+
+  // box 2
+  if(experience.consumptions.length > 1){
+    var nextLastCon = experience.consumptions[1];
+    if (nextLastCon.drug.unit.length < 5) {
+      $('#youTookB4').html(nextLastCon.count + ' ' + nextLastCon.drug.unit);
+      $('#youTookOfB4').html('of ' + nextLastCon.drug.name);
+    } else {
+      $('#youTookB4').html(nextLastCon.count);
+      $('#youTookOfB4').html(nextLastCon.drug.unit + ' of ' + nextLastCon.drug.name);
+    }
+
+      var secsDiff = experience.consumptions[0].date - experience.consumptions[1].date;
+      var hours = Math.floor(secsDiff / 3600);
+      var minutes = Math.floor((secsDiff - (hours * 3600)) / 60);
+      var seconds = Math.floor((secsDiff - (hours * 3600) - (minutes * 60)));
+
+      $('#youTookTimeB4').html(('00' + hours).substr(-2) + ':' + ('00' + minutes).substr(-2) + ':' + ('00' + seconds).substr(-2));
+  } else{
+    $('#nextLastCon').html('<h4>..and that was it!</h4>');
+  }
+
+  // box 3
+  var trimmedCons = drugTotals.sort(function(a, b) {
+    return a[0] - b[0];
+  }).slice(0, 2).map(function(drugTotals){
+    return '<div><h3>' + drugTotals[0] + ' ' + drugTotals[1] + '</h3>' + drugTotals[2] + '</div>';
+  });
+
+  $('#totals').empty().append('<hr>' + trimmedCons.join('<hr>') + '<hr>');
+  if (drugTotals.length - trimmedCons.length > 0) {
+    $('#totals').append('<div> and ' + (drugTotals.length - trimmedCons.length) + ' more<hr></div>');
+  }
+
+  $('#loadingSpinner').removeClass('active');
+  $('.bigLoading').removeClass('hide');
 }
 
 function deleteConsumption(id) {
@@ -304,11 +391,13 @@ $('#addQuicknote').submit(function(event) {
 });
 
 $('#consumptionsTabBtn, #addConsumptionTabBtn, #panicTabBtn, #bigTabBtn').click(function(e) {
-  if(e.target.id === 'bigTabBtn'){
+  if (e.target.id === 'bigTabBtn') {
     $('.removable').addClass('hide');
   } else {
     $('.removable').removeClass('hide');
   }
+
+  window.location.hash = e.target.hash;
 });
 
 // upload media
@@ -358,6 +447,14 @@ $(document).ready(function() {
 
   // autofocus notes on load; does nothing on iphone
   $('#note').focus();
+
+  $('ul.tabs').tabs('select_tab', window.location.hash.substring(1));
+  if (window.location.hash === 'bigTabBtn') {
+    $('.removable').addClass('hide');
+  }
+
+
+
 });
 
 if (location.search.slice(1) === 'hiddenNav') {
@@ -439,4 +536,5 @@ updateExperienceObject(function() {
   $('#notes').html(cleanMarkdown(micromarkdown.parse(experience.notes)));
   $('.fullLink').attr('href', '/experience.html?' + experience.id);
   drawConsumptions();
+  drawBP();
 });

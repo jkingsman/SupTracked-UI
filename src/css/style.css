@@ -77,3 +77,7 @@ ul.inlineMenu > li {
 ul.inlineMenu > li:not(:last-child):after {
     content: " // ";
 }
+
+.hide-overflow {
+    overflow: hidden;
+}

@@ -4,7 +4,7 @@ block title
 	title Quick | SupTracked
 
 block content
-	main
+	main.hide-overflow
 		.container
 			.row
 				.col.l8.offset-l2.m12.s12
@@ -65,10 +65,39 @@ block content
 						#panic.col.s12
 							button.btn.waves-effect.orange.waves-light#panicButton(value='create', style='width: 100%; margin-top: 10px;', onClick='confirmPanic();')
 								| Send Panic Message
-								
+
 						#big.col.s12
-							
-							
+							.row#notEnough(style="display: none;")
+								.col.s12
+									h3 You don't have enough consumptions.
+							.row
+								.preloader-wrapper.big.active#loadingSpinner(style='position: absolute; top: 50%; left: 50%;')
+									.spinner-layer.spinner-blue-only
+										.circle-clipper.left
+											.circle
+										.gap-patch
+											.circle
+										.circle-clipper.right
+											.circle
+								.col.s6.hide.bigLoading(style='text-align: center;')
+									p You took
+									h4#youTook
+									span#youTookOf
+									br
+									strong#youTookTime(style="font-weight: 500;") 
+									|  hours ago
+								.col.s6.hide.bigLoading#nextLastCon(style='text-align: center;')
+									p You took
+									h4#youTookB4
+									span#youTookOfB4
+									br
+									strong#youTookTimeB4(style="font-weight: 500;") 
+									|  hours before that
+							.row
+								.col.s12.hide.bigLoading
+									span(style='font-size: .8rem;') In this experience, you've done...
+									div#totals(style='text-align: center;')
+
 					.row.removable
 						ul.collapsible(data-collapsible='accordion')
 							li

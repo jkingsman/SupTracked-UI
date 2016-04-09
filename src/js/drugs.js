@@ -62,6 +62,7 @@ $("#drugList").on('change', function() {
     $('#family').val('');
     $('#rarity').val(1);
     $('#notes').val('');
+    $('#slang').val('');
 
     // reveal the save button, hide delete
     $('#saveNew').show();
@@ -83,9 +84,10 @@ $("#drugList").on('change', function() {
       $('#family').val(drug.family);
       $('#rarity').val(drug.rarity);
       $('#notes').val(drug.notes);
+      $('#slang').val(drug.slang);
 
       // trigger formatting and autoresizing
-      $('#nameLabel, #unitLabel, #classificationLabel, #familyLabel, #notesLabel').addClass('active');
+      $('#nameLabel, #slangLabel, #unitLabel, #classificationLabel, #familyLabel, #notesLabel').addClass('active');
       $('#notes').trigger('autoresize');
 
       $('#notesMarkdown').html(cleanMarkdown(micromarkdown.parse($('#notes').val())));
@@ -96,7 +98,7 @@ $("#drugList").on('change', function() {
 });
 
 // listen for changes
-$("#name, #unit, #classification, #family, #rarity, #notes").on('change keyup paste', function() {
+$("#name, #unit, #slang, #classification, #family, #rarity, #notes").on('change keyup paste', function() {
   if (parseInt($('#drugList').val()) !== 0) {
     // only fire if we're not creating a new one
     clearTimeout(saveNotificationTimeout);
@@ -104,6 +106,7 @@ $("#name, #unit, #classification, #family, #rarity, #notes").on('change keyup pa
       var updateObj = {
         id: parseInt($('#drugList').val()),
         name: $('#name').val(),
+        slang: $('#slang').val(),
         unit: $('#unit').val(),
         notes: $('#notes').val(),
         classification: $('#classification').val(),
@@ -128,6 +131,7 @@ function saveNew() {
   var newDrug = {
     name: $('#name').val(),
     unit: $('#unit').val(),
+    slang: $('#slang').val(),
     notes: $('#notes').val(),
     classification: $('#classification').val(),
     family: $('#family').val(),
