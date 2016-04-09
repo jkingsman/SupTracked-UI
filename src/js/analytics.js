@@ -137,7 +137,7 @@ makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
   $('#drug').append('<optgroup label="Common" id="common_dropdwngroup"></optgroup>');
 
   drugsByUsage.forEach(function(drug, index, orig) {
-    $('#common_dropdwngroup').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+    $('#common_dropdwngroup').append('<option value="' + drug.id + '">' + drug.name + '</option>');
     orig[index] = drug.id;
   });
 
@@ -145,9 +145,9 @@ makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
 
   allDrugs.forEach(function(drug) {
     if (drugsByUsage.indexOf(drug.id) === -1) {
-      $('#all_dropdwngroup').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+      $('#all_dropdwngroup').append('<option value="' + drug.id + '">' + drug.name + '</option>');
     } else {
-      $('#all_dropdwngroup').append('<option value="dup-' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+      $('#all_dropdwngroup').append('<option value="dup-' + drug.id + '">' + drug.name + '</option>');
     }
   });
 
@@ -166,5 +166,9 @@ makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
 });
 
 $('#drug').change(function(){
+  if($('#drug').val().indexOf('dup') > -1){
+    $('#drug').val($('#drug').val().split('dup-')[1]);
+  }
+
   location.search = $('#drug').val();
 });

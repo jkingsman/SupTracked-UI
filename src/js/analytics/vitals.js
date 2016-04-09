@@ -187,5 +187,7 @@ function vitals() {
   new Date((bestRecord.start.date + 3600) * 1000 ).toISOString().slice(11, 16) +
   ' ' + new Date(bestRecord.start.date * 1000 ).toISOString().slice(0, 10) +
   ' during <a href="/experience.html?' + bestRecord.start.exp_id + '">' + bestRecord.start.title + '</a>');
+
+
   analyticsFinished += 1;
 }
