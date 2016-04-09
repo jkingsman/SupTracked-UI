@@ -9,14 +9,14 @@ block content
 			.row
 				.col.l8.offset-l2.m12.s12
 					h3#title
-					.row
+					.row.removable
 						.input-field
 							form#addQuicknote
 								input#note(type='text', required)
 								label(for='note') Add a note...
 								button.btn.waves-effect.waves-light(type='submit', value='create', style='width: 100%;')
 									| Add Note
-					.row
+					.row.removable
 						form#addMedia
 							.file-field.input-field
 								.btn
@@ -27,12 +27,14 @@ block content
 					.row
 						.col.s12
 							ul.tabs
-								li.tab.col.s4
-									a.active(href='#consumptions') List
-								li.tab.col.s4
-									a(href='#addConsumption') Add
-								li.tab.col.s4
-									a(href='#panic') Panic
+								li.tab.col.s3
+									a.active#consumptionsTabBtn(href='#consumptions') List
+								li.tab.col.s3
+									a#addConsumptionTabBtn(href='#addConsumption') Add
+								li.tab.col.s3
+									a#panicTabBtn(href='#panic') Panic
+								li.tab.col.s3
+									a#bigTabBtn(href='#big') Big
 
 						#consumptions.col.s12
 							ul.collection#consumptionsCollection
@@ -63,7 +65,11 @@ block content
 						#panic.col.s12
 							button.btn.waves-effect.orange.waves-light#panicButton(value='create', style='width: 100%; margin-top: 10px;', onClick='confirmPanic();')
 								| Send Panic Message
-					.row
+								
+						#big.col.s12
+							
+							
+					.row.removable
 						ul.collapsible(data-collapsible='accordion')
 							li
 								.collapsible-header
@@ -71,7 +77,7 @@ block content
 									| Notes
 								.collapsible-body
 									p#notes No notes.
-					.row
+					.row.removable
 						h6.center-align
 							a.fullLink(href='/experiences.html', title="Open in Current Tab") Full Expererience 
 							//

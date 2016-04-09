@@ -28,7 +28,7 @@ function drawConsumptions() {
     interactions = [];
   }
 
-  if(interactions.length > 0){
+  if (interactions.length > 0) {
     $('#interactionWarning').show();
   }
 
@@ -303,6 +303,14 @@ $('#addQuicknote').submit(function(event) {
 
 });
 
+$('#consumptionsTabBtn, #addConsumptionTabBtn, #panicTabBtn, #bigTabBtn').click(function(e) {
+  if(e.target.id === 'bigTabBtn'){
+    $('.removable').addClass('hide');
+  } else {
+    $('.removable').removeClass('hide');
+  }
+});
+
 // upload media
 $('#media').change(function() {
   event.preventDefault();
@@ -422,7 +430,7 @@ updateExperienceObject(function() {
     });
   });
 
-  if(experience.notes === null){
+  if (experience.notes === null) {
     // so micromarkdown doesn't choke
     experience.notes = '[none]';
   }
