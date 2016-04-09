@@ -1,4 +1,5 @@
 /* globals makeAuthRequest,Materialize,micromarkdown,cleanMarkdown */
+/* jshint -W003 */ // ugh I'm done with rearranging
 
 "use strict";
 
@@ -10,55 +11,17 @@ var analyticsFinished = 0;
 // just get jshint off our back. these are defined in their respective files
 var vitals, experience_list, top_listings, hours_days, purchasing;
 
-function startAnalytics() {
-  vitals();
-  experience_list();
-  top_listings();
-  hours_days();
-  purchasing();
-}
+var autoStart, countdown = 5,
+  updateInterval;
+var hasSelected = false;
 
-// don't show select if we're already navigating
-if (location.search.length > 1) {
+function drugSelected() {
   $('#selection').hide();
   $('#loading').show();
-}
 
-// populate the drug dropdown
-makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
-  allDrugs = data;
-
-  data.sort(function(a, b) {
-    a = a.name.toLowerCase();
-    b = b.name.toLowerCase();
-
-    return (a < b) ? -1 : (a > b) ? 1 : 0;
-  });
-
-  if (data.length < 1) {
-    $('#drug').append('<option value="" disabled selected>None</option>');
-    return;
+  if ($('#drug').val().indexOf('dup') > -1) {
+    $('#drug').val($('#drug').val().split('-')[1]); // break out dups from menu
   }
-
-  data.forEach(function(drug) {
-    $('#drug').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
-  });
-
-  $('#loadingOpt').remove();
-
-  // we have a search
-  if (location.search.length > 1) {
-    $('#drug').val(location.search.substr(1));
-    $('#drugSelect').submit();
-  }
-});
-
-// catch form submission
-$('#drugSelect').submit(function(event) {
-  event.preventDefault();
-
-  $('#selection').hide();
-  $('#loading').show();
 
   allDrugs.forEach(function(singleDrug) {
     if (singleDrug.id === parseInt($('#drug').val())) {
@@ -127,27 +90,133 @@ $('#drugSelect').submit(function(event) {
       analyticsFinished = analyticsCount;
     }
   });
-});
+}
+
+function autoLoad(cancel) {
+  if(cancel){
+      clearInterval(autoStart);
+      $('#autoLoadCancel').show();
+      $('#autoLoad').hide();
+      return;
+  }
+
+  $('#autoLoad').show();
+  $('#loading').hide();
+
+  autoStart = setInterval(function() {
+    countdown -= 1;
+    $('#autoloadCountdown').html(countdown);
+    if (countdown === 0) {
+      drugSelected();
+    }
+  }, 1000);
+
+  $(document).click(function() {
+    clearInterval(autoStart);
+    $('#autoLoadCancel').show();
+    $('#autoLoad').hide();
+  });
+}
 
 // set up the completion listener
-var updateInterval = setInterval(function updateCompletion() {
-  // update the percentages
-  $('#analyticsComplete').text(Math.round(analyticsFinished / analyticsCount * 100));
-  $('#analyticsProgress').css('width', Math.round(analyticsFinished / analyticsCount * 100) + '%');
+function startPercentageUpdate() {
+  updateInterval = setInterval(function updateCompletion() {
+    // update the percentages
+    var current = Number($('#analyticsComplete').text());
+    var perDone = Math.round(analyticsFinished / analyticsCount) * 100;
+    var jitteryPerDone = current + Math.floor(Math.random() * (10)) + 1; // add jitter for authenticity
 
-  if (window.location.hash.substring(1).indexOf('skip') > -1) {
-    // fast debug load
-    clearInterval(updateInterval);
-    $('#loading').hide();
-    $('#analytics').show();
-  }
+    var percentage = perDone > jitteryPerDone ? perDone : jitteryPerDone;
 
-  if (analyticsFinished === analyticsCount) {
-    // we're done here;  display it after an aesthetic delay for the progress bar to hit 100%
-    clearInterval(updateInterval);
-    setTimeout(function() {
+    // dont' whine till we have something to bother the dom with
+    $('#analyticsComplete').text(percentage);
+    $('#analyticsProgress').css('width', percentage + '%');
+
+    if (analyticsFinished === analyticsCount || window.location.hash.substring(1).indexOf('skip') > -1) {
+      // we're done here;  display it after an aesthetic delay for the progress bar to hit 100%
+      clearInterval(updateInterval);
       $('#loading').hide();
       $('#analytics').show();
-    }, 500);
+    }
+  }, 100);
+}
+
+function startAnalytics() {
+  autoLoad(true);
+  startPercentageUpdate();
+  vitals();
+  experience_list();
+  top_listings();
+  hours_days();
+  purchasing();
+}
+
+// populate the drug dropdown
+makeAuthRequest('/drug/all', 'GET', null, 'json', function(err, data, code) {
+  if (data.length < 1) {
+    $('#drug').append('<option value="" disabled selected>None</option>');
+    return;
   }
-}, 100);
+
+  allDrugs = data.sort(function(a, b) {
+    a = a.name.toLowerCase();
+    b = b.name.toLowerCase();
+
+    return (a < b) ? -1 : (a > b) ? 1 : 0;
+  });
+
+  var drugsByUsage = allDrugs.slice();
+  drugsByUsage = drugsByUsage.sort(function(a, b) {
+    return b.use_count - a.use_count;
+  }).slice(0, 5);
+
+  $('#drug').append('<optgroup label="Common" id="common_dropdwngroup"></optgroup>');
+
+  drugsByUsage.forEach(function(drug, index, orig) {
+    $('#common_dropdwngroup').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+    orig[index] = drug.id;
+  });
+
+  $('#drug').append('<optgroup label="All" id="all_dropdwngroup"></optgroup>');
+
+  allDrugs.forEach(function(drug) {
+    if (drugsByUsage.indexOf(drug.id) === -1) {
+      $('#all_dropdwngroup').append('<option value="' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+    } else {
+      $('#all_dropdwngroup').append('<option value="dup-' + drug.id + '">' + drug.name + ' (' + drug.unit + ')</option>');
+    }
+  });
+
+  $('#loadingOpt').remove();
+
+  var allIds = allDrugs.map(function(drug) {
+    return drug.id;
+  });
+
+  // we have a search
+  if (location.search.length > 1 && allIds.indexOf(location.search.substr(1)) > -1) {
+    $('#drug').val(location.search.substr(1));
+    drugSelected();
+  } else {
+    makeAuthRequest('/consumption/search', 'POST', JSON.stringify({
+      limit: 1
+    }), 'json', function(err, data, code) {
+      if (data) {
+        $('#drug').val(data[0].consumptions[0].drug.id);
+        $('#autoLoad').show();
+        autoLoad(false);
+      }
+    });
+  }
+});
+
+// catch form submission
+$('#drug').change(drugSelected);
+// horribly ghetto way to account for clicking and keeping the same one
+$('#drug').click(function() {
+  if (hasSelected) {
+    drugSelected();
+  } else {
+    hasSelected = true;
+  }
+});

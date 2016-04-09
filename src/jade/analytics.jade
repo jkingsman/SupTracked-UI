@@ -20,10 +20,15 @@ block content
 												option('disabled')#loadingOpt Loading...
 								.card-action
 									.row
-										.col.s6.offset-s6.right-align
-											button.btn.waves-effect.waves-light.page-action(type='submit', value='create')
-												| Analyze
-												i.material-icons.right trending_up
+										.col.s6
+											div#autoLoad(style='display: none;')
+												i Autoload in 
+													span#autoloadCountdown 5
+													| ... 
+													br
+													| Click anywhere to cancel
+											div#autoLoadCancel(style='display: none;')
+												i Autoload cancelled.
 		.section#loading(style='display: none;')
 			.container
 				.row
