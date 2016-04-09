@@ -49,9 +49,13 @@ block content
 						h5 Index
 						ul
 							li
+								a#drugEntry(href='', target='_blank') [Drug Entry]
+							li
 								a(href='#basic') Basic Data
 							li
 								a(href='#notes') Notes
+							li
+								a(href='#purchasing') Purchasing
 							li
 								a(href='#vitals') Vital Signs
 							li
@@ -60,24 +64,50 @@ block content
 								a(href='#top') Top
 							li
 								a(href='#hours_days') Hourly/Daily/Weekly Breakdown
-								
+
+				hr
+				.row
 					.col.m6
-						.row
-							.col.m12
-								a(name='basic')
-								h5 Basic Data
-								.col.m12
-									strong Unit: 
-									span#unit
-									br
-									strong Classification: 
-									span#classification
-									br
-									strong Family: 
-									span#family
-									br
-									strong Rarity: 
-									span#rarity
+						a(name='basic')
+						h5 Basic Data
+						.col.m12
+							strong Unit: 
+							span#unit
+							br
+							strong Classification: 
+							span#classification
+							br
+							strong Family: 
+							span#family
+							br
+							strong Rarity: 
+							span#rarity
+					.col.m6
+						a(name='purchasing')
+						h5 Purchasing
+						p Total: 
+							span#purchasedRecord
+						table
+							thead
+								tr
+									th Del
+									th Date
+									th
+										| Amount (
+										span#purchaseUnit
+										| )
+									th Notes
+							tfoot
+								tr
+									th
+									th
+										input#addPurchaseDate(placeholder='YYYY-MM-DD')
+									th
+										input#addPurchaseCount()
+									th
+										input#addPurchaseNotes()
+							tbody#noteEntries
+						a.waves-effect.waves-light.btn.page-action(onClick='addPurchasing();', style='width: 100%;') Add Entry
 				hr
 				a(name='notes')
 				.row
@@ -147,4 +177,3 @@ block scripts
 	script(src='https://code.highcharts.com/modules/exporting.js')
 	script(src='js/analytics.js')
 	script(src='js/analytics_display.js')
-	

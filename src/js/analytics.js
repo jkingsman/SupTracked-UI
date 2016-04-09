@@ -8,13 +8,14 @@ var analyticsCount = 0;
 var analyticsFinished = 0;
 
 // just get jshint off our back. these are defined in their respective files
-var vitals, experience_list, top_listings, hours_days;
+var vitals, experience_list, top_listings, hours_days, purchasing;
 
 function startAnalytics() {
   vitals();
   experience_list();
   top_listings();
   hours_days();
+  purchasing();
 }
 
 // don't show select if we're already navigating
@@ -94,7 +95,7 @@ $('#drugSelect').submit(function(event) {
       $('#rarity').html('<span class="grey white-text" style="padding: 3px; border-radius: 24px;">???</span>');
   }
 
-  $('#notes').html(cleanMarkdown(micromarkdown.parse(drug.notes)));
+  $('#notes').html(cleanMarkdown(micromarkdown.parse(drug.notes.split('$$$purchasedata$$$')[0])));
 
   // compile all consumptions
   makeAuthRequest('/consumption/search', 'POST', JSON.stringify({
@@ -118,6 +119,8 @@ $('#drugSelect').submit(function(event) {
         return (a.date < b.date) ? -1 : (a.date > b.date) ? 1 : 0;
       });
 
+      $('#drugEntry').attr('href', '/drugs.html?' + drug.id);
+
       // off we go!
       startAnalytics();
     } else {
@@ -131,6 +134,13 @@ var updateInterval = setInterval(function updateCompletion() {
   // update the percentages
   $('#analyticsComplete').text(Math.round(analyticsFinished / analyticsCount * 100));
   $('#analyticsProgress').css('width', Math.round(analyticsFinished / analyticsCount * 100) + '%');
+
+  if (window.location.hash.substring(1).indexOf('skip') > -1) {
+    // fast debug load
+    clearInterval(updateInterval);
+    $('#loading').hide();
+    $('#analytics').show();
+  }
 
   if (analyticsFinished === analyticsCount) {
     // we're done here;  display it after an aesthetic delay for the progress bar to hit 100%

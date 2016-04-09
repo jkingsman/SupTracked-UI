@@ -46,7 +46,11 @@ function populateDropdown(selected) {
 }
 
 $(document).ready(function() {
-  populateDropdown();
+  if(location.search.slice(1) > 0){
+    populateDropdown(Number(location.search.slice(1)));
+  } else {
+    populateDropdown();
+  }
 });
 
 $("#drugList").on('change', function() {
