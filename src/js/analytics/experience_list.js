@@ -8,6 +8,8 @@ analyticsCount += 1;
 function experience_list() {
   "use strict";
 
+  $('#experienceContainer').empty();
+
   allExperiences.forEach(function(experience) {
     if (experience.title.length < 1) {
       experience.title = '[none]';
@@ -50,7 +52,7 @@ function experience_list() {
       groupedLocationsString = groupedLocationsList.join(', ');
     }
 
-    $('#experienceContainer').empty().append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<span class="right hide-on-med-and-down" style="max-width: 50%;">' + groupedFriendsString + ' at <strong>' + groupedLocationsString + '</strong></span><h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + totalCount + ' ' + drug.unit + ' ' + drug.name + '</div></li>');
+    $('#experienceContainer').append('<li class="collection-item">' + new Date(experience.date * 1000).toISOString().slice(0, 10) + '<span class="right hide-on-med-and-down" style="max-width: 50%;">' + groupedFriendsString + ' at <strong>' + groupedLocationsString + '</strong></span><h5><a href="/experience.html?' + experience.id + '">' + experience.title + '</a></h5><div class="pad-left-40">' + totalCount + ' ' + drug.unit + ' ' + drug.name + '</div></li>');
   });
   analyticsFinished += 1;
 }
