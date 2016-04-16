@@ -192,7 +192,7 @@ function drawConsumptions() {
       }
 
       var currentCount = 0;
-      data.forEach(function(consumption) {
+      data.forEach(function(consumption, index, internalData) {
         // build friends list
         var friendList = [];
         friendList = consumption.friends.map(function(friend) {
@@ -211,8 +211,13 @@ function drawConsumptions() {
           currentCount += consumption.count;
         }
 
+        var delta = '';
+        if(index > 0){
+          delta = ' (' + Math.floor((consumption.date - internalData[index - 1].date)  / 60) + ' min after last)';
+        }
+
         $('#consumptionsCollection').prepend('<li class="collection-item ' + currentCountClass + '" id="con-' + consumption.id + '">' +
-          '<span id="conDate">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '</span>' +
+          '<span id="conDate">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + delta + '</span>' +
           '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
           '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
           '<a href="#" title="Bulk Edit" onClick="bulkEdit()" class="secondary-content consumption-icon bulk-edit-button" style="display: none;"><i class="material-icons">library_books</i></a>' +
