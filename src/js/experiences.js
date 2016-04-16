@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,Materialize */
+/* globals makeAuthRequest,Materialize,collateConsumptions */
 /* jshint -W089 */
 
 "use strict";
@@ -42,17 +42,7 @@ function loadMore() {
         }
 
         // compile the consumptions, grouped by drug
-        var groupedConsumptionList = {};
-
-        experience.consumptions.forEach(function(consumption) {
-          if (groupedConsumptionList.hasOwnProperty(consumption.drug.name)) {
-            groupedConsumptionList[consumption.drug.name].count += consumption.count;
-          } else {
-            groupedConsumptionList[consumption.drug.name] = {};
-            groupedConsumptionList[consumption.drug.name].count = consumption.count;
-            groupedConsumptionList[consumption.drug.name].unit = consumption.drug.unit;
-          }
-        });
+        var groupedConsumptionList = collateConsumptions(experience.consumptions);
 
         // group the consumptions into strings by drug
         var stringifiedConsumptions = [];

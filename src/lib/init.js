@@ -34,6 +34,24 @@ function cleanMarkdown(text) {
   return text;
 }
 
+function collateConsumptions(consumptions){
+  "use strict";
+
+  var groupedConsumptionList = {};
+
+  consumptions.forEach(function(consumption) {
+    if (groupedConsumptionList.hasOwnProperty(consumption.drug.name)) {
+      groupedConsumptionList[consumption.drug.name].count += consumption.count;
+    } else {
+      groupedConsumptionList[consumption.drug.name] = {};
+      groupedConsumptionList[consumption.drug.name].count = consumption.count;
+      groupedConsumptionList[consumption.drug.name].unit = consumption.drug.unit;
+    }
+  });
+
+  return groupedConsumptionList;
+}
+
 // toggle menu display with alt
 $(document).on('click', function(event) {
   "use strict";
