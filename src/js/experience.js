@@ -217,7 +217,7 @@ function drawConsumptions() {
         }
 
         $('#consumptionsCollection').prepend('<li class="collection-item ' + currentCountClass + '" id="con-' + consumption.id + '">' +
-          '<span id="conDate">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + delta + '</span>' +
+          '<span id="conDate">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span class="delta" style="display: none;">' + delta + '</span></span>' +
           '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
           '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
           '<a href="#" title="Bulk Edit" onClick="bulkEdit()" class="secondary-content consumption-icon bulk-edit-button" style="display: none;"><i class="material-icons">library_books</i></a>' +
@@ -990,6 +990,7 @@ $(window).keydown(function(e) {
       $('#quickConList').append('<li>' + groupedConsumptionList[drug].count + ' ' + groupedConsumptionList[drug].unit + ' ' + drug + '</li>');
     }
     $('#quickConList').show();
+    $('.delta').show();
   }
 });
 
