@@ -39,39 +39,56 @@ block content
 						#notesMarkdown
 
 					#meta.col.s12
+						h4 Basics
 						.row
-							.input-field.col.s12
-								input#metaTitle(type='text', required)
-								label.active#addTitleLabel(for='metaTitle') Title
+							.col.s11.offset-s1
+								.row
+									.input-field.col.s12
+										input#metaTitle(type='text', required)
+										label.active#addTitleLabel(for='metaTitle') Title
+								.row
+									.input-field.col.s12
+										input.datepicker#metaDate(type='date', required)
+										label.active(for='metaDate') Date
+								.row
+									.input-field.col.s12
+										textarea#metaPanic.materialize-textarea(length='120')
+										label.active#metaPanicLabel(for='metaPanic') Panic Message
+								.row
+									.col.s12
+										label Rating
+										select#metaRating.browser-default
+											option(value='0').selected No Rating
+											option(value='1') Horrific
+											option(value='2') Bad
+											option(value='3') Meh
+											option(value='4') Good
+											option(value='5') Great
+											option(value='6') Spectacular
+						h4 Groupings
 						.row
-							.input-field.col.s12
-								input.datepicker#metaDate(type='date', required)
-								label.active(for='metaDate') Date
+							.col.s11.offset-s1
+								.row
+									.col.s12
+										label Grouping Drug
+										select#metaGroupDrug.browser-default
+											option(value='0').selected [none]
+								.row
+									.input-field.col.s12
+										input#metaGroupCount(type='text', placeholder='[none]')
+										label.active#metaGroupCountLabel(for='metaGroupCount') Grouping Interval (counts)
+						h4 Emergency Management
 						.row
-							.input-field.col.s12
-								textarea#metaPanic.materialize-textarea(length='120')
-								label.active#metaPanicLabel(for='metaPanic') Panic Message
-						.row
-							label Rating
-							select#metaRating.browser-default
-								option(value='0').selected No Rating
-								option(value='1') Horrific
-								option(value='2') Bad
-								option(value='3') Meh
-								option(value='4') Good
-								option(value='5') Great
-								option(value='6') Spectacular
-						.row
-							label.tooltipped(data-position='right', data-delay='50', data-tooltip='Add App notes as a function of time elapsed since the selected consumption.', style='border-bottom: 1px dashed #ADADAD;') T-Time
-							select#metaTTime.browser-default
-						.row
-							h5 Interactions
-							p Possible interactions: 
-								span#interactionList
-							.col.s12
-								#heightLimiter(style='height: 150px; overflow: auto;')
-									div#drugCollection
-							
+							.col.s11.offset-s1
+								.row
+									label.tooltipped(data-position='right', data-delay='50', data-tooltip='Add App notes as a function of time elapsed since the selected consumption.', style='border-bottom: 1px dashed #ADADAD;') T-Time
+									select#metaTTime.browser-default
+								.row
+									p Possible interactions: 
+										span#interactionList
+									.col.s12
+										#heightLimiter(style='height: 150px; overflow: auto;')
+											div#drugCollection
 						.row
 							hr
 							a.btn.waves-effect.waves-light.page-action(onClick='deleteExperience();', style='width: 100%;')

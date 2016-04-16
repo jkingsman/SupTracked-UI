@@ -81,3 +81,28 @@ ul.inlineMenu > li:not(:last-child):after {
 .hide-overflow {
     overflow: hidden;
 }
+
+
+.grouped-0 {
+  background-color: rgba(47, 47, 47, 0.09);
+}
+
+.grouped-1 {
+  background-color: rgba(82, 110, 150, 0.32);
+}
+
+.grouped-2 {
+  background-color: rgba(82, 150, 112, 0.32);
+}
+
+.grouped-3 {
+  background-color: rgba(143, 150, 82, 0.32);
+}
+
+.grouped-4 {
+  background-color: rgba(82, 150, 140, 0.32);
+}
+
+.hide-overflow {
+    overflow: hidden;
+}
