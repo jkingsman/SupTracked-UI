@@ -62,6 +62,7 @@
 
 .bulk-edit-selected {
   background-color: rgb(240, 248, 255) !important;
+  opacity: .5;
 }
 
 .big-warning{
@@ -84,23 +85,23 @@ ul.inlineMenu > li:not(:last-child):after {
 
 
 .grouped-0 {
-  background-color: rgba(47, 47, 47, 0.09);
+  background-color: rgba(47, 47, 47, 0.09) !important;
 }
 
 .grouped-1 {
-  background-color: rgba(82, 110, 150, 0.32);
+  background-color: rgba(82, 110, 150, 0.32) !important;
 }
 
 .grouped-2 {
-  background-color: rgba(82, 150, 112, 0.32);
+  background-color: rgba(82, 150, 112, 0.32) !important;
 }
 
 .grouped-3 {
-  background-color: rgba(143, 150, 82, 0.32);
+  background-color: rgba(143, 150, 82, 0.32) !important;
 }
 
 .grouped-4 {
-  background-color: rgba(82, 150, 140, 0.32);
+  background-color: rgba(82, 150, 140, 0.32) !important;
 }
 
 .hide-overflow {

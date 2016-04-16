@@ -180,7 +180,7 @@ function drawConsumptions() {
       $('#consumptionsCollection').empty();
 
       data.sort(function(a, b) {
-        return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
+        return a.date - b.date;
       });
 
       consumptions = data;
@@ -207,11 +207,11 @@ function drawConsumptions() {
 
         var currentCountClass = '';
         if (masterExp.groupDrug === consumption.drug.id) {
-          currentCount += consumption.count;
           currentCountClass = 'grouped-' + Math.floor(currentCount / masterExp.groupCount);
+          currentCount += consumption.count;
         }
 
-        $('#consumptionsCollection').append('<li class="collection-item ' + currentCountClass + '" id="con-' + consumption.id + '">' +
+        $('#consumptionsCollection').prepend('<li class="collection-item ' + currentCountClass + '" id="con-' + consumption.id + '">' +
           '<span id="conDate">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '</span>' +
           '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
           '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
