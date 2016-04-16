@@ -161,33 +161,36 @@ function vitals() {
     return b.date - a.date;
   });
 
-  var bestRecord = {start: allConsumptions[0], count: allConsumptions[0].count};
-  var rollingRecord = [allConsumptions[0]];
-
-  function checkCutOff(entry) {
-    return entry.date <= (rollingRecord[0].date + 3600);
-  }
-
-  for (var i = 1; i < allConsumptions.length; i += 1) {
-    rollingRecord.unshift(allConsumptions[i]);
-    rollingRecord = rollingRecord.filter(checkCutOff);
-
-    var currentScore = rollingRecord.reduce(function(total, currentVal){
-      return total + currentVal.count;
+  var hours = [];
+  allConsumptions.forEach(function(consumption, index) {
+    var total = allConsumptions.filter(function(subCon) {
+      if (subCon.date >= consumption.date && subCon.date <= (consumption.date + 3600)) {
+        return true;
+      }
+      return false;
+    }).reduce(function(accum, curr) {
+      return accum + curr.count;
     }, 0);
 
-    if(currentScore > bestRecord.count){
-      bestRecord.count = currentScore;
-      bestRecord.start = rollingRecord[0];
-    }
-  }
+    hours.push({
+      start: consumption,
+      count: total
+    });
+  });
 
-  $('#hourRecord').html(bestRecord.count + ' ' + drug.unit + ' between ' +
-  new Date(bestRecord.start.date * 1000).toISOString().slice(11, 16) + ' and ' +
-  new Date((bestRecord.start.date + 3600) * 1000 ).toISOString().slice(11, 16) +
-  ' ' + new Date(bestRecord.start.date * 1000 ).toISOString().slice(0, 10) +
-  ' during <a href="/experience.html?' + bestRecord.start.exp_id + '">' + bestRecord.start.title + '</a>');
+  hours.sort(function(a, b){
+    return b.count - a.count;
+  });
 
+  var topHours = hours.slice(0, 3).map(function(hourRecord) {
+    return '<li>' + hourRecord.count + ' ' + drug.unit + ' between ' +
+      new Date(hourRecord.start.date * 1000).toISOString().slice(11, 16) + ' and ' +
+      new Date((hourRecord.start.date + 3600) * 1000).toISOString().slice(11, 16) +
+      ' ' + new Date(hourRecord.start.date * 1000).toISOString().slice(0, 10) +
+      ' during <a href="/experience.html?' + hourRecord.start.exp_id + '">' + hourRecord.start.title + '</a></li>';
+  });
+
+  $('#hourRecord').html('<ul class="pad-left-40">' + topHours.join('') + '</ul>');
 
   analyticsFinished += 1;
 }
