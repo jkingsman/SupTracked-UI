@@ -712,7 +712,7 @@ $('#beConsumption').submit(function(event) {
     if (ids.indexOf(consumption.id) > -1) {
       var customPayload = JSON.parse(JSON.stringify(payload));
       customPayload.id = consumption.id;
-      customPayload.date = consumption.date + dateOffset * 60 * 60;
+      customPayload.date = consumption.date + dateOffset * 60;
 
       requests.push({
         path: '/consumption',
