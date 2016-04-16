@@ -1,5 +1,5 @@
-/* globals makeAuthRequest,makeAuthBlobRequest,Materialize,micromarkdown,getCookie,cleanMarkdown */
-/* jshint -W003 */
+/* globals makeAuthRequest,makeAuthBlobRequest,Materialize,micromarkdown,getCookie,cleanMarkdown,collateConsumptions */
+/* jshint -W003, -W089 */
 "use strict";
 
 var experienceID = location.search.slice(1);
@@ -943,6 +943,18 @@ function setupMetaListeners() {
 $("#notesMarkdown").on("click", function() {
   $("#notesMarkdown").hide();
   $("#notesArea").show();
+});
+
+// listener for quick cons
+$(window).keydown(function(e) {
+  if(e.keyCode === 18){
+    $('#quickConList').empty();
+    var groupedConsumptionList = collateConsumptions(consumptions);
+    for(var drug in groupedConsumptionList){
+      $('#quickConList').append('<li>' + groupedConsumptionList[drug].count + ' ' + groupedConsumptionList[drug].unit + ' ' + drug + '</li>');
+    }
+    $('#quickConList').show();
+  }
 });
 
 $(document).click(function(event) {
