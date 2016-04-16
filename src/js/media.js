@@ -4,7 +4,7 @@
 "use strict";
 
 var currentBatch = 0;
-var batchSize = 25;
+var batchSize = 20;
 var atEnd = false;
 
 var imagesPopulated = false; // we don't let a new page load until the previous is done
@@ -21,7 +21,7 @@ makeAuthRequest('/media/search', 'POST', null, 'json', function(err, data, code)
 // expects an array of media
 function showMedia(mediaCollection, callback) {
   mediaCollection.forEach(function(media, index) {
-    if (index % 6 === 0) {
+    if (index % 4 === 0) {
       // we're beginning a new row
       $('#media').append('<div id="row' + rowsProcessed + '" class="row"></div>');
       rowsProcessed += 1;
@@ -51,7 +51,7 @@ function showMedia(mediaCollection, callback) {
       mediaTags = '<br>' + media.tags;
     }
 
-    $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m2"><div class="card"><div class="card-image">' +
+    $('#row' + (rowsProcessed - 1)).append('<div class="col s12 m3"><div class="card"><div class="card-image">' +
       '<a id="imagelink' + media.id + '" target="_blank"><img id="image' + media.id + '" ' + explicitBlurStyle + '><span class="card-title" id="title-' + media.id + '" style="background-color: rgba(0, 0, 0, 0.5);">' + favoriteIcon + media.title + '</span><a/></div>' +
       '<div class="card-content"><p>' + editString +
       new Date(media.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span id="tags-' + media.id + '">' + mediaTags + '</span>' + association + '</p></div>' +
@@ -60,7 +60,25 @@ function showMedia(mediaCollection, callback) {
     makeAuthBlobRequest('/media/file/' + media.id, function(imgData) {
       var converter = new FileReader();
       converter.onload = function(e) {
-        var result = e.target.result.replace('application/octet-stream', 'image/png');
+        // check for mime type with magic bytes
+        var result;
+        if (e.target.result.indexOf('/9j/') > -1) {
+          // JPEG
+          result = e.target.result.replace('application/octet-stream', 'image/png');
+        } else if (e.target.result.indexOf('iVBOR') > -1) {
+          // png
+          result = e.target.result.replace('application/octet-stream', 'image/png');
+        } else if (e.target.result.indexOf('R0lGO') > -1) {
+          // gif
+          result = e.target.result.replace('application/octet-stream', 'image/gif');
+        } else if (e.target.result.indexOf('HGZ0eX') > -1) {
+          // mp4
+          result = e.target.result.replace('application/octet-stream', 'video/mp4');
+          $('#image' + media.id).replaceWith('<video autoplay loop style="width: 100%;"><source id="image1311" type="video/mp4"></video>');
+        } else {
+          result = e.target.result.replace('application/octet-stream', 'image/png');
+        }
+
         $('#image' + media.id).attr('src', result);
         $('#imagelink' + media.id).attr('href', result);
       };
@@ -70,7 +88,7 @@ function showMedia(mediaCollection, callback) {
     if (index === mediaCollection.length - 1) {
       imagesPopulated = true;
 
-      if(typeof callback === 'function'){
+      if (typeof callback === 'function') {
         callback();
       }
     }
@@ -91,7 +109,7 @@ function loadMore() {
         atEnd = true;
       }
 
-      showMedia(data, function(){
+      showMedia(data, function() {
         $('#loading').hide();
         $('#media').show();
       });
