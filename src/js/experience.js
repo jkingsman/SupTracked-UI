@@ -192,6 +192,7 @@ function drawConsumptions() {
       }
 
       var currentCount = 0;
+      var rollingTotals = {};
       data.forEach(function(consumption, index, internalData) {
         // build friends list
         var friendList = [];
@@ -211,9 +212,17 @@ function drawConsumptions() {
           currentCount += consumption.count;
         }
 
+        // get minutes since last
         var delta = '';
-        if(index > 0){
-          delta = ' (' + Math.floor((consumption.date - internalData[index - 1].date)  / 60) + ' min after last)';
+        if (index > 0) {
+          delta = ' (' + Math.floor((consumption.date - internalData[index - 1].date) / 60) + ' min after last)';
+        }
+
+        // get rolling increases
+        if (consumption.drug.id in rollingTotals) {
+          rollingTotals[consumption.drug.id] += Number(consumption.count);
+        } else {
+          rollingTotals[consumption.drug.id] = Number(consumption.count);
         }
 
         $('#consumptionsCollection').prepend('<li class="collection-item ' + currentCountClass + '" id="con-' + consumption.id + '">' +
@@ -226,7 +235,9 @@ function drawConsumptions() {
           '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">call_split</i></a>' +
           '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
           '<a href="#" title="Clone Friend and Location Data" onClick="cloneData(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">input</i></a>' +
-          '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + '<a target="_BLANK" href="/analytics.html?' + consumption.drug.id + '">' + consumption.drug.name + '</a>, ' + consumption.method.name + '</span>' +
+          '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + '<a target="_BLANK" href="/analytics.html?' + consumption.drug.id + '">' +
+          consumption.drug.name + '</a>, ' + consumption.method.name + '</span>' +
+          '<span class="rollingTotal" style="display: none;"> (total to ' + (Math.round(rollingTotals[consumption.drug.id] * 100) / 100) + ' ' + consumption.drug.unit + ')</span>' +
           '</li>');
       });
     }
@@ -991,6 +1002,7 @@ $(window).keydown(function(e) {
     }
     $('#quickConList').show();
     $('.delta').show();
+    $('.rollingTotal').show();
   }
 });
 
