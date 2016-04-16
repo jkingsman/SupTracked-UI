@@ -104,6 +104,18 @@ ul.inlineMenu > li:not(:last-child):after {
   background-color: rgba(82, 150, 140, 0.32) !important;
 }
 
+.grouped-5 {
+  background-color: rgba(150, 84, 82, 0.32) !important;
+}
+
+.grouped-6 {
+  background-color: rgba(115, 150, 82, 0.61)! important;
+}
+
+.grouped-7 {
+  background-color: rgba(218, 11, 11, 0.61) !important;
+}
+
 .hide-overflow {
     overflow: hidden;
 }
