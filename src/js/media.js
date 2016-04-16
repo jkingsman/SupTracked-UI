@@ -61,26 +61,32 @@ function showMedia(mediaCollection, callback) {
       var converter = new FileReader();
       converter.onload = function(e) {
         // check for mime type with magic bytes
-        var result;
+        var result, mimeType;
         if (e.target.result.indexOf('/9j/') > -1) {
-          // JPEG
+          // jpeg
+          mimeType = 'image/png';
           result = e.target.result.replace('application/octet-stream', 'image/png');
         } else if (e.target.result.indexOf('iVBOR') > -1) {
           // png
+          mimeType = 'image/png';
           result = e.target.result.replace('application/octet-stream', 'image/png');
         } else if (e.target.result.indexOf('R0lGO') > -1) {
           // gif
+          mimeType = 'image/gif';
           result = e.target.result.replace('application/octet-stream', 'image/gif');
         } else if (e.target.result.indexOf('HGZ0eX') > -1) {
           // mp4
+          mimeType = 'video/mp4';
           result = e.target.result.replace('application/octet-stream', 'video/mp4');
-          $('#image' + media.id).replaceWith('<video autoplay loop style="width: 100%;"><source id="image1311" type="video/mp4"></video>');
+          $('#image' + media.id).replaceWith('<video autoplay loop style="width: 100%;"><source id="image' + media.id + '" type="video/mp4"></video>');
         } else {
+          mimeType = 'image/png[unknown]';
           result = e.target.result.replace('application/octet-stream', 'image/png');
         }
 
         $('#image' + media.id).attr('src', result);
         $('#imagelink' + media.id).attr('href', result);
+        $('#imagelink' + media.id).attr('x-mime', mimeType);
       };
       converter.readAsDataURL(imgData);
     });
@@ -310,6 +316,8 @@ $('#editMedia').submit(function(event) {
 
 $('#addMedia').submit(function(event) {
   event.preventDefault();
+
+  Materialize.toast('Media uploading', 100000, 'success-toast');
 
   // assemble this horrible date
   var customDate = $('#customTime').val().split(' ')[0];
