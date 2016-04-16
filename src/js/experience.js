@@ -987,7 +987,7 @@ $(window).keydown(function(e) {
     $('#quickConList').empty();
     var groupedConsumptionList = collateConsumptions(consumptions);
     for (var drug in groupedConsumptionList) {
-      $('#quickConList').append('<li>' + groupedConsumptionList[drug].count + ' ' + groupedConsumptionList[drug].unit + ' ' + drug + '</li>');
+      $('#quickConList').append('<li>' + (Math.round(groupedConsumptionList[drug].count * 100) / 100) + ' ' + groupedConsumptionList[drug].unit + ' ' + drug + '</li>');
     }
     $('#quickConList').show();
     $('.delta').show();
