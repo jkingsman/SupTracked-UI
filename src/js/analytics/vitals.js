@@ -178,7 +178,7 @@ function vitals() {
     });
   });
 
-  hours.sort(function(a, b){
+  hours.sort(function(a, b) {
     return b.count - a.count;
   });
 
@@ -191,6 +191,16 @@ function vitals() {
   });
 
   $('#hourRecord').html('<ul class="pad-left-40">' + topHours.join('') + '</ul>');
+
+  var methods = allConsumptions.map(function(consumption) {
+    return consumption.method.name;
+  }).filter(function(name, pos, array) {
+    return array.indexOf(name) === pos;
+  });
+
+  $('#methods').append(methods.reduce(function(accum, current) {
+    return accum += '<li>' + current + '</li>';
+  }, ''));
 
   analyticsFinished += 1;
 }
