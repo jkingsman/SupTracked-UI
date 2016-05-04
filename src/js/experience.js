@@ -213,7 +213,7 @@ function drawConsumptions() {
         // get minutes since last
         var delta = '';
         if (index > 0) {
-          delta = ' (' + Math.floor((consumption.date - internalData[index - 1].date) / 60) + ' min after last)';
+          delta = ' (' + Math.floor((consumption.date - internalData[index - 1].date) / 60) + ' min after last/' + (Math.floor((Math.floor(Date.now() / 1000) - consumption.date) / 60) - new Date().getTimezoneOffset()) + ' min ago)';
         }
 
         // get rolling increases
