@@ -52,6 +52,25 @@ function collateConsumptions(consumptions){
   return groupedConsumptionList;
 }
 
+function getTTime(consumptionDate){
+  "use strict";
+  var conDate = Math.floor(new Date(consumptionDate * 1000).getTime() / 1000);
+  var now = Math.floor(new Date().getTime() / 1000) - (new Date().getTimezoneOffset() * 60);
+
+  var sign = '+';
+  if (conDate > now) {
+    sign = '-';
+  }
+
+  var diff = Math.abs(now - conDate);
+  var hours = Math.floor(diff / 60 / 60);
+  diff -= hours * 60 * 60;
+  var minutes = Math.floor(diff / 60);
+
+  var timeString = 'T' + sign + ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2);
+  return timeString;
+}
+
 // toggle menu display with alt
 $(document).on('click', function(event) {
   "use strict";

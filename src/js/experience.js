@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,makeAuthBlobRequest,Materialize,micromarkdown,getCookie,cleanMarkdown,collateConsumptions */
+/* globals makeAuthRequest,makeAuthBlobRequest,Materialize,micromarkdown,getCookie,cleanMarkdown,collateConsumptions,getTTime */
 /* jshint -W003, -W089 */
 "use strict";
 
@@ -881,16 +881,30 @@ $(document).ready(function() {
 // listen to save text area
 $("#notesArea").on('change keyup paste', function() {
   clearTimeout(noteSaveNotificationTimeout);
+
   noteSaveNotificationTimeout = setTimeout(function() {
+    var notesVal = $("#notesArea").val();
+
+    // find current TTime
+    if (masterExp.ttime) {
+      var tTimeStamp;
+      consumptions.forEach(function(consumption){
+        if(consumption.id === masterExp.ttime){
+          notesVal = notesVal.replace(/(\n|^)TS /ig, '\n' + getTTime(consumption.date) + ' -- ');
+        }
+      });
+    }
+
     makeAuthRequest('/experience', 'PUT', JSON.stringify({
       id: experienceID,
-      notes: $("#notesArea").val()
+      notes: notesVal
     }), 'json', function(err, data, code) {
       if (code !== 200) {
         Materialize.toast('Notes save error: ' + err, 6000, 'warning-toast');
         return;
       }
 
+      $("#notesArea").val(notesVal);
       Materialize.toast('Notes saved', 1000, 'success-toast');
     });
   }, 1000);
