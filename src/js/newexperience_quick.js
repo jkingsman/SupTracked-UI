@@ -154,8 +154,15 @@ function setLocation(location){
   $('#fDate').html(new Date(consumption.date * 1000).toISOString().slice(0, 16).replace(/T/, ' '));
   $('#fCon').html(consumption.count + ' ' + consumption.drugUnit + ' ' + consumption.drugName + ' ' + consumption.methodName);
   $('#fLoc').html(consumption.location);
-  $('#fFriends').html(consumption.friends.join(', '));
 
+  var friendList;
+  if(consumption.friends.length === 0){
+    friendList = '[none]';
+  } else {
+    friendList = consumption.friends.join(', ');
+  }
+
+  $('#fFriends').html(friendList);
   $('ul.tabs').tabs('select_tab', 'finalize');
 }
 
@@ -171,6 +178,41 @@ function create(){
 
     Materialize.toast('Experience created', 6000, 'success-toast');
 
-    
+    var payload = {
+      date: consumption.date,
+      count: consumption.count,
+      experience_id: data.id,
+      drug_id: consumption.drug,
+      method_id: consumption.method,
+      location: consumption.location
+    };
+
+    makeAuthRequest('/consumption', 'POST', JSON.stringify(payload), 'json', function(err, conData, code) {
+      if (err) {
+        Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
+        return;
+      }
+
+      Materialize.toast('Consumption created', 6000, 'success-toast');
+
+      if(consumption.friends.length === 0){
+        window.location.href = '/quick.html';
+        return;
+      }
+
+      consumption.friends.forEach(function(friend, index) {
+        makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
+          consumption_id: conData.id,
+          name: friend
+        }), 'json', function(err, data, code) {
+          if (index === (consumption.friends.length - 1)) {
+            Materialize.toast('Friends added', 6000, 'success-toast');
+            window.location.href = '/quick.html';
+          }
+        });
+      });
+    });
+
+
   });
 }

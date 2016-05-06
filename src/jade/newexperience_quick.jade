@@ -76,12 +76,20 @@ block content
 												a.collection-item(href='#', onclick='setCount(1);') 1
 												a.collection-item(href='#', onclick='setCount(1.5);') 1.5
 												a.collection-item(href='#', onclick='setCount(2);') 2
+												a.collection-item(href='#', onclick='setCount(10);') 10
 												a.collection-item(href='#', onclick='setCount(12);') 12
+												a.collection-item(href='#', onclick='setCount(20);') 20
 												a.collection-item(href='#', onclick='setCount(25);') 25
 												a.collection-item(href='#', onclick='setCount(50);') 50
 												a.collection-item(href='#', onclick='setCount(100);') 100
 												
 									#friends.col.s12
+										.row
+											.col.s6.offset-s6
+												br
+												a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="setFriends();", style='width: 100%;')
+													| Next
+													i.material-icons.right trending_flat
 										.row.col.s12
 											h5 Friends
 												div#friendList(style='background-color: rgb(255, 255, 255); padding: 3px;')
