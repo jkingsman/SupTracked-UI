@@ -7,121 +7,120 @@ block content
 	main
 		.container
 			.row
-				.col.m12.l8.offset-l2
-					form
-						.card.blue-grey.darken-1
-							.card-content.white-text
-								span.card-title Quick Experience
-								.row
-									.col.s12
-										ul.tabs
-											li.tab.col.s3
-												a.active(href='#basics')
-													| B
-													span.hide-on-med-and-down asics
-											li.tab.col.s3
-												a(href='#drug') 
-													| D
-													span.hide-on-med-and-down rugs
-											li.tab.col.s3
-												a(href='#method')
-													| M
-													span.hide-on-med-and-down ethods
-											li.tab.col.s3
-												a(href='#count')
-													| C
-													span.hide-on-med-and-down ount
-											li.tab.col.s3
-												a(href='#friends') 
-													| F
-													span.hide-on-med-and-down riends
-											li.tab.col.s3
-												a(href='#location') 
-													| L
-													span.hide-on-med-and-down ocation
-											li.tab.col.s3
-												a(href='#finalize') 
-													| F
-													span.hide-on-med-and-down inalize
-									#basics.col.s12
-										.row
-											.input-field.col.s12
-												input#title(type='text', required)
-												label(for='title') Title
-										.row
-											.input-field.col.s12
-												input.datepicker#date(type='date', required)
-												label(for='date') Date
-										.row
-											.col.s6.offset-s6
-												a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="setTitle()", style='width: 100%;')
-													| Next
-													i.material-icons.right trending_flat
+				.col.s12.l8.offset-l2
+					.card.blue-grey.darken-1
+						.card-content.white-text
+							span.card-title Quick Experience
+							.row
+								.col.s12
+									ul.tabs
+										li.tab.col.s3
+											a.active(href='#basics')
+												| B
+												span.hide-on-med-and-down asics
+										li.tab.col.s3
+											a(href='#drug') 
+												| D
+												span.hide-on-med-and-down rugs
+										li.tab.col.s3
+											a(href='#method')
+												| M
+												span.hide-on-med-and-down ethods
+										li.tab.col.s3
+											a(href='#count')
+												| C
+												span.hide-on-med-and-down ount
+										li.tab.col.s3
+											a(href='#friends') 
+												| F
+												span.hide-on-med-and-down riends
+										li.tab.col.s3
+											a(href='#location') 
+												| L
+												span.hide-on-med-and-down ocation
+										li.tab.col.s3
+											a(href='#finalize') 
+												| F
+												span.hide-on-med-and-down inalize
+								#basics.col.s12
+									.row
+										.input-field.col.s12
+											input#title(type='text', required)
+											label(for='title') Title
+									.row
+										.input-field.col.s12
+											input.datepicker#date(type='date', required)
+											label(for='date') Date
+									.row
+										.col.s6.offset-s6
+											a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="setTitle()", style='width: 100%;')
+												| Next
+												i.material-icons.right trending_flat
 
-									#drug.col.s12
-										.row.col.s12
-											h5 Drug
-											.collection#drugList
+								#drug.col.s12
+									.row.col.s12
+										h5 Drug
+										.collection#drugList
 
-									#method.col.s12
-										.row.col.s12
-											h5 Method
-											.collection#methodList
+								#method.col.s12
+									.row.col.s12
+										h5 Method
+										.collection#methodList
+										
+								#count.col.s12
+									.row.col.s12
+										h5 Count 
+											span#unit
+										.collection#countList
+											a.collection-item(href='#', onclick='setCount(1);') 1
+											a.collection-item(href='#', onclick='setCount(1.5);') 1.5
+											a.collection-item(href='#', onclick='setCount(2);') 2
+											a.collection-item(href='#', onclick='setCount(10);') 10
+											a.collection-item(href='#', onclick='setCount(12);') 12
+											a.collection-item(href='#', onclick='setCount(20);') 20
+											a.collection-item(href='#', onclick='setCount(25);') 25
+											a.collection-item(href='#', onclick='setCount(50);') 50
+											a.collection-item(href='#', onclick='setCount(100);') 100
 											
-									#count.col.s12
-										.row.col.s12
-											h5 Count 
-												span#unit
-											.collection#countList
-												a.collection-item(href='#', onclick='setCount(1);') 1
-												a.collection-item(href='#', onclick='setCount(1.5);') 1.5
-												a.collection-item(href='#', onclick='setCount(2);') 2
-												a.collection-item(href='#', onclick='setCount(10);') 10
-												a.collection-item(href='#', onclick='setCount(12);') 12
-												a.collection-item(href='#', onclick='setCount(20);') 20
-												a.collection-item(href='#', onclick='setCount(25);') 25
-												a.collection-item(href='#', onclick='setCount(50);') 50
-												a.collection-item(href='#', onclick='setCount(100);') 100
+								#friends.col.s12
+									.row
+										.col.s6.offset-s6
+											br
+											a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="setFriends();", style='width: 100%;')
+												| Next
+												i.material-icons.right trending_flat
+									.row.col.s12
+										h5 Friends
+											div#friendList(style='background-color: rgb(255, 255, 255); padding: 3px;')
+									.row
+										.col.s6.offset-s6
+											a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="setFriends();", style='width: 100%;')
+												| Next
+												i.material-icons.right trending_flat
 												
-									#friends.col.s12
-										.row
-											.col.s6.offset-s6
-												br
-												a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="setFriends();", style='width: 100%;')
-													| Next
-													i.material-icons.right trending_flat
-										.row.col.s12
-											h5 Friends
-												div#friendList(style='background-color: rgb(255, 255, 255); padding: 3px;')
-										.row
-											.col.s6.offset-s6
-												a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="setFriends();", style='width: 100%;')
-													| Next
-													i.material-icons.right trending_flat
-													
-									#location.col.s12
-										.row.col.s12
-											h5 Location
-											.collection#locationList
-											
-									#finalize.col.s12
-										.row.col.s12
-											h5 Finalize
-											p Title: 
-												span#fTitle
-											p Date: 
-												span#fDate
-											p Consumption: 
-												span#fCon
-											p Location: 
-												span#fLoc
-											p Friends: 
-												span#fFriends
-										.row
-											.col.s6.offset-s6
-												a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="create();", style='width: 100%;')
-													| Create
-													i.material-icons.right done
+								#location.col.s12
+									.row.col.s12
+										h5 Location
+										.collection#locationList
+										
+								#finalize.col.s12
+									.row.col.s12
+										h5 Finalize
+										p Title: 
+											span#fTitle
+										p Date: 
+											span#fDate
+										p Consumption: 
+											span#fCon
+										p Location: 
+											span#fLoc
+										p Friends: 
+											span#fFriends
+									.row
+										.col.s6.offset-s6
+											a.waves-effect.waves-light.btn.modal-trigger.page-action(onClick="create();", style='width: 100%;')
+												| Create
+												i.material-icons.right done
 
 block scripts
 	script(src='js/newexperience_quick.js')
