@@ -1,4 +1,4 @@
-/* globals makeAuthRequest,Materialize,getCookie,makeAuthBlobRequest,server,micromarkdown,cleanMarkdown  */
+/* globals makeAuthRequest,Materialize,getCookie,makeAuthBlobRequest,server,micromarkdown,cleanMarkdown,getTTime  */
 /* jshint -W089 */
 
 "use strict";
@@ -328,20 +328,9 @@ $('#addQuicknote').submit(function(event) {
     if (experience.ttime) {
       experience.consumptions.forEach(function(consumption) {
         if (consumption.id === experience.ttime) {
-          var conDate = Math.floor(new Date(consumption.date * 1000).getTime() / 1000);
-          var now = Math.floor(new Date().getTime() / 1000) - (new Date().getTimezoneOffset() * 60);
+          var timePrefix = getTTime(consumption.date);
 
-          var sign = '+';
-          if (conDate > now) {
-            sign = '-';
-          }
-
-          var diff = Math.abs(now - conDate);
-          var hours = Math.floor(diff / 60 / 60);
-          diff -= hours * 60 * 60;
-          var minutes = Math.floor(diff / 60);
-
-          newNotes = experience.notes + '\nT' + sign + ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2) + ' -- ' + $('#note').val();
+          newNotes = experience.notes + '\n' + timePrefix + ' -- ' + $('#note').val();
         }
       });
     } else {
