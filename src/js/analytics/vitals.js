@@ -59,11 +59,11 @@ function vitals() {
     return b.count - a.count;
   });
 
-  var topCons = consumptionDup.slice(0, 3).map(function(consumption) {
+  var topCons = consumptionDup.slice(0, 5).map(function(consumption) {
     return '<li>' + new Date(consumption.date * 1000).toISOString().slice(0, 16).replace(/T/, ' ').replace(':', '') + ' -- ' + consumption.count + ' ' + drug.unit + ' -- <a href="/experience.html?' + consumption.exp_id + '">' + consumption.title + '</a></li>';
   });
 
-  $('#largeDose').html('<ul class="pad-left-40">' + topCons.join('') + '</ul>');
+  $('#largeDose').html('<ol class="pad-left-40">' + topCons.join('') + '</ol>');
 
   // longest streak calc
 
@@ -182,7 +182,7 @@ function vitals() {
     return b.count - a.count;
   });
 
-  var topHours = hours.slice(0, 3).map(function(hourRecord) {
+  var topHours = hours.slice(0, 5).map(function(hourRecord) {
     return '<li>' + hourRecord.count + ' ' + drug.unit + ' between ' +
       new Date(hourRecord.start.date * 1000).toISOString().slice(11, 16) + ' and ' +
       new Date((hourRecord.start.date + 3600) * 1000).toISOString().slice(11, 16) +
@@ -190,7 +190,7 @@ function vitals() {
       ' during <a href="/experience.html?' + hourRecord.start.exp_id + '">' + hourRecord.start.title + '</a></li>';
   });
 
-  $('#hourRecord').html('<ul class="pad-left-40">' + topHours.join('') + '</ul>');
+  $('#hourRecord').html('<ol class="pad-left-40">' + topHours.join('') + '</ol>');
 
   var methods = allConsumptions.map(function(consumption) {
     return consumption.method.name;
