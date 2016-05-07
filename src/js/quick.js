@@ -61,7 +61,7 @@ function drawConsumptions() {
     $('#consumptionsCollection').append('<li class="collection-item"><div>No consumptions</div></li>');
   } else {
     experience.consumptions.sort(function(a, b) {
-      return (a.date > b.date) ? -1 : (a.date < b.date) ? 1 : 0;
+      return (a.date < b.date) ? -1 : (a.date > b.date) ? 1 : 0;
     });
 
     experience.consumptions.forEach(function(consumption) {
