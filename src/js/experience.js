@@ -849,7 +849,7 @@ $(document).ready(function() {
     masterExp = data;
 
     // load title and date
-    $('#title').text(data.title);
+    $('#title').html(data.title);
     document.title = data.title + ' | SupTracked';
 
     var date = new Date(data.date * 1000);
@@ -962,7 +962,7 @@ $("#metaTitle, #metaDate, #metaPanic, #metaRating, #metaTTime, #metaGroupDrug, #
         }
 
         // load the new title
-        $('#title').text($('#metaTitle').val());
+        $('#title').html($('#metaTitle').val());
         Materialize.toast('Metadata saved.', 1000);
       });
     }, 1000);
