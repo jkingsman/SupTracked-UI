@@ -35,11 +35,11 @@ function drawPurchasings() {
     return total + Number(current.cost);
   }, 0));
 
-  $('#avgPrice').html((Math.round(purchases.reduce(function(total, current) {
+  $('#avgPrice').html(purchases.reduce(function(total, current) {
     return total + Number(current.cost);
   }, 0) / purchases.reduce(function(total, current) {
     return total + Number(current.count);
-  }, 0) * 1000) / 1000).toFixed(3));
+  }, 0));
 }
 
 function delPurchasing(id) {
