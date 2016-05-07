@@ -201,7 +201,9 @@ function drawConsumptions() {
         var friendString = 'No friends';
 
         if (friendList.length > 0) {
-          friendString = friendList.join(', ');
+          friendString = '<li>' + friendList.sort(function(a, b) {
+            return (a > b) ? -1 : (a < b) ? 1 : 0;
+          }).join('</li><li>') + '</li>';
         }
 
         var currentCountClass = '';
@@ -226,7 +228,6 @@ function drawConsumptions() {
         $('#consumptionsCollection').prepend('<li class="collection-item ' + currentCountClass + '" id="con-' + consumption.id + '">' +
           '<span id="conDate">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') + '<span class="delta" style="display: none;">' + delta + '</span></span>' +
           '<span class="consumption-location hide-on-small-and-down pad-left-40">' + consumption.location + '</span>' +
-          '<span class="consumption-friends hide-on-med-and-down pad-left-40">' + friendString + '</span>' +
           '<a href="#" title="Bulk Edit" onClick="bulkEdit()" class="secondary-content consumption-icon bulk-edit-button" style="display: none;"><i class="material-icons">library_books</i></a>' +
           '<a href="#" title="Edit" onClick="editConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">list</i></a>' +
           '<a href="#" title="Set to Now" onClick="setNow(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">alarm_on</i></a>' +
@@ -236,6 +237,7 @@ function drawConsumptions() {
           '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + '<a target="_BLANK" href="/analytics.html?' + consumption.drug.id + '">' +
           consumption.drug.name + '</a>, ' + consumption.method.name + '</span>' +
           '<span class="rollingTotal" style="display: none;"> (total to ' + (Math.round(rollingTotals[consumption.drug.id] * 100) / 100) + ' ' + consumption.drug.unit + ')</span>' +
+          '<ul class="hide-on-med-and-down pad-left-40">' + friendString + '</ul>' +
           '</li>');
       });
     }
@@ -888,8 +890,8 @@ $("#notesArea").on('change keyup paste', function() {
     // find current TTime
     if (masterExp.ttime) {
       var tTimeStamp;
-      consumptions.forEach(function(consumption){
-        if(consumption.id === masterExp.ttime){
+      consumptions.forEach(function(consumption) {
+        if (consumption.id === masterExp.ttime) {
           notesVal = notesVal.replace(/(\n|^)TS /ig, '\n' + getTTime(consumption.date) + ' -- ');
         }
       });
@@ -1017,12 +1019,22 @@ $(window).keydown(function(e) {
 });
 
 $(document).click(function(event) {
-  if ($(event.target)[0].id.startsWith('con-')) {
-    $(event.target).toggleClass('bulk-edit-selected');
-    if ($('.bulk-edit-selected').length > 0) {
-      $('.bulk-edit-button').show();
+  // block bulk edit click
+  if (!$(event.target)[0].classList.contains('material-icons')) {
+    var id = '';
+    if ($(event.target).parents('.collection-item')[0]) {
+      id = $(event.target).parents('.collection-item')[0].id;
     } else {
-      $('.bulk-edit-button').hide();
+      id = $(event.target)[0].id;
+    }
+
+    if (id.startsWith('con-')) {
+      $('#' + id).toggleClass('bulk-edit-selected');
+      if ($('.bulk-edit-selected').length > 0) {
+        $('.bulk-edit-button').show();
+      } else {
+        $('.bulk-edit-button').hide();
+      }
     }
   }
 });
