@@ -9,7 +9,7 @@ analyticsCount += 1;
 function purchasing() {
   "use strict";
 
-  $('#purchaseUnit').html(drug.unit);
+  $('.purchaseUnit').html(drug.unit);
 
   if (drug.notes.split('$$$purchasedata$$$')[1]) {
     drawPurchasings();
@@ -23,12 +23,23 @@ function drawPurchasings() {
   $('#noteEntries').empty();
   var purchases = JSON.parse(drug.notes.split('$$$purchasedata$$$')[1]);
   purchases.forEach(function(purchase, index) {
-    $('#noteEntries').append('<tr><td><a href="#" title="Delete" onClick="delPurchasing(' + index + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a></td><td>' + purchase.date + '</td><td>' + purchase.count + '</td><td>' + purchase.notes + '</td></tr>');
+    $('#noteEntries').append('<tr><td><a href="#" title="Delete" onClick="delPurchasing(' + index + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
+      '</td><td>' + purchase.date + '</td><td>' + purchase.count + '</td><td>$' + (Math.round(purchase.cost * 100) / 100).toFixed(2) + '</td><td>' + purchase.notes + '</td></tr>');
   });
 
   $('#purchasedRecord').html(purchases.reduce(function(total, current) {
     return total + Number(current.count);
   }, 0) + ' ' + drug.unit);
+
+  $('#purchasedCost').html(purchases.reduce(function(total, current) {
+    return total + Number(current.cost);
+  }, 0));
+
+  $('#avgPrice').html((Math.round(purchases.reduce(function(total, current) {
+    return total + Number(current.cost);
+  }, 0) / purchases.reduce(function(total, current) {
+    return total + Number(current.count);
+  }, 0) * 1000) / 1000).toFixed(3));
 }
 
 function delPurchasing(id) {
@@ -55,12 +66,13 @@ function addPurchasing() {
   var purchase = {
     date: $("#addPurchaseDate").val(),
     count: $("#addPurchaseCount").val(),
+    cost: $("#addPurchaseCost").val(),
     notes: $("#addPurchaseNotes").val()
   };
 
   var newNotes = drug.notes.split('$$$purchasedata$$')[0];
 
-  $('#addPurchaseDate, #addPurchaseCount, #addPurchaseNotes').val('');
+  $('#addPurchaseDate, #addPurchaseCount, #addPurchaseCost, #addPurchaseNotes').val('');
   var purchases = [];
   if (!drug.notes.split('$$$purchasedata$$$')[1]) {
     // fresh purchasing notes

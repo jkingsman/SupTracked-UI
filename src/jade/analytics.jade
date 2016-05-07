@@ -60,54 +60,30 @@ block content
 						a(name='basic')
 						h5 Basic Data
 						.col.m12
-							strong Unit: 
+							strong Unit:
 							span#unit
 							br
-							strong Classification: 
+							strong Classification:
 							span#classification
 							br
-							strong Family: 
+							strong Family:
 							span#family
 							br
-							strong Rarity: 
+							strong Rarity:
 							span#rarity
 							br
-							strong Methods: 
+							strong Methods:
 							ul.pad-left-40#methods
+
 					.col.m6
-						a(name='purchasing')
-						h5 Purchasing
-						p Total: 
-							span#purchasedRecord
-						table
-							thead
-								tr
-									th Del
-									th Date
-									th
-										| Amount (
-										span#purchaseUnit
-										| )
-									th Notes
-							tfoot
-								tr
-									th
-									th
-										input#addPurchaseDate(placeholder='YYYY-MM-DD')
-									th
-										input#addPurchaseCount()
-									th
-										input#addPurchaseNotes()
-							tbody#noteEntries
-						a.waves-effect.waves-light.btn.page-action(onClick='addPurchasing();', style='width: 100%;') Add Entry
-				hr
-				a(name='notes')
-				.row
-					.col.m6
+						a(name='notes')
 						h5 Notes
 						.col.m12
 							span#notes
-					.col.m6
+
+				hr
+				.row
+					.col.s12
 						a(name='vitals')
 						h5 Vital Signs
 						.col.s12
@@ -126,11 +102,49 @@ block content
 							strong Longest Break: 
 							span#tBreak
 							hr
-							strong Most Done in an Hour: 
+							strong Most Done in an Hour:
 							span#hourRecord
 							br
-							strong Largest Single Doses: 
+							strong Largest Single Doses:
 							span#largeDose
+				hr
+				.row
+					.col.s12
+						a(name='purchasing')
+						h5 Purchasing
+						p Total: 
+							span#purchasedRecord
+							|  for $
+							span#purchasedCost
+						p Avg. Price: $
+							span#avgPrice
+							|  per 
+							span.purchaseUnit
+						table
+							thead
+								tr
+									th Del
+									th Date
+									th
+										| Amount (
+										span.purchaseUnit
+										| )
+									th Cost
+									th Notes
+							tfoot
+								tr
+									th
+									th
+										input#addPurchaseDate(placeholder='YYYY-MM-DD')
+									th
+										input#addPurchaseCount()
+									th
+										input#addPurchaseCost()
+									th
+										input#addPurchaseNotes()
+							tbody#noteEntries
+						a.waves-effect.waves-light.btn.page-action(onClick='addPurchasing();', style='width: 100%;') Add Entry
+
 				hr
 				.row
 					.col.m12
