@@ -59,8 +59,13 @@ block content
 										label(for='addLocation') Location
 										input#addLocation(type='text', list='addLocationAutofill')
 										datalist#addLocationAutofill
-								button.btn.waves-effect.waves-light(type='submit', value='create', style='width: 100%;')
-									| Add Consumption
+								.row
+									.col.s6
+										input#cloneLastFriends(name='friendEntry', type='checkbox', checked)
+										label(for='cloneLastFriends')  Clone Friends from Last
+									.col.s6
+										button.btn.waves-effect.waves-light(type='submit', value='create', style='width: 100%;')
+											| Add Consumption
 
 						#panic.col.s12
 							button.btn.waves-effect.orange.waves-light#panicButton(value='create', style='width: 100%; margin-top: 10px;', onClick='confirmPanic();')

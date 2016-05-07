@@ -850,7 +850,7 @@ $(document).ready(function() {
 
     // load title and date
     $('#title').html(data.title);
-    document.title = data.title + ' | SupTracked';
+    document.title = $(data.title).text() + ' | SupTracked';
 
     var date = new Date(data.date * 1000);
     $('#date').text(date.toISOString().slice(0, 10));

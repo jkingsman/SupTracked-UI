@@ -60,26 +60,23 @@ function drawConsumptions() {
   if (experience.consumptions.length === 0) {
     $('#consumptionsCollection').append('<li class="collection-item"><div>No consumptions</div></li>');
   } else {
-    experience.consumptions.sort(function(a, b) {
-      return (a.date < b.date) ? -1 : (a.date > b.date) ? 1 : 0;
-    });
-
     experience.consumptions.forEach(function(consumption) {
-      $('#consumptionsCollection').append('<li class="collection-item">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') +
+      $('#consumptionsCollection').prepend('<li class="collection-item">' + new Date(consumption.date * 1000).toISOString().slice(5, 16).replace(/T/, ' ').replace('-', '/') +
         '<a href="#" title="Set to Now" onClick="setNow(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">alarm_on</i></a>' +
         '<a href="#" title="Duplicate" onClick="duplicateConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">call_split</i></a>' +
         '<a href="#" title="Delete" onClick="deleteConsumption(' + consumption.id + ')" class="secondary-content consumption-icon"><i class="material-icons">delete</i></a>' +
         '<br><span class="consumption-data">' + consumption.count + ' ' + consumption.drug.unit + ' ' + consumption.drug.name + ', ' + consumption.method.name + '</span>' +
         '</li>');
-
-      $('#addLocation').val(consumption.location);
     });
+
+    $('#addLocation').val(experience.consumptions[experience.consumptions.length - 1].location);
   }
 }
 
 var youTookTimer;
+
 function drawBP() {
-  if(drugTotals.length === 0){
+  if (drugTotals.length === 0) {
     $('#notEnough').show();
     $('#loadingSpinner').removeClass('active');
   }
@@ -104,7 +101,7 @@ function drawBP() {
   }, 1000);
 
   // box 2
-  if(experience.consumptions.length > 1){
+  if (experience.consumptions.length > 1) {
     var nextLastCon = experience.consumptions[1];
     if (nextLastCon.drug.unit.length < 5) {
       $('#youTookB4').html(nextLastCon.count + ' ' + nextLastCon.drug.unit);
@@ -114,20 +111,20 @@ function drawBP() {
       $('#youTookOfB4').html(nextLastCon.drug.unit + ' of ' + nextLastCon.drug.name);
     }
 
-      var secsDiff = experience.consumptions[0].date - experience.consumptions[1].date;
-      var hours = Math.floor(secsDiff / 3600);
-      var minutes = Math.floor((secsDiff - (hours * 3600)) / 60);
-      var seconds = Math.floor((secsDiff - (hours * 3600) - (minutes * 60)));
+    var secsDiff = experience.consumptions[0].date - experience.consumptions[1].date;
+    var hours = Math.floor(secsDiff / 3600);
+    var minutes = Math.floor((secsDiff - (hours * 3600)) / 60);
+    var seconds = Math.floor((secsDiff - (hours * 3600) - (minutes * 60)));
 
-      $('#youTookTimeB4').html(('00' + hours).substr(-2) + ':' + ('00' + minutes).substr(-2) + ':' + ('00' + seconds).substr(-2));
-  } else{
+    $('#youTookTimeB4').html(('00' + hours).substr(-2) + ':' + ('00' + minutes).substr(-2) + ':' + ('00' + seconds).substr(-2));
+  } else {
     $('#nextLastCon').html('<h4>..and that was it!</h4>');
   }
 
   // box 3
   var trimmedCons = drugTotals.sort(function(a, b) {
     return a[0] - b[0];
-  }).slice(0, 2).map(function(drugTotals){
+  }).slice(0, 2).map(function(drugTotals) {
     return '<div><h3>' + drugTotals[0] + ' ' + drugTotals[1] + '</h3>' + drugTotals[2] + '</div>';
   });
 
@@ -197,6 +194,18 @@ function duplicateConsumption(id) {
           Materialize.toast(err.charAt(0).toUpperCase() + err.slice(1), 6000, 'warning-toast');
           return;
         }
+
+        consumption.friends.forEach(function(friend) {
+          makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
+            consumption_id: data.id,
+            name: friend.name
+          }), 'json', function(err, data, code) {
+            if (err) {
+              Materialize.toast('Friends copy error: ' + err, 6000, 'warning-toast');
+              return;
+            }
+          });
+        });
 
         // draw consumptions, which will include our new one
         updateExperienceObject(function() {
@@ -303,10 +312,25 @@ $('#addConsumption').submit(function(event) {
       return;
     }
 
+    if ($('#cloneLastFriends').is(':checked')) {
+      experience.consumptions[experience.consumptions.length - 1].friends.forEach(function(friend) {
+        makeAuthRequest('/consumption/friend', 'POST', JSON.stringify({
+          consumption_id: data.id,
+          name: friend.name
+        }), 'json', function(err, data, code) {
+          if (err) {
+            Materialize.toast('Friends copy error: ' + err, 6000, 'warning-toast');
+            return;
+          }
+        });
+      });
+    }
+
     // draw consumptions, which will include our new one
     updateExperienceObject(function() {
       drawConsumptions();
     });
+
     $('ul.tabs').tabs('select_tab', 'consumptions');
     Materialize.toast('Consumption created', 1000, 'success-toast');
   });
