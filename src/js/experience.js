@@ -198,7 +198,7 @@ function drawConsumptions() {
           return friend.name;
         });
 
-        var friendString = 'No friends';
+        var friendString = '';
 
         if (friendList.length > 0) {
           friendString = '<li>' + friendList.sort(function(a, b) {
