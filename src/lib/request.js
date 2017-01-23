@@ -225,6 +225,9 @@ function makeAuthBlobRequest(endpoint, cb) {
       //this.response is what you're looking for
       delReqToast("blob");
       cb(this.response);
+    } else if (this.status === 404) {
+      delReqToast("blob");
+      cb(this.response); 
     }
   };
 
